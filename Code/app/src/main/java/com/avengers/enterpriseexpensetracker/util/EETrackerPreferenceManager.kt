@@ -6,12 +6,7 @@ import androidx.preference.PreferenceManager
 class EETrackerPreferenceManager {
 
     companion object {
-
-
-        fun saveLoginPrefs(emailId: String?,
-                                   fname: String?,
-                                   lname: String?,
-                                   context: Context?) {
+        fun saveLoginPrefs(emailId: String?, fname: String?, lname: String?, context: Context?) {
             //Set the email Id and first name and last name in shared preferences
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             val editor = sharedPreferences.edit()

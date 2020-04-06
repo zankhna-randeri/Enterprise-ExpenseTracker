@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">ExpenseTracker</string>
+    <string name="app_name">Enterprise Expense Tracker</string>
+
+    <!--    login-->
+    <string name="txt_hint_email">Email Id</string>
+    <string name="txt_login">Login</string>
+    <string name="txt_password">Password</string>
+    <string name="enter_login_info">Please Enter Login Details</string>
+
+    <!-- common-->
+    <string name="txt_loading">Loading</string>
 </resources>

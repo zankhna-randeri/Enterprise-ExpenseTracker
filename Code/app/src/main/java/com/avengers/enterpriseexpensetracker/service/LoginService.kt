@@ -1,6 +1,5 @@
 package com.avengers.enterpriseexpensetracker.service
 
-import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.JobIntentService
@@ -8,13 +7,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avengers.enterpriseexpensetracker.modal.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
-import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.NetworkHelper
-import com.avengers.enterpriseexpensetracker.util.Utility
 import retrofit2.Call
-
-private const val EXTRA_EMAIL = "enterpriseexpensetracker.service.extra.EMAIL_ID"
-private const val EXTRA_PASSWORD = "enterpriseexpensetracker.service.extra.PASSWORD"
 
 private const val JOB_ID = 1000
 
@@ -26,33 +20,17 @@ private const val JOB_ID = 1000
 class LoginService : JobIntentService() {
 
     companion object {
-
         /**
          * Starts this service to perform work with the given parameters. If
          * the service is already performing a task this action will be queued.
          */
+        @JvmStatic
         fun enqueueWork(context: Context?, intent: Intent?) {
             if (context != null && intent != null) {
-                enqueueWork(context, LoginService.javaClass, JOB_ID, intent)
+                enqueueWork(context, LoginService::class.java, JOB_ID, intent)
             }
         }
 
-        /**
-         * Starts this service to perform action Baz with the given parameters. If
-         * the service is already performing a task this action will be queued.
-         *
-         * @see IntentService
-         */
-        // TODO: Customize helper method
-//        @JvmStatic
-//        fun startActionBaz(context: Context, param1: String, param2: String) {
-//            val intent = Intent(context, LoginService::class.java).apply {
-//                action = ACTION_BAZ
-//                putExtra(EXTRA_PARAM1, param1)
-//                putExtra(EXTRA_PARAM2, param2)
-//            }
-//            context.startService(intent)
-//        }
     }
 
     override fun onHandleWork(intent: Intent) {
@@ -76,7 +54,7 @@ class LoginService : JobIntentService() {
 
     private fun handleResponse(response: LoginResponse?) {
         if (response?.getMessage() != null) {
-            var responseIntent = Intent(Constants.BROADCAST_LOGIN_RESPONSE).apply {
+            val responseIntent = Intent(Constants.BROADCAST_LOGIN_RESPONSE).apply {
                 putExtra(Constants.EXTRA_API_RESPONSE, response)
             }
             val broadcastManager: LocalBroadcastManager = LocalBroadcastManager

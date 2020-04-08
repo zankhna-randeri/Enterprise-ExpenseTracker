@@ -24,14 +24,18 @@ android {
     }
 
     compileOptions {
-        targetCompatibility = 1.8
-        sourceCompatibility = 1.8
+        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
     }
 
     testOptions {
         unitTests {
             includeAndroidResources = true
         }
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -46,6 +50,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.navigation:navigation-fragment:2.2.1'
+    implementation 'androidx.navigation:navigation-ui:2.2.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.1'
 
     // Test Dependency
     testImplementation 'junit:junit:4.13'

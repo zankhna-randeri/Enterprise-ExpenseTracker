@@ -3,8 +3,7 @@ package com.avengers.enterpriseexpensetracker.ui.add_expense
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.speech.tts.TextToSpeech
-import android.util.Log
+import android.speech.SpeechRecognizer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,20 +12,16 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.avengers.enterpriseexpensetracker.R
-import com.avengers.enterpriseexpensetracker.util.Utility
 import java.util.*
 
 class AddExpenseFragment : Fragment() {
-
     private lateinit var addExpenseViewModel: AddExpenseViewModel
     private var btnVoice: AppCompatImageButton? = null
     private var linearLayout: LinearLayout? = null
-
-    private var tts: TextToSpeech? = null
-
-    companion object {
-        private const val REQ_SPEECH_INPUT: Int = 120
-    }
+    private var speechRecognizer: SpeechRecognizer? = null
+    private var speechRecognizerIntent: Intent? = null
+    private var isListening = false
+    private lateinit var speechRecognitionListener: SpeechRecognitionListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,33 +41,30 @@ class AddExpenseFragment : Fragment() {
             promptSpeechInput()
         }
 
-        initTTS()
+        initSpeechRecognizer()
     }
 
-    private fun initTTS() {
-        tts = TextToSpeech(activity, TextToSpeech.OnInitListener { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                val ttsLang = tts?.setLanguage(Locale.US)
-                if (ttsLang == TextToSpeech.LANG_MISSING_DATA ||
-                    ttsLang == TextToSpeech.LANG_COUNTRY_VAR_AVAILABLE
-                ) {
-                    Log.e("Error: %s", "Language not supported !")
-                } else {
-                    Log.i("Success: %s", "Language Supported");
-                }
-            } else {
-                Utility.getInstance().showMsg(activity, getString(R.string.tts_init_failed))
-            }
-        })
+    override fun onDestroyView() {
+        super.onDestroyView()
+        speechRecognizer?.destroy()
+        speechRecognitionListener.shutDownTTs()
     }
 
-    private fun promptSpeechInput() {
-        activity?.intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+    private fun initSpeechRecognizer() {
+        speechRecognitionListener = SpeechRecognitionListener(activity, addExpenseViewModel)
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity)
+        speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
             putExtra(RecognizerIntent.EXTRA_PROMPT, "Voice bot is now listening your command")
+            putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, activity?.packageName)
         }
-        startActivityForResult(activity?.intent, Companion.REQ_SPEECH_INPUT)
+        speechRecognizer?.setRecognitionListener(speechRecognitionListener)
+    }
 
+    private fun promptSpeechInput() {
+        if (!isListening) {
+            speechRecognizer?.startListening(speechRecognizerIntent)
+        }
     }
 }

@@ -7,6 +7,24 @@
     <string name="txt_password">Password</string>
     <string name="enter_login_info">Please Enter Valid Login Details</string>
 
+    <!--    TTS-->
+    <string name="tts_init_failed">TTS initialization failed!</string>
+
     <!-- common-->
     <string name="txt_loading">Loading</string>
+
+    <!--    Dashboard-->
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <!--    Menu-->
+    <string name="menu_home">Home</string>
+    <string name="menu_add_expense">Add Expense</string>
+    <string name="menu_logout">Logout</string>
+    <string name="action_settings">Settings</string>
+
 </resources>

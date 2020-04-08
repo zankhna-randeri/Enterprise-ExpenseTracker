@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00897B</color>
-    <color name="colorPrimaryDark">#00695C</color>
-    <color name="colorAccent">#E0F2F1</color>
-
-    <color name="color_button_select">#80CBC4</color>
+    <color name="colorPrimary">#485863</color>
+    <color name="colorPrimaryLight">#718792</color>
+    <color name="colorPrimaryDark">#37434c</color>
+    <color name="colorPrimaryText">#ffffff</color>
+    <color name="colorAccent">#F1F1F1</color>
     <color name="color_progress">#DDd4d4d6</color>
+    <color name="color_layout_bg">#f1f1f1</color>
+    <color name="color_expense_pending">#F6C634</color>
+    <color name="color_expense_approve">#60CB71</color>
+    <color name="color_expense_reject">#ED484E</color>
 </resources>

@@ -2,6 +2,15 @@ package com.avengers.enterpriseexpensetracker.util
 
 class Constants {
     companion object {
+
+        //Expense type
+        enum class ExpenseType {
+            FOOD,
+            TRAVEL,
+            STAY,
+            OTHER
+        }
+
         // SharedPreference
         const val PREFS_LOGIN = "is_login"
         const val PREFS_EMAIL = "email"

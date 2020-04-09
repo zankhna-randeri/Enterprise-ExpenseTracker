@@ -10,18 +10,18 @@
         android:background="@drawable/ic_bot" />
 
     <TextView
-        android:id="@+id/txtMessageResponse"
+        android:id="@+id/txtMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@drawable/text_bubble_res"
         android:gravity="center_vertical"
-        android:paddingStart="@dimen/padding_8"
+        android:paddingStart="@dimen/padding_20"
         android:paddingTop="@dimen/padding_8"
-        android:paddingEnd="@dimen/padding_20"
+        android:paddingEnd="@dimen/padding_8"
+        android:layout_marginEnd="@dimen/margin_5"
         android:paddingBottom="@dimen/padding_8"
         android:textAlignment="gravity"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold" />
+        android:textColor="@color/colorAccent" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -6,9 +6,10 @@
     android:gravity="end">
 
     <TextView
-        android:id="@+id/txtMessageRequest"
+        android:id="@+id/txtMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_5"
         android:layout_marginTop="10dp"
         android:background="@drawable/text_bubble_req"
         android:gravity="center_vertical"

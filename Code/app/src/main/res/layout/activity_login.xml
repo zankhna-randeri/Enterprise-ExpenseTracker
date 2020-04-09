@@ -35,15 +35,6 @@
                     android:scaleType="fitXY"
                     android:src="@mipmap/ic_launcher" />
 
-                <!--                 TODO: remove this-->
-                <TextView
-                    android:id="@+id/txt_app_title"
-                    style="@style/AppTitleTheme"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_15"
-                    android:text="@string/app_name" />
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/txt_input_email"
                     style="@style/TextInputTheme"

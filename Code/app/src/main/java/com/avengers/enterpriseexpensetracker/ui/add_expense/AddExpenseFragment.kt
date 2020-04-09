@@ -4,50 +4,72 @@ import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
+import com.avengers.enterpriseexpensetracker.adapter.ConversationAdapter
+import com.avengers.enterpriseexpensetracker.modal.VoiceMessage
 import java.util.*
+import kotlin.collections.ArrayList
 
 class AddExpenseFragment : Fragment() {
-    private lateinit var addExpenseViewModel: AddExpenseViewModel
     private var btnVoice: AppCompatImageButton? = null
-    private var linearLayout: LinearLayout? = null
+    private var conversationView: RecyclerView? = null
+    private var addExpenseViewModel: AddExpenseViewModel? = null
+    private var conversationAdapter: ConversationAdapter? = null
     private var speechRecognizer: SpeechRecognizer? = null
+    private var speechRecognitionListener: SpeechRecognitionListener? = null
     private var speechRecognizerIntent: Intent? = null
     private var isListening = false
-    private lateinit var speechRecognitionListener: SpeechRecognitionListener
+    private val conversations = ArrayList<VoiceMessage>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        addExpenseViewModel =
-            ViewModelProvider(this).get(AddExpenseViewModel::class.java)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        addExpenseViewModel = ViewModelProvider(this).get(AddExpenseViewModel::class.java)
         return inflater.inflate(R.layout.fragment_add_expense, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        linearLayout = view.findViewById(R.id.layout)
+        conversationView = view.findViewById(R.id.conversationView)
+        conversationView?.layoutManager = LinearLayoutManager(activity)
         btnVoice = view.findViewById(R.id.btnListen)
         btnVoice?.setOnClickListener {
             promptSpeechInput()
         }
 
         initSpeechRecognizer()
+        setUpConversations()
+    }
+
+    private fun setUpConversations() {
+        val conversationObserver = Observer<ArrayList<VoiceMessage>>() {
+            Log.d("EETracker ****", "Inside observer")
+            conversations.clear()
+            if (!it.isNullOrEmpty()) {
+                conversations.addAll(it)
+            }
+            if (conversationAdapter == null) {
+                conversationAdapter = ConversationAdapter(conversations)
+                conversationView?.adapter = conversationAdapter
+            } else {
+                conversationAdapter?.notifyDataSetChanged()
+            }
+        }
+        addExpenseViewModel?.getConversation()?.observe(viewLifecycleOwner, conversationObserver)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         speechRecognizer?.destroy()
-        speechRecognitionListener.shutDownTTs()
+        speechRecognitionListener?.shutDownTTs()
     }
 
     private fun initSpeechRecognizer() {

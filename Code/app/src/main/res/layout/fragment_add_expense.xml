@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/conversationList"
+        android:id="@+id/conversationView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -14,10 +14,12 @@
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btnListen"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin_large"
         android:layout_weight="0"
-        android:background="@android:color/white"
+        android:background="@drawable/round"
         android:padding="16dp"
         android:src="@drawable/ic_mic" />
 

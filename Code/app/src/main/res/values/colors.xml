@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#485863</color>
-    <color name="colorPrimaryLight">#718792</color>
+    <color name="colorPrimaryLight">#718799</color>
     <color name="colorPrimaryDark">#37434c</color>
     <color name="colorPrimaryText">#ffffff</color>
     <color name="colorAccent">#F1F1F1</color>
@@ -10,4 +10,6 @@
     <color name="color_expense_pending">#F6C634</color>
     <color name="color_expense_approve">#60CB71</color>
     <color name="color_expense_reject">#ED484E</color>
+    <color name="color_voice_response">#506878</color>
+    <color name="color_voice_request">#3F535F</color>
 </resources>

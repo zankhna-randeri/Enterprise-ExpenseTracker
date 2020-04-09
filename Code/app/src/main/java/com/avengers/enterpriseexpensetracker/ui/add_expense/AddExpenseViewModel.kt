@@ -5,15 +5,22 @@ import androidx.lifecycle.ViewModel
 import com.avengers.enterpriseexpensetracker.modal.VoiceMessage
 
 class AddExpenseViewModel : ViewModel() {
-    private val conversations = MutableLiveData<MutableList<VoiceMessage>>()
+    private var conversations: ArrayList<VoiceMessage>? = null
+    private var conversationLiveData = MutableLiveData<ArrayList<VoiceMessage>>()
+    var tmp = MutableLiveData<String>()
 
-    fun updateConversation(message: VoiceMessage) {
-        if (message.isResponse) {
-            conversations.value?.add(message)
-        }
+    init {
+        conversations = ArrayList()
+        conversationLiveData.value = conversations
+        tmp.value = "First"
     }
 
-    fun getConversation(): MutableLiveData<MutableList<VoiceMessage>> {
-        return conversations
+    fun updateConversation(message: VoiceMessage) {
+        conversations?.add(message)
+        conversationLiveData.value = conversations
+    }
+
+    fun getConversation(): MutableLiveData<ArrayList<VoiceMessage>> {
+        return conversationLiveData
     }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants">
+
+    <ImageView
+        android:layout_width="@dimen/person_width"
+        android:layout_height="@dimen/person_width"
+        android:background="@drawable/ic_bot" />
+
+    <TextView
+        android:id="@+id/txtMessageResponse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/text_bubble_res"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/padding_8"
+        android:paddingTop="@dimen/padding_8"
+        android:paddingEnd="@dimen/padding_20"
+        android:paddingBottom="@dimen/padding_8"
+        android:textAlignment="gravity"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

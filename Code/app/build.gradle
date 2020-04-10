@@ -77,6 +77,9 @@ dependencies {
     // Firebase crashlytics
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta03'
 
+    // Chart
+    implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
+
     // Test Dependency
     testImplementation 'junit:junit:4.13'
     testImplementation 'androidx.test.ext:junit:1.1.1'

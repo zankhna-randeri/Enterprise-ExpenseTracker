@@ -29,8 +29,8 @@
 
                 <ImageView
                     android:id="@+id/img_logo"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="@dimen/logo_160"
+                    android:layout_height="@dimen/logo_160"
                     android:layout_gravity="center"
                     android:scaleType="fitXY"
                     android:src="@mipmap/ic_launcher" />

@@ -5,7 +5,8 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+        // Chart library dependency
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.2'
@@ -16,6 +17,9 @@ buildscript {
 
         // Firebase Crashlytics
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.0.0-beta03'
+
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+
     }
 }
 
@@ -23,7 +27,8 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        // Chart library dependency
+        maven { url 'https://jitpack.io' }
     }
 }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lyt_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -78,6 +79,15 @@
                     android:text="@string/txt_login"
                     android:theme="@style/ButtonTheme" />
 
+                <TextView
+                    android:id="@+id/txt_forgot_pwd"
+                    style="@style/TextDetailTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:gravity="center"
+                    android:text="@string/forgot_pwd" />
+
             </androidx.appcompat.widget.LinearLayoutCompat>
         </ScrollView>
     </LinearLayout>
@@ -85,4 +95,4 @@
     <include
         layout="@layout/app_progress"
         android:visibility="gone" />
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

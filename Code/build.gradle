@@ -15,11 +15,10 @@ buildscript {
         // Firebase
         classpath 'com.google.gms:google-services:4.3.3'
 
-        // Firebase Crashlytics
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.0.0-beta03'
-
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
 
+        // Firebase Crashlytics
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.0.0-beta03'
     }
 }
 

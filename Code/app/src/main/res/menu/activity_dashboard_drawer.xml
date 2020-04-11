@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/upper"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_home"
@@ -12,6 +14,19 @@
             android:id="@+id/nav_add_expense"
             android:icon="@drawable/ic_menu_add_expense"
             android:title="@string/menu_add_expense" />
+        <item
+            android:id="@+id/nav_track_status"
+            android:icon="@drawable/ic_menu_track_status"
+            android:title="@string/menu_track_status" />
+    </group>
+
+    <group
+        android:id="@+id/lower"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_change_pwd"
+            android:icon="@drawable/ic_menu_change_pwd"
+            android:title="@string/menu_change_pwd" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_menu_logout"

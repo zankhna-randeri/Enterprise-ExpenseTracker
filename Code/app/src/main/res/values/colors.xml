@@ -12,4 +12,9 @@
     <color name="color_expense_reject">#ED484E</color>
     <color name="color_voice_response">#506878</color>
     <color name="color_voice_request">#3F535F</color>
+
+    <!--    Pie chart-->
+    <color name="color_chart_1">#6AA786</color>
+    <color name="color_chart_2">#D9508A</color>
+    <color name="color_chart_3">#F39531</color>
 </resources>

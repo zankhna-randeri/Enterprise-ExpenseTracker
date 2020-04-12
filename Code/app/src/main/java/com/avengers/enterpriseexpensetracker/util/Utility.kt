@@ -20,7 +20,7 @@ class Utility {
     }
 
 
-    fun showMsg(context: Context?, msg: String?) {
+    fun showMsg(context: Context, msg: String?) {
         Toast.makeText(context, msg,
                 Toast.LENGTH_SHORT).show()
     }

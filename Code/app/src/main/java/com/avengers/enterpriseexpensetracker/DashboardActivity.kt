@@ -15,18 +15,18 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class DashboardActivity : AppCompatActivity() {
-
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         FirebaseApp.initializeApp(applicationContext)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-        FirebaseCrashlytics.getInstance().sendUnsentReports();
+        FirebaseCrashlytics.getInstance().sendUnsentReports()
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)

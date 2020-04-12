@@ -202,7 +202,89 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    private fun handleUploadClick() {
+        if (hasRequiredPermissions()) {
+            selectImage()
+        }
 
+    }
+
+    private fun selectImage() {
+        val options = arrayOfNulls<String>(2)
+        options[0] = getString(R.string.txt_click_pic)
+        options[1] = getString(R.string.txt_select_photos)
+        options[2] = getString(R.string.txt_cancel)
+        val builder = activity?.applicationContext?.let { AlertDialog.Builder(it) }
+        builder?.setItems(options) { dialog, item ->
+            when {
+                options[item].equals(getString(R.string.txt_click_pic)) -> {
+                    openCamera()
+                }
+                options[item].equals(getString(R.string.txt_select_photos)) -> {
+                    val pickPhoto = Intent(Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    startActivityForResult(pickPhoto, ACTION_PHOTOS)
+                }
+                options[item].equals(getString(R.string.txt_cancel)) -> {
+                    dialog.dismiss()
+                }
+            }
+        }
+        builder?.show()
+    }
+
+    private fun openCamera() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (activity != null) {
+            if (activity?.packageManager?.let { takePictureIntent.resolveActivity(it) } != null) {
+                var photoFile: File? = null
+                try {
+                    photoFile = createImageFile()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+                if (photoFile != null) {
+                    val photoURI = activity?.applicationContext?.let {
+                        FileProvider.getUriForFile(it,
+                                "com.avengers.enterpriseexpensetracker.fileprovider",
+                                photoFile)
+                    }
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, ACTION_CAMERA)
+                }
+            }
+        }
+    }
+
+    private fun createImageFile(): File? {
+        // Create an image file name
+        val timeStamp = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+                    .format(Date())
+        } else {
+            java.text.SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+                    .format(Date())
+        }
+        val imageFileName = "JPEG_" + timeStamp + "_"
+        val storageDir = activity?.applicationContext?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",  /* suffix */
+                storageDir /* directory */
+        )
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.absolutePath
+        Log.d("EETracker ****", mCurrentPhotoPath)
+        return image
+    }
+
+    fun getImageUri(inContext: Context?, inImage: Bitmap?): Uri? {
+        val bytes = ByteArrayOutputStream()
+        inImage?.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path =
+            MediaStore.Images.Media.insertImage(inContext?.contentResolver, inImage, "Title", null)
+        return Uri.parse(path)
+    }
 
     private fun hasRequiredPermissions(): Boolean {
         val permissionToRequest = ArrayList<String>()

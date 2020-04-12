@@ -25,6 +25,7 @@
             android:layout_marginLeft="@dimen/margin_30"
             android:layout_marginRight="@dimen/margin_30"
             android:text="@string/txt_upload"
+            android:id="@+id/btnUpload"
             android:theme="@style/ButtonTheme" />
 
         <androidx.appcompat.widget.AppCompatImageButton

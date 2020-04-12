@@ -9,6 +9,7 @@
     <dimen name="font_28">28sp</dimen>
     <dimen name="font_name_initial">54sp</dimen>
     <dimen name="font_name_list_initial">20sp</dimen>
+    <dimen name="font_5">5sp</dimen>
 
     <dimen name="margin_3">3dp</dimen>
     <dimen name="margin_5">5dp</dimen>
@@ -28,7 +29,7 @@
 
     <dimen name="person_width">32dp</dimen>
     <dimen name="logo_160">160dp</dimen>
-    <dimen name="dimen_chart">200dp</dimen>
+    <dimen name="dimen_chart">350dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_height">176dp</dimen>
 </resources>

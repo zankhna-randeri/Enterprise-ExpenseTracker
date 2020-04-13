@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -51,11 +52,11 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private var mCurrentPhotoPath: String? = null
     private var isListening = false
     private val conversations = ArrayList<VoiceMessage>()
+    private var cardImageUri: Uri? = null
     private val PERMISSION_RECORD_AUDIO = 1
     private val PERMISSION_MULTIPLE_REQUEST = 2
     private val ACTION_CAMERA = 3
     private val ACTION_PHOTOS = 4
-    private var cardImageUri: Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -206,15 +207,15 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         if (hasRequiredPermissions()) {
             selectImage()
         }
-
     }
 
     private fun selectImage() {
-        val options = arrayOfNulls<String>(2)
+        val options = arrayOfNulls<String>(3)
         options[0] = getString(R.string.txt_click_pic)
         options[1] = getString(R.string.txt_select_photos)
         options[2] = getString(R.string.txt_cancel)
-        val builder = activity?.applicationContext?.let { AlertDialog.Builder(it) }
+        val builder = context?.let { AlertDialog.Builder(ContextThemeWrapper(it, R.style.AlertDialogTheme)) }
+        builder?.setTitle("Choose Photo")
         builder?.setItems(options) { dialog, item ->
             when {
                 options[item].equals(getString(R.string.txt_click_pic)) -> {

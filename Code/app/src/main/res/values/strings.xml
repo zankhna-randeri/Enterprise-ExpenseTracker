@@ -10,11 +10,19 @@
 
     <!--    TTS-->
     <string name="tts_init_failed">TTS initialization failed!</string>
+    <string name="tts_permission_denied">Audio recording permission is required in order to user Voice Chatbot</string>
 
+    <!--    Chart-->
+    <string name="chart_dataset_label">Expense \nReimbursed</string>
     <string name="txt_upload"> Upload Receipt</string>
+
+    <!--    add expense-->
+    <string name="txt_click_pic">Click Photo</string>
+    <string name="txt_select_photos">Choose from Photos</string>
 
     <!-- common-->
     <string name="txt_loading">Loading</string>
+    <string name="txt_cancel">Cancel</string>
 
     <!--    Dashboard-->
     <string name="title_activity_dashboard">DashboardActivity</string>

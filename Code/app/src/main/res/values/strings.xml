@@ -19,6 +19,7 @@
     <!--    add expense-->
     <string name="txt_click_pic">Click Photo</string>
     <string name="txt_select_photos">Choose from Photos</string>
+    <string name="txt_failed_image_path">Image path is null or blank !</string>
 
     <!-- common-->
     <string name="txt_loading">Loading</string>

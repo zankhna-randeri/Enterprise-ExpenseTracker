@@ -152,6 +152,21 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         } else {
             handlePhotosResponse(data)
         }
+
+        // Do nothing if failed to get image path
+        if (receiptPath.isNullOrBlank()) {
+            activity?.applicationContext?.let {
+                Utility.getInstance().showMsg(it, getString(R.string.txt_failed_image_path))
+            }
+            return
+        }
+        // Send to webservice
+        val intent = Intent(activity?.applicationContext, LoginService::class.java).apply {
+            putExtra(Constants.EXTRA_UPLOAD_RECEIPT_PATH, receiptPath)
+            putExtra(Constants.EXTRA_UPLOAD_EXPENSE_TYPE, expenseType)
+            action = Constants.ACTION_UPLOAD
+        }
+        Utility.getInstance().startExpenseTrackerService(context, intent)
     }
 
     private fun handleCameraResponse(): String? {

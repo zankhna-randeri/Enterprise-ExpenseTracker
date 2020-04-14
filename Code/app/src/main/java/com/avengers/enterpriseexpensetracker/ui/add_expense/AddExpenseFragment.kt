@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
@@ -33,10 +34,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.ConversationAdapter
 import com.avengers.enterpriseexpensetracker.modal.VoiceMessage
+import com.avengers.enterpriseexpensetracker.service.LoginService
+import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.Utility
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -49,10 +53,11 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private var speechRecognizer: SpeechRecognizer? = null
     private var speechRecognitionListener: SpeechRecognitionListener? = null
     private var speechRecognizerIntent: Intent? = null
-    private var mCurrentPhotoPath: String? = null
+    private var cameraImagePhotoPath: String? = null
     private var isListening = false
     private val conversations = ArrayList<VoiceMessage>()
-    private var cardImageUri: Uri? = null
+
+    //    private var receiptImageUri: Uri? = null
     private val PERMISSION_RECORD_AUDIO = 1
     private val PERMISSION_MULTIPLE_REQUEST = 2
     private val ACTION_CAMERA = 3
@@ -75,6 +80,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         btnVoice?.setOnClickListener(this)
         initSpeechRecognizer()
         setUpConversations()
+        setUpObservers()
     }
 
     private fun setUpConversations() {
@@ -92,6 +98,12 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             }
         }
         addExpenseViewModel?.getConversation()?.observe(viewLifecycleOwner, conversationObserver)
+    }
+
+    private fun setUpObservers() {
+        addExpenseViewModel?.getUploadButtonVisibility()?.observe(viewLifecycleOwner, Observer {
+            btnUpload?.visibility = if (it) View.VISIBLE else View.INVISIBLE
+        })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -128,34 +140,42 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                ACTION_CAMERA -> handleCameraResponse()
-                ACTION_PHOTOS -> handlePhotosResponse(data)
+                ACTION_CAMERA -> handleSelectImageResponse(isCamera = true, data = data)
+                ACTION_PHOTOS -> handleSelectImageResponse(isCamera = false, data = data)
             }
         }
     }
 
-    private fun handleCameraResponse() {
-        val file = File(mCurrentPhotoPath)
-        var photo: Bitmap? = null
-        try {
-            photo =
-                if (activity != null) MediaStore.Images.Media.getBitmap(activity!!.contentResolver,
-                        Uri.fromFile(file)) else null
-        } catch (e: IOException) {
-            e.printStackTrace()
+    private fun handleSelectImageResponse(isCamera: Boolean, data: Intent?) {
+        val receiptPath = if (isCamera) {
+            handleCameraResponse()
+        } else {
+            handlePhotosResponse(data)
         }
-//        if (photo != null) {
-//            cardImage.setImageBitmap(photo)
-//        }
-        cardImageUri = getImageUri(activity!!.applicationContext, photo)
-//        cardFilePath = getRealPathFromURI(cardImageUri)
     }
 
-    private fun handlePhotosResponse(data: Intent?) {
-        cardImageUri = data?.data
-//        cardImage.setImageURI(cardImageUri)
-//        cardFilePath = getPathFromPhotoURL(cardImageUri)
-        Log.d("EETracker ****", "handlePhotoResponse cardImageUri: $cardImageUri")
+    private fun handleCameraResponse(): String? {
+        val file = File(cameraImagePhotoPath)
+        var photo: Bitmap? = null
+        try {
+            photo = if (activity != null) MediaStore.Images.Media.getBitmap(activity!!.contentResolver,
+                    Uri.fromFile(file)) else null
+        } catch (e: IOException) {
+            Log.e("EETracker **** ", " handleCameraResponse: ${e.message}")
+            e.printStackTrace()
+        }
+        /*if (photo != null) {
+            cardImage.setImageBitmap(photo)
+        }*/
+        val receiptImageUri = getImageUri(activity?.applicationContext, photo)
+        return getRealPathFromURI(receiptImageUri)
+    }
+
+    private fun handlePhotosResponse(data: Intent?): String? {
+        val receiptImageUri = data?.data
+        //cardImage.setImageURI(cardImageUri)
+        Log.d("EETracker ****", "handlePhotoResponse cardImageUri: $receiptImageUri")
+        return getPathFromPhotoURL(receiptImageUri)
     }
 
     override fun onDestroyView() {
@@ -231,6 +251,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
+
         builder?.show()
     }
 
@@ -242,6 +263,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                 try {
                     photoFile = createImageFile()
                 } catch (e: IOException) {
+                    Log.e("EETracker **** ", " openCamera: ${e.message}")
                     e.printStackTrace()
                 }
                 if (photoFile != null) {
@@ -274,12 +296,12 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                 storageDir /* directory */
         )
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.absolutePath
-        Log.d("EETracker ****", mCurrentPhotoPath)
+        cameraImagePhotoPath = image.absolutePath
+        Log.d("EETracker ****", cameraImagePhotoPath)
         return image
     }
 
-    fun getImageUri(inContext: Context?, inImage: Bitmap?): Uri? {
+    private fun getImageUri(inContext: Context?, inImage: Bitmap?): Uri? {
         val bytes = ByteArrayOutputStream()
         inImage?.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path =
@@ -320,5 +342,48 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         } else {
             promptSpeechInput()
         }
+    }
+
+    private fun getRealPathFromURI(uri: Uri?): String? {
+        if (uri == null) {
+            return null
+        }
+        var path: String? = null
+        val cursor = activity?.contentResolver?.query(uri, null, null, null, null)
+        if (cursor != null) {
+            cursor.moveToFirst()
+            val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+            path = cursor.getString(idx)
+            cursor.close()
+        }
+
+        return path
+    }
+
+    private fun getPathFromPhotoURL(uri: Uri?): String? {
+        if (uri == null) {
+            return null
+        }
+        var path: String? = null
+        var cursor: Cursor? = null
+        try {
+            val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+            cursor = activity?.contentResolver?.query(uri, filePathColumn, null, null, null)
+            path = if (cursor != null) {
+                cursor.moveToFirst()
+                val columnIndex = cursor.getColumnIndexOrThrow(filePathColumn[0])
+                cursor.getString(columnIndex)
+            } else {
+                uri.path
+            }
+        } catch (e: Exception) {
+            Log.e("EETracker **** ", " getPathFromPhotoURL: ${e.message}")
+            e.printStackTrace()
+        } finally {
+            cursor?.close()
+        }
+
+        Log.d("EETracker **** ", " getPathFromPhotoURL: $path")
+        return path
     }
 }

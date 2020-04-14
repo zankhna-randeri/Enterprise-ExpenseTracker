@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 
 class EETrackerPreferenceManager {
-
     companion object {
         fun saveLoginPrefs(emailId: String?, fname: String?, lname: String?, context: Context?) {
             //Set the email Id and first name and last name in shared preferences
@@ -16,6 +15,11 @@ class EETrackerPreferenceManager {
             // keep user logged in
             editor.putBoolean(Constants.PREFS_LOGIN, true)
             editor.apply()
+        }
+
+        fun getUserEmail(context: Context?): String? {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            return sharedPreferences.getString("PREFS_EMAIL", null)
         }
     }
 }

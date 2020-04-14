@@ -7,8 +7,13 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avengers.enterpriseexpensetracker.modal.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
+import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.NetworkHelper
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
+import java.io.File
 
 private const val JOB_ID = 1000
 
@@ -18,7 +23,6 @@ private const val JOB_ID = 1000
  * helper methods.
  */
 class LoginService : JobIntentService() {
-
     companion object {
         /**
          * Starts this service to perform work with the given parameters. If
@@ -31,6 +35,8 @@ class LoginService : JobIntentService() {
             }
         }
 
+        val webservice: ExpenseTrackerWebService =
+            ExpenseTrackerWebService.retrofit.create(ExpenseTrackerWebService::class.java)
     }
 
     override fun onHandleWork(intent: Intent) {
@@ -39,20 +45,43 @@ class LoginService : JobIntentService() {
                 val user = intent.getParcelableExtra(Constants.EXTRA_LOGIN_USER) as LoginUser
                 handleActionLogin(user)
             }
+            Constants.ACTION_UPLOAD -> {
+                val receiptPath = intent.getStringExtra(Constants.EXTRA_UPLOAD_RECEIPT_PATH)
+                val expenseType = intent.getStringExtra(Constants.EXTRA_UPLOAD_EXPENSE_TYPE)
+                handleActionUploadReceipt(receiptPath, expenseType)
+            }
         }
     }
-
 
     private fun handleActionLogin(user: LoginUser) {
         if (NetworkHelper.hasNetworkAccess(applicationContext)) {
-            val webservice: ExpenseTrackerWebService =
-                ExpenseTrackerWebService.retrofit.create(ExpenseTrackerWebService::class.java)
             val call: Call<LoginResponse> = webservice.loginUser(user)
-            handleResponse(call.execute().body())
+            handleLoginResponse(call.execute().body())
         }
     }
 
-    private fun handleResponse(response: LoginResponse?) {
+    private fun handleActionUploadReceipt(receiptPath: String, type: String?) {
+        if (NetworkHelper.hasNetworkAccess(applicationContext)) {
+            //Create a file object using file path
+            val file = File(receiptPath);
+            // Create a request body with file and image media type
+            val filePart = MultipartBody.Part.createFormData("file",
+                    file.name, RequestBody.create(MediaType.parse("image/*"), file))
+            //val fileReqBody = RequestBody.create(MediaType.parse("image/*"), file)
+
+            val email = EETrackerPreferenceManager.getUserEmail(applicationContext)
+                    ?.let { RequestBody.create(MediaType.parse("text/plain"), it) }
+            val expenseType = type?.let {
+                RequestBody.create(MediaType.parse("text/plain"), it)
+            }
+
+            if (expenseType != null && email != null) {
+                val call = webservice.uploadReceipt(filePart, email, expenseType)
+            }
+        }
+    }
+
+    private fun handleLoginResponse(response: LoginResponse?) {
         if (response?.getMessage() != null) {
             val responseIntent = Intent(Constants.BROADCAST_LOGIN_RESPONSE).apply {
                 putExtra(Constants.EXTRA_API_RESPONSE, response)

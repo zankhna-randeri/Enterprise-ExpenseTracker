@@ -2,7 +2,6 @@ package com.avengers.enterpriseexpensetracker.util
 
 class Constants {
     companion object {
-
         //Expense type
         enum class ExpenseType {
             FOOD,
@@ -19,15 +18,19 @@ class Constants {
 
         // Actions
         const val ACTION_LOGIN = "com.avengers.enterpriseexpensetracker.action.LOGIN"
+        const val ACTION_UPLOAD = "com.avengers.enterpriseexpensetracker.action.UPLOAD"
 
         // Extras
         const val EXTRA_LOGIN_USER = "login_user"
+        const val EXTRA_UPLOAD_RECEIPT_PATH = "receipt_path"
+        const val EXTRA_UPLOAD_EXPENSE_TYPE = "expense_type"
         const val EXTRA_API_RESPONSE = "api_response"
 
         // API constants
         const val RESPONSE_OK = 200
 
         // Broadcast
-        const val BROADCAST_LOGIN_RESPONSE = "com.avengers.enterpriseexpensetracker.service.action.LOGIN_RESPONSE"
+        const val BROADCAST_LOGIN_RESPONSE =
+            "com.avengers.enterpriseexpensetracker.service.action.LOGIN_RESPONSE"
     }
 }

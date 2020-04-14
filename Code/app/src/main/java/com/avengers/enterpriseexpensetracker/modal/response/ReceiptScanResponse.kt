@@ -49,4 +49,7 @@ data class ReceiptScanResponse(private var expenseBusinessName: String? = null,
         }
     }
 
+    fun getApiResponseStatus(): Boolean? {
+        return super.status
+    }
 }

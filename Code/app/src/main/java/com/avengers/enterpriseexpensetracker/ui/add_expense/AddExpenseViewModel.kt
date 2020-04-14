@@ -7,12 +7,12 @@ import com.avengers.enterpriseexpensetracker.modal.VoiceMessage
 class AddExpenseViewModel : ViewModel() {
     private var conversations: ArrayList<VoiceMessage>? = null
     private var conversationLiveData = MutableLiveData<ArrayList<VoiceMessage>>()
-    var tmp = MutableLiveData<String>()
+    private var isUploadButtonEnabled = MutableLiveData<Boolean>()
 
     init {
         conversations = ArrayList()
         conversationLiveData.value = conversations
-        tmp.value = "First"
+        isUploadButtonEnabled.value = false
     }
 
     fun updateConversation(message: VoiceMessage) {
@@ -22,5 +22,13 @@ class AddExpenseViewModel : ViewModel() {
 
     fun getConversation(): MutableLiveData<ArrayList<VoiceMessage>> {
         return conversationLiveData
+    }
+
+    fun updateUploadButtonVisibility(enabled: Boolean) {
+        isUploadButtonEnabled.value = enabled
+    }
+
+    fun getUploadButtonVisibility() : MutableLiveData<Boolean> {
+        return isUploadButtonEnabled
     }
 }

@@ -17,13 +17,21 @@ class SpeechRecognitionListener(private var context: Context?,
                                 private var viewModel: ViewModel?) : RecognitionListener {
     private var tts: TextToSpeech? = null
     private var expenseType: String? = null
+    private var amount: Int? = -1
+    private var date: String? = null
+    private var isUploadEnabled: Boolean? = null
 
     init {
+        isUploadEnabled = false
         initTTS()
     }
 
     companion object {
         private const val UTTERANCE_ID = "1234"
+    }
+
+    fun setUploadEnabled(enabled: Boolean?) {
+        this.isUploadEnabled = enabled
     }
 
     private fun initTTS() {
@@ -37,7 +45,9 @@ class SpeechRecognitionListener(private var context: Context?,
                     Log.i("Success: %s", "Language Supported");
                 }
             } else {
-                Utility.getInstance().showMsg(context, context?.resources?.getString(R.string.tts_init_failed))
+                context?.let {
+                    Utility.getInstance().showMsg(it, context?.resources?.getString(R.string.tts_init_failed))
+                }
             }
         })
     }
@@ -89,13 +99,16 @@ class SpeechRecognitionListener(private var context: Context?,
             when {
                 isSubmittingExpense(command) -> {
                     answer =
-                        "What kind of expense you want to submit? Travel, Food or Other"
+                        "What kind of expense you want to submit? Travel, Food or Other."
                 }
                 isExpenseType(command) -> {
-                    answer = "How much amount you want to submit?"
+                    answer = "Ok, go ahead and upload expense receipt."
+                    isUploadEnabled = true
+                    (viewModel as AddExpenseViewModel).updateUploadButtonVisibility(isUploadEnabled!!)
+                    //answer = "How much amount you want to submit?"
                 }
                 isAmount(command) -> {
-                    answer = "Yes, go ahead"
+                    answer = "Yes, go ahead."
                 }
             }
 

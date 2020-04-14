@@ -8,11 +8,13 @@ class AddExpenseViewModel : ViewModel() {
     private var conversations: ArrayList<VoiceMessage>? = null
     private var conversationLiveData = MutableLiveData<ArrayList<VoiceMessage>>()
     private var isUploadButtonEnabled = MutableLiveData<Boolean>()
+    private var expenseType = MutableLiveData<String>()
 
     init {
         conversations = ArrayList()
         conversationLiveData.value = conversations
         isUploadButtonEnabled.value = false
+        expenseType.value = null
     }
 
     fun updateConversation(message: VoiceMessage) {
@@ -24,11 +26,19 @@ class AddExpenseViewModel : ViewModel() {
         return conversationLiveData
     }
 
-    fun updateUploadButtonVisibility(enabled: Boolean) {
+    fun setUploadButtonVisibility(enabled: Boolean) {
         isUploadButtonEnabled.value = enabled
     }
 
-    fun getUploadButtonVisibility() : MutableLiveData<Boolean> {
+    fun getUploadButtonVisibility(): MutableLiveData<Boolean> {
         return isUploadButtonEnabled
+    }
+
+    fun setExpenseType(expenseType: String) {
+        this.expenseType.value = expenseType
+    }
+
+    fun getExpenseType(): MutableLiveData<String>? {
+        return expenseType
     }
 }

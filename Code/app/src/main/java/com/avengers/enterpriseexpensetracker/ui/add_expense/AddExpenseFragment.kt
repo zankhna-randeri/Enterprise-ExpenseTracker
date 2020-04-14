@@ -40,7 +40,6 @@ import com.avengers.enterpriseexpensetracker.util.Utility
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -55,6 +54,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private var speechRecognizerIntent: Intent? = null
     private var cameraImagePhotoPath: String? = null
     private var isListening = false
+    private var expenseType: String? = null
     private val conversations = ArrayList<VoiceMessage>()
 
     //    private var receiptImageUri: Uri? = null
@@ -104,6 +104,10 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         addExpenseViewModel?.getUploadButtonVisibility()?.observe(viewLifecycleOwner, Observer {
             btnUpload?.visibility = if (it) View.VISIBLE else View.INVISIBLE
         })
+
+        addExpenseViewModel?.getExpenseType()?.observe(viewLifecycleOwner, Observer {
+            expenseType = it
+        })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -152,7 +156,6 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         } else {
             handlePhotosResponse(data)
         }
-
         // Do nothing if failed to get image path
         if (receiptPath.isNullOrBlank()) {
             activity?.applicationContext?.let {
@@ -170,6 +173,10 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     }
 
     private fun handleCameraResponse(): String? {
+        if (cameraImagePhotoPath.isNullOrBlank()) {
+            return null
+        }
+
         val file = File(cameraImagePhotoPath)
         var photo: Bitmap? = null
         try {

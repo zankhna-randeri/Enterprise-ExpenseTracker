@@ -104,7 +104,8 @@ class SpeechRecognitionListener(private var context: Context?,
                 isExpenseType(command) -> {
                     answer = "Ok, go ahead and upload expense receipt."
                     isUploadEnabled = true
-                    (viewModel as AddExpenseViewModel).updateUploadButtonVisibility(isUploadEnabled!!)
+                    isUploadEnabled?.let { (viewModel as AddExpenseViewModel).setUploadButtonVisibility(it) }
+                    expenseType?.let { (viewModel as AddExpenseViewModel).setExpenseType(it) }
                     //answer = "How much amount you want to submit?"
                 }
                 isAmount(command) -> {

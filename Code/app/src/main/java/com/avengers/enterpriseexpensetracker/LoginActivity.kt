@@ -196,10 +196,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         override fun onReceive(context: Context?, intent: Intent?) {
             val response = intent?.getParcelableExtra<LoginResponse>(Constants.EXTRA_API_RESPONSE)
             response?.let {
-                if (response.getApiResponseCode() != Constants.RESPONSE_OK) {
-                    onFailure(context, response.getMessage())
-                } else {
+                val statusSuccess = response.getApiResponseStatus() ?: false
+                if (statusSuccess) {
                     onSuccess(context, response)
+                } else {
+                    onFailure(context, context?.resources?.getString(R.string.failed_login))
                 }
             }
         }

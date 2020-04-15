@@ -50,7 +50,7 @@ data class ReceiptScanResponse(private var expenseBusinessName: String? = null,
     }
 
     fun getApiResponseStatus(): Boolean? {
-        return super.status
+        return super.statusToUI
     }
 
     fun getTotal(): Float {

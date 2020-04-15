@@ -16,8 +16,6 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import java.io.File
 
-private const val JOB_ID = 1000
-
 /**
  * An [JobIntentService] subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -25,6 +23,9 @@ private const val JOB_ID = 1000
  */
 class LoginService : JobIntentService() {
     companion object {
+
+        private const val JOB_ID = 1000
+
         /**
          * Starts this service to perform work with the given parameters. If
          * the service is already performing a task this action will be queued.
@@ -92,12 +93,10 @@ class LoginService : JobIntentService() {
     }
 
     private fun handleLoginResponse(response: LoginResponse?) {
-        if (response?.getMessage() != null) {
-            val responseIntent = Intent(Constants.BROADCAST_LOGIN_RESPONSE).apply {
-                putExtra(Constants.EXTRA_API_RESPONSE, response)
-            }
-            val broadcastManager = LocalBroadcastManager.getInstance(applicationContext)
-            broadcastManager.sendBroadcast(responseIntent)
+        val responseIntent = Intent(Constants.BROADCAST_LOGIN_RESPONSE).apply {
+            putExtra(Constants.EXTRA_API_RESPONSE, response)
         }
+        val broadcastManager = LocalBroadcastManager.getInstance(applicationContext)
+        broadcastManager.sendBroadcast(responseIntent)
     }
 }

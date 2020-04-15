@@ -26,7 +26,7 @@ interface ExpenseTrackerWebService {
     fun loginUser(@Body userLoginRequest: LoginUser): Call<LoginResponse>
 
     @Multipart
-    @POST("uploadReceiptToS3")
+    @POST("receiptScan")
     fun uploadReceipt(@Part file: MultipartBody.Part,
                       @Part("emailId") emailId: RequestBody,
                       @Part("expenseCategory") category: RequestBody): Call<ReceiptScanResponse>

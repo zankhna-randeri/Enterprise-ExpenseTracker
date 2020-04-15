@@ -26,9 +26,6 @@ class Constants {
         const val EXTRA_UPLOAD_EXPENSE_TYPE = "expense_type"
         const val EXTRA_API_RESPONSE = "api_response"
 
-        // API constants
-        const val RESPONSE_OK = 200
-
         // Broadcast
         const val BROADCAST_LOGIN_RESPONSE =
             "com.avengers.enterpriseexpensetracker.service.action.LOGIN_RESPONSE"

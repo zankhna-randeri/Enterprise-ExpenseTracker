@@ -32,5 +32,7 @@ class Constants {
         // Broadcast
         const val BROADCAST_LOGIN_RESPONSE =
             "com.avengers.enterpriseexpensetracker.service.action.LOGIN_RESPONSE"
+        const val BROADCAST_RECEIPT_SCAN_RESPONSE =
+            "com.avengers.enterpriseexpensetracker.service.action.RECEIPT_SCAN_RESPONSE"
     }
 }

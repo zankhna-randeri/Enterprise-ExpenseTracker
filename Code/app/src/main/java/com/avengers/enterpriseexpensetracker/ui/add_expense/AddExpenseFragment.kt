@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -29,11 +30,15 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.ConversationAdapter
 import com.avengers.enterpriseexpensetracker.modal.VoiceMessage
+import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
+import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
+import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
 import com.avengers.enterpriseexpensetracker.service.LoginService
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.Utility
@@ -52,6 +57,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private var speechRecognizer: SpeechRecognizer? = null
     private var speechRecognitionListener: SpeechRecognitionListener? = null
     private var speechRecognizerIntent: Intent? = null
+    private var responseReceiver: ReceiptScanResponseReceiver? = null
     private var cameraImagePhotoPath: String? = null
     private var isListening = false
     private var expenseType: String? = null
@@ -78,9 +84,15 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         btnUpload?.setOnClickListener(this)
         btnVoice = view.findViewById(R.id.btnListen)
         btnVoice?.setOnClickListener(this)
+
+        initBroadcast()
         initSpeechRecognizer()
         setUpConversations()
         setUpObservers()
+    }
+
+    private fun initBroadcast() {
+        responseReceiver = ReceiptScanResponseReceiver()
     }
 
     private fun setUpConversations() {
@@ -146,6 +158,25 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             when (requestCode) {
                 ACTION_CAMERA -> handleSelectImageResponse(isCamera = true, data = data)
                 ACTION_PHOTOS -> handleSelectImageResponse(isCamera = false, data = data)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        responseReceiver?.let {
+            val intentFilter = IntentFilter(Constants.BROADCAST_RECEIPT_SCAN_RESPONSE)
+            activity?.applicationContext?.let {
+                LocalBroadcastManager.getInstance(it).registerReceiver(responseReceiver!!, intentFilter)
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        responseReceiver?.let {
+            activity?.applicationContext?.let {
+                LocalBroadcastManager.getInstance(it).unregisterReceiver(responseReceiver!!)
             }
         }
     }
@@ -386,6 +417,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         if (uri == null) {
             return null
         }
+
         var path: String? = null
         var cursor: Cursor? = null
         try {
@@ -407,5 +439,31 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
         Log.d("EETracker **** ", " getPathFromPhotoURL: $path")
         return path
+    }
+
+    private class ReceiptScanResponseReceiver : ApiResponseReceiver() {
+        override fun onSuccess(context: Context?, response: ApiResponse) {
+            (context as AddExpenseFragment).updateVoiceBotData(response as ReceiptScanResponse)
+        }
+
+        override fun onFailure(context: Context?, message: String?) {
+            context?.let { Utility.getInstance().showMsg(it, message) }
+        }
+
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val response = intent?.getParcelableExtra<ReceiptScanResponse>(Constants.EXTRA_API_RESPONSE)
+            response?.let {
+                val statusSuccess = response.getApiResponseStatus() ?: false
+                if (statusSuccess) {
+                    onFailure(context, context?.getString(R.string.txt_api_failed))
+                } else {
+                    onSuccess(context, response)
+                }
+            }
+        }
+    }
+
+    private fun updateVoiceBotData(receiptScanResponse: ReceiptScanResponse) {
+        speechRecognitionListener?.updateCurrentExpense(receiptScanResponse)
     }
 }

@@ -44,4 +44,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_notification">Notifications</string>
 
+    <!--    Notification-->
+    <string name="status_notification_channel_id">1111</string>
+    <string name="status_notification_channel_name">Expense Report Status Update</string>
+    <string name="txt_status_update">Expense Report Status Update</string>
 </resources>

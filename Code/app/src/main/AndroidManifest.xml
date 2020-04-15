@@ -19,14 +19,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NotificationActivity"></activity>
+        <activity android:name=".NotificationActivity"/>
         <activity
             android:name=".DashboardActivity"
             android:label="@string/title_activity_dashboard"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".service.LoginService"
+            android:name=".service.EETrackerJobService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 

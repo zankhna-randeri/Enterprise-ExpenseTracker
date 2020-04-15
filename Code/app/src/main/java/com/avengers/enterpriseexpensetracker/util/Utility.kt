@@ -3,7 +3,7 @@ package com.avengers.enterpriseexpensetracker.util
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.avengers.enterpriseexpensetracker.service.LoginService
+import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
 
 class Utility {
 
@@ -26,6 +26,6 @@ class Utility {
     }
 
     fun startExpenseTrackerService(context: Context?, intent: Intent?) {
-       LoginService.enqueueWork(context, intent)
+       EETrackerJobService.enqueueWork(context, intent)
     }
 }

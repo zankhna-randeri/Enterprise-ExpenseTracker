@@ -39,7 +39,7 @@ import com.avengers.enterpriseexpensetracker.modal.VoiceMessage
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
 import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
-import com.avengers.enterpriseexpensetracker.service.LoginService
+import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.Utility
 import java.io.ByteArrayOutputStream
@@ -195,7 +195,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             return
         }
         // Send to webservice
-        val intent = Intent(activity?.applicationContext, LoginService::class.java).apply {
+        val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
             putExtra(Constants.EXTRA_UPLOAD_RECEIPT_PATH, receiptPath)
             putExtra(Constants.EXTRA_UPLOAD_EXPENSE_TYPE, expenseType)
             action = Constants.ACTION_UPLOAD

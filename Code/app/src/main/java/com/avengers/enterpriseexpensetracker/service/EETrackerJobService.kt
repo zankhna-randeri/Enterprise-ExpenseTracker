@@ -21,7 +21,7 @@ import java.io.File
  * a service on a separate handler thread.
  * helper methods.
  */
-class LoginService : JobIntentService() {
+class EETrackerJobService : JobIntentService() {
     companion object {
 
         private const val JOB_ID = 1000
@@ -33,7 +33,7 @@ class LoginService : JobIntentService() {
         @JvmStatic
         fun enqueueWork(context: Context?, intent: Intent?) {
             if (context != null && intent != null) {
-                enqueueWork(context, LoginService::class.java, JOB_ID, intent)
+                enqueueWork(context, EETrackerJobService::class.java, JOB_ID, intent)
             }
         }
 

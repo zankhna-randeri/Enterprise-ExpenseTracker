@@ -27,7 +27,7 @@ import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.modal.tracking.TrackLoginData
 import com.avengers.enterpriseexpensetracker.modal.tracking.TrackScreenData
 import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
-import com.avengers.enterpriseexpensetracker.service.LoginService
+import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
 import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
@@ -94,6 +94,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         inputPassword = findViewById(R.id.txt_input_password)
         btnSubmit = findViewById(R.id.btn_login_submit)
         btnSubmit?.setOnClickListener(this)
+
         // Setup forgot password link
         forgotPwd = findViewById(R.id.txt_forgot_pwd)
         forgotPwd.paintFlags = forgotPwd.paintFlags or Paint.UNDERLINE_TEXT_FLAG
@@ -162,7 +163,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     getString(R.string.enter_login_info))
         } else {
             val user = LoginUser(email, password)
-            val intent = Intent(this, LoginService::class.java).apply {
+            val intent = Intent(this, EETrackerJobService::class.java).apply {
                 putExtra(Constants.EXTRA_LOGIN_USER, user)
                 action = Constants.ACTION_LOGIN
             }

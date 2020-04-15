@@ -78,6 +78,9 @@ dependencies {
     // Firebase crashlytics
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
 
+    // Firebase Messaging
+    implementation 'com.google.firebase:firebase-messaging:20.1.5'
+
     // Chart
     implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
 

@@ -6,35 +6,40 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.Paint
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Patterns
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.avengers.enterpriseexpensetracker.modal.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
+import com.avengers.enterpriseexpensetracker.modal.tracking.TrackLoginData
+import com.avengers.enterpriseexpensetracker.modal.tracking.TrackScreenData
 import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
 import com.avengers.enterpriseexpensetracker.service.LoginService
+import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.Utility
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
-import java.util.regex.Pattern
+import com.google.firebase.FirebaseApp
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
-
+    private lateinit var activityLayout: CoordinatorLayout
+    private lateinit var forgotPwd: TextView
     private var toolbar: Toolbar? = null
     private var title: TextView? = null
     private var inputEmail: TextInputLayout? = null
@@ -52,6 +57,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login);
+
+        FirebaseApp.initializeApp(applicationContext)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        FirebaseCrashlytics.getInstance().sendUnsentReports();
 
         if (isAlreadyLoggedIn()) {
             val intent = Intent(this, VoiceBotActivity::class.java)
@@ -76,6 +85,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initView() {
+        activityLayout = findViewById(R.id.lyt_login)
         progress = findViewById(R.id.lyt_progress)
         txtProgressMsg = progress?.findViewById(R.id.txt_progress_msg)
         toolbar = findViewById(R.id.toolbar)
@@ -83,10 +93,15 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         inputEmail = findViewById(R.id.txt_input_email)
         inputPassword = findViewById(R.id.txt_input_password)
         btnSubmit = findViewById(R.id.btn_login_submit)
-        setUpToolbar()
         btnSubmit?.setOnClickListener(this)
+        // Setup forgot password link
+        forgotPwd = findViewById(R.id.txt_forgot_pwd)
+        forgotPwd.paintFlags = forgotPwd.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        setUpToolbar()
 
         initBroadcast()
+
+        AnalyticsHelper.getInstance().trackViewScreenEvent(this, TrackScreenData("Login"))
     }
 
     private fun initBroadcast() {
@@ -104,15 +119,16 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            finish();
-            return true;
+            finish()
+            return true
         }
-        return false;
+        return false
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_login_submit -> {
+                AnalyticsHelper.getInstance().trackLogin(this, TrackLoginData("email"))
                 val email = inputEmail?.editText?.text.toString()
                 val password = inputPassword?.editText?.text.toString()
                 handleLogin(email, password)
@@ -122,7 +138,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        if (loginResponseReceiver != null) {
+        loginResponseReceiver?.let {
             val intentFilter = IntentFilter(Constants.BROADCAST_LOGIN_RESPONSE)
             LocalBroadcastManager.getInstance(this).registerReceiver(loginResponseReceiver!!, intentFilter)
         }
@@ -130,7 +146,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onPause() {
         super.onPause()
-        if (loginResponseReceiver != null) {
+        loginResponseReceiver?.let {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(loginResponseReceiver!!)
         }
     }
@@ -141,7 +157,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun handleLogin(email: String?, password: String?) {
-        if (!password.isNullOrBlank() || !isValidEmail(email)) {
+        if (password.isNullOrBlank() || !isValidEmail(email)) {
             Utility.getInstance().showMsg(applicationContext,
                     getString(R.string.enter_login_info))
         } else {
@@ -159,28 +175,32 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private class LoginResponseReceiver : ApiResponseReceiver() {
-
         override fun onSuccess(context: Context?, response: ApiResponse) {
             val res = response as LoginResponse
             EETrackerPreferenceManager.saveLoginPrefs(res.getEmail(),
                     res.getFname(),
                     res.getLname(),
                     context)
-            val intent = Intent(context, VoiceBotActivity::class.java)
+            val intent = Intent(context, DashboardActivity::class.java)
             context?.startActivity(intent)
             (context as LoginActivity).finish()
         }
 
         override fun onFailure(context: Context?, message: String?) {
-            Utility.getInstance().showMsg(context, message)
+            val snackbar = Snackbar.make((context as LoginActivity).activityLayout, message.toString(),
+                    Snackbar.LENGTH_LONG)
+            snackbar.view.setBackgroundColor(context.resources.getColor(android.R.color.holo_red_light))
+            snackbar.show()
         }
 
         override fun onReceive(context: Context?, intent: Intent?) {
             val response = intent?.getParcelableExtra<LoginResponse>(Constants.EXTRA_API_RESPONSE)
-            if (response?.getApiResponseCode() != Constants.RESPONSE_OK) {
-                onFailure(context, response?.getMessage())
-            } else {
-                onSuccess(context, response)
+            response?.let {
+                if (response.getApiResponseCode() != Constants.RESPONSE_OK) {
+                    onFailure(context, response.getMessage())
+                } else {
+                    onSuccess(context, response)
+                }
             }
         }
     }

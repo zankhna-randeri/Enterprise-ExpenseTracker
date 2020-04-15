@@ -24,6 +24,7 @@
     <!-- common-->
     <string name="txt_loading">Loading</string>
     <string name="txt_cancel">Cancel</string>
+    <string name="txt_api_failed">API call failed!</string>
 
     <!--    Dashboard-->
     <string name="title_activity_dashboard">DashboardActivity</string>

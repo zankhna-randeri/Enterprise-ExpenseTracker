@@ -8,10 +8,14 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.avengers.enterpriseexpensetracker.R
+import com.avengers.enterpriseexpensetracker.modal.Expense
+import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.VoiceMessage
+import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.Utility
 import java.util.*
+import kotlin.collections.ArrayList
 
 class SpeechRecognitionListener(private var context: Context?,
                                 private var viewModel: ViewModel?) : RecognitionListener {
@@ -20,9 +24,15 @@ class SpeechRecognitionListener(private var context: Context?,
     private var amount: Int? = -1
     private var date: String? = null
     private var isUploadEnabled: Boolean? = null
+    private var expenseReport: ExpenseReport? = null
+    private var currentExpense: Expense? = null
+    private var expenses: List<Expense>? = null
 
     init {
         isUploadEnabled = false
+        expenseReport = ExpenseReport()
+        expenses = ArrayList()
+        currentExpense = Expense()
         initTTS()
     }
 
@@ -97,7 +107,7 @@ class SpeechRecognitionListener(private var context: Context?,
                 (viewModel as AddExpenseViewModel).updateConversation(request)
             }
             when {
-                isSubmittingExpense(command) -> {
+                isSubmitRequest(command) -> {
                     answer =
                         "What kind of expense you want to submit? Travel, Food or Other."
                 }
@@ -112,14 +122,14 @@ class SpeechRecognitionListener(private var context: Context?,
                     answer = "Yes, go ahead."
                 }
             }
-
         }
+
         val response = VoiceMessage(answer, true)
         (viewModel as AddExpenseViewModel).updateConversation(response)
         tts?.speak(answer, TextToSpeech.QUEUE_FLUSH, null, UTTERANCE_ID)
     }
 
-    private fun isSubmittingExpense(command: String): Boolean {
+    private fun isSubmitRequest(command: String): Boolean {
         return command.contains("submit expenses", true) ||
                 command.contains("submit my expenses", true) ||
                 command.contains("submit expense", true) ||
@@ -147,5 +157,21 @@ class SpeechRecognitionListener(private var context: Context?,
         return command.contains("dollar", false) ||
                 command.contains("dollars", false) ||
                 command.contains("$", false)
+    }
+
+    fun updateCurrentExpense(receiptScanResponse: ReceiptScanResponse) {
+        //hide upload button
+        (viewModel as AddExpenseViewModel).setUploadButtonVisibility(false)
+
+        currentExpense?.setAmount(receiptScanResponse.getTotal())
+        currentExpense?.setDate(receiptScanResponse.getExpenseDate())
+        val answer = "Your expense details after receipt scan is as below: \n " +
+                "Expense Amount : ${currentExpense?.getAmount()} \n" +
+                "Expense Date : ${currentExpense?.getDate()} \n" +
+                "Do you want to submit these details?"
+
+        val response = VoiceMessage(answer, true)
+        (viewModel as AddExpenseViewModel).updateConversation(response)
+        tts?.speak(answer, TextToSpeech.QUEUE_FLUSH, null, UTTERANCE_ID)
     }
 }

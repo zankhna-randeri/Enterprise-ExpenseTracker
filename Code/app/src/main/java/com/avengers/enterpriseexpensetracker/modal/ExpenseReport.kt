@@ -21,4 +21,6 @@ class ExpenseReport {
         this.status = status
         this.total = total
     }
+
+    constructor()
 }

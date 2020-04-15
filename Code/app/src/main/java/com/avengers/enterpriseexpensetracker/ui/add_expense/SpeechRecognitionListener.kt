@@ -107,6 +107,9 @@ class SpeechRecognitionListener(private var context: Context?,
                 (viewModel as AddExpenseViewModel).updateConversation(request)
             }
             when {
+                isUserAgreed(command) -> {
+                    answer = "Thank you! Your expense report will be submitted."
+                }
                 isSubmitRequest(command) -> {
                     answer =
                         "What kind of expense you want to submit? Travel, Food or Other."
@@ -120,6 +123,9 @@ class SpeechRecognitionListener(private var context: Context?,
                 }
                 isAmount(command) -> {
                     answer = "Yes, go ahead."
+                }
+                isModify(command) -> {
+
                 }
             }
         }
@@ -151,6 +157,17 @@ class SpeechRecognitionListener(private var context: Context?,
         }
 
         return null
+    }
+
+    private fun isModify(command: String): Boolean {
+        return command.contains("modify", true) ||
+                command.contains("update", true) ||
+                command.contains("edit", true) ||
+                command.contains("change", true)
+    }
+
+    private fun isUserAgreed(command: String): Boolean {
+        return command.contains("yes", true) || command.contains("go ahead", true)
     }
 
     private fun isAmount(command: String): Boolean {

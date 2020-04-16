@@ -5,7 +5,7 @@ import android.os.Parcelable
 
 data class LoginResponse(private var firstName: String? = null,
                          private var lastName: String? = null,
-                         private var emailId: String?) : ApiResponse(), Parcelable {
+                         private var emailid: String?) : ApiResponse(), Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
@@ -26,7 +26,7 @@ data class LoginResponse(private var firstName: String? = null,
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(firstName)
         parcel.writeString(lastName)
-        parcel.writeString(emailId)
+        parcel.writeString(emailid)
     }
 
     override fun describeContents(): Int {
@@ -34,7 +34,7 @@ data class LoginResponse(private var firstName: String? = null,
     }
 
     fun getEmail(): String? {
-        return this.emailId
+        return this.emailid
     }
 
     fun getFname(): String? {

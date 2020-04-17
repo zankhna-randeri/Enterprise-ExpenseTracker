@@ -19,7 +19,7 @@ class EETrackerPreferenceManager {
 
         fun getUserEmail(context: Context?): String? {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-            return sharedPreferences.getString("PREFS_EMAIL", null)
+            return sharedPreferences.getString(Constants.PREFS_EMAIL, null)
         }
     }
 }

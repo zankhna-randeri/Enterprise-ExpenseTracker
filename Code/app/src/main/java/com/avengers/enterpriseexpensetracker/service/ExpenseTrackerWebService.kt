@@ -15,7 +15,7 @@ import retrofit2.http.Part
 
 interface ExpenseTrackerWebService {
     companion object {
-        private const val BASE_URL = "http://eet-env.eba-xqmhpn6k.us-east-1.elasticbeanstalk.com/"
+        private const val BASE_URL = "http://expensetracker.us-east-1.elasticbeanstalk.com"
 
         val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)

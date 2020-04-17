@@ -2,6 +2,7 @@ package com.avengers.enterpriseexpensetracker.ui.add_expense
 
 import android.Manifest
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -57,7 +58,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private var speechRecognizer: SpeechRecognizer? = null
     private var speechRecognitionListener: SpeechRecognitionListener? = null
     private var speechRecognizerIntent: Intent? = null
-    private var responseReceiver: ReceiptScanResponseReceiver? = null
+    private var responseReceiver: BroadcastReceiver? = null
     private var cameraImagePhotoPath: String? = null
     private var isListening = false
     private var expenseType: String? = null
@@ -92,7 +93,28 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initBroadcast() {
-        responseReceiver = ReceiptScanResponseReceiver()
+        responseReceiver = object : ApiResponseReceiver() {
+            override fun onSuccess(context: Context?, response: ApiResponse) {
+                updateVoiceBotData(response as ReceiptScanResponse)
+            }
+
+            override fun onFailure(context: Context?, message: String?) {
+                context?.let { Utility.getInstance().showMsg(it, message) }
+            }
+
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val response = intent?.getParcelableExtra<ReceiptScanResponse>(Constants.EXTRA_API_RESPONSE)
+                response?.let {
+                    Log.d("EETracker ***", "response $response")
+                    val statusSuccess = response.getApiResponseStatus() ?: false
+                    if (statusSuccess) {
+                        onFailure(context, context?.getString(R.string.txt_api_failed))
+                    } else {
+                        onSuccess(context, response)
+                    }
+                }
+            }
+        }
     }
 
     private fun setUpConversations() {
@@ -439,28 +461,6 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
         Log.d("EETracker **** ", " getPathFromPhotoURL: $path")
         return path
-    }
-
-    private class ReceiptScanResponseReceiver : ApiResponseReceiver() {
-        override fun onSuccess(context: Context?, response: ApiResponse) {
-            (context as AddExpenseFragment).updateVoiceBotData(response as ReceiptScanResponse)
-        }
-
-        override fun onFailure(context: Context?, message: String?) {
-            context?.let { Utility.getInstance().showMsg(it, message) }
-        }
-
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val response = intent?.getParcelableExtra<ReceiptScanResponse>(Constants.EXTRA_API_RESPONSE)
-            response?.let {
-                val statusSuccess = response.getApiResponseStatus() ?: false
-                if (statusSuccess) {
-                    onFailure(context, context?.getString(R.string.txt_api_failed))
-                } else {
-                    onSuccess(context, response)
-                }
-            }
-        }
     }
 
     private fun updateVoiceBotData(receiptScanResponse: ReceiptScanResponse) {

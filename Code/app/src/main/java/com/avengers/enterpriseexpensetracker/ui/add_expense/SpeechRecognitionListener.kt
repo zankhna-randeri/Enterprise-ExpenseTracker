@@ -23,10 +23,11 @@ class SpeechRecognitionListener(private var context: Context?,
     private var expenseType: String? = null
     private var amount: Int? = -1
     private var date: String? = null
+    private var toggleUpdateMode: Boolean = false
     private var isUploadEnabled: Boolean? = null
     private var expenseReport: ExpenseReport? = null
     private var currentExpense: Expense? = null
-    private var expenses: List<Expense>? = null
+    private var expenses: MutableList<Expense>? = null
 
     init {
         isUploadEnabled = false
@@ -106,26 +107,60 @@ class SpeechRecognitionListener(private var context: Context?,
                 val request = VoiceMessage(command, false)
                 (viewModel as AddExpenseViewModel).updateConversation(request)
             }
-            when {
-                isUserAgreed(command) -> {
-                    answer = "Thank you! Your expense report will be submitted."
-                }
-                isSubmitRequest(command) -> {
-                    answer =
-                        "What kind of expense you want to submit? Travel, Food or Other."
-                }
-                isExpenseType(command) -> {
-                    answer = "Ok, go ahead and upload expense receipt."
-                    isUploadEnabled = true
-                    isUploadEnabled?.let { (viewModel as AddExpenseViewModel).setUploadButtonVisibility(it) }
-                    expenseType?.let { (viewModel as AddExpenseViewModel).setExpenseType(it) }
-                    //answer = "How much amount you want to submit?"
-                }
-                isAmount(command) -> {
-                    answer = "Yes, go ahead."
-                }
-                isModify(command) -> {
 
+            if (toggleUpdateMode) {
+                when {
+                    isReqDateChange(command) -> {
+                        answer = "Please provide with the changed date ? "
+                    }
+                    isReqAmtChange(command) -> {
+                        answer = "Please provide with the changed amount ?"
+                    }
+                    isReqCategoryChange(command) -> {
+                        answer =
+                            "Please provide with the changed category ? Such as - Travel, Food, Accommodation or Other"
+                    }
+                    isExpenseType(command) -> {
+                        toggleUpdateMode = false
+                        expenseType?.let {
+                            currentExpense?.setCategory(it)
+                            answer = "Category is updated to $it. \n" +
+                                    "Do you want to submit expense?"
+                        }
+                    }
+                    isAmount(command) -> {
+                        toggleUpdateMode = false
+                        currentExpense?.setAmount(command.toFloat())
+                        answer = "Amount is updated to ${currentExpense?.getAmount()}. \n" +
+                                "Do you want to submit expense?"
+                    }
+                    isDate(command) -> {
+                        toggleUpdateMode = false
+                        currentExpense?.setDate(command)
+                        answer = "Date is updated to ${currentExpense?.getDate()}. \n" +
+                                "Do you want to submit this expense?"
+                    }
+                }
+            } else {
+                when {
+                    isUserAgreed(command) -> {
+                        answer = "Thank you! Your expense report will be submitted."
+                    }
+                    isSubmitRequest(command) -> {
+                        answer =
+                            "What kind of expense you want to submit? Travel, Food, Accommodation or Other."
+                    }
+                    isExpenseType(command) -> {
+                        answer = "Ok, go ahead and upload expense receipt."
+                        isUploadEnabled = true
+                        isUploadEnabled?.let { (viewModel as AddExpenseViewModel).setUploadButtonVisibility(it) }
+                        expenseType?.let { (viewModel as AddExpenseViewModel).setExpenseType(it) }
+                        //answer = "How much amount you want to submit?"
+                    }
+                    isModify(command) -> {
+                        toggleUpdateMode = true
+                        answer = "What would you like to change - category, amount or date?"
+                    }
                 }
             }
         }
@@ -141,6 +176,7 @@ class SpeechRecognitionListener(private var context: Context?,
                 command.contains("submit expense", true) ||
                 command.contains("submit my expense", true) ||
                 command.contains("expenses", true) ||
+                command.contains("expense", true) ||
                 command.contains("submit", true)
     }
 
@@ -166,14 +202,50 @@ class SpeechRecognitionListener(private var context: Context?,
                 command.contains("change", true)
     }
 
+    private fun isReqDateChange(command: String): Boolean {
+        return command.contains("date", true)
+    }
+
+    private fun isReqAmtChange(command: String): Boolean {
+        return command.contains("amount", true) ||
+                command.contains("charge", true)
+    }
+
+    private fun isReqCategoryChange(command: String): Boolean {
+        return command.contains("category", true) ||
+                command.contains("type", true)
+    }
+
     private fun isUserAgreed(command: String): Boolean {
-        return command.contains("yes", true) || command.contains("go ahead", true)
+        return command.contains("yes", true) ||
+                command.contains("go ahead", true) ||
+                command.contains("yaa", true) ||
+                command.contains("confirmed", true) ||
+                command.contains("yup", true) ||
+                command.contains("confirm", true)
     }
 
     private fun isAmount(command: String): Boolean {
-        return command.contains("dollar", false) ||
-                command.contains("dollars", false) ||
-                command.contains("$", false)
+        return command.contains("dollar", true) ||
+                command.contains("dollars", true) ||
+                command.contains("$", true) ||
+                command.contains("cent", true) ||
+                command.contains("cents", true)
+    }
+
+    private fun isDate(command: String): Boolean {
+        return command.contains("January", true) ||
+                command.contains("February", true) ||
+                command.contains("march", true) ||
+                command.contains("april", true) ||
+                command.contains("may", true) ||
+                command.contains("june", true) ||
+                command.contains("july", true) ||
+                command.contains("august", true) ||
+                command.contains("september", true) ||
+                command.contains("october", true) ||
+                command.contains("november", true) ||
+                command.contains("december", true)
     }
 
     fun updateCurrentExpense(receiptScanResponse: ReceiptScanResponse) {
@@ -182,8 +254,8 @@ class SpeechRecognitionListener(private var context: Context?,
 
         currentExpense?.setAmount(receiptScanResponse.getTotal())
         currentExpense?.setDate(receiptScanResponse.getExpenseDate())
-        val answer = "Your expense details after receipt scan is as below: \n " +
-                "Expense Amount : ${currentExpense?.getAmount()} \n" +
+        val answer = "Your expense details after receipt scan are as below: \n" +
+                "Expense Amount : ${currentExpense?.getAmount()} $\n" +
                 "Expense Date : ${currentExpense?.getDate()} \n" +
                 "Do you want to submit these details?"
 

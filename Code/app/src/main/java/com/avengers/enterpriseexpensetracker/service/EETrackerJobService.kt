@@ -76,10 +76,10 @@ class EETrackerJobService : JobIntentService() {
             val expenseType = type?.let {
                 RequestBody.create(MediaType.parse("text/plain"), it)
             }
-
             if (expenseType != null && email != null) {
                 val call = webservice.uploadReceipt(filePart, email, expenseType)
-                handleReceiptScanResponse(call.execute().body())
+                val response = call.execute()
+                handleReceiptScanResponse(response.body())
             }
         }
     }

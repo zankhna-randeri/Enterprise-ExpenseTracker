@@ -113,9 +113,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                         res.getFname(),
                         res.getLname(),
                         context)
-                val intent = Intent(context, DashboardActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
+                val intent = Intent(context, DashboardActivity::class.java)
                 context?.startActivity(intent)
                 (context as LoginActivity).finish()
             }

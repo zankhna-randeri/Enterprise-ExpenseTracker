@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         FirebaseCrashlytics.getInstance().sendUnsentReports();
 
         if (isAlreadyLoggedIn()) {
-            val intent = Intent(this, VoiceBotActivity::class.java)
+            val intent = Intent(this, DashboardActivity::class.java)
             startActivity(intent)
             this.finish()
         } else {
@@ -106,7 +106,42 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initBroadcast() {
-        loginResponseReceiver = LoginResponseReceiver()
+        loginResponseReceiver = object : ApiResponseReceiver() {
+            override fun onSuccess(context: Context?, response: ApiResponse) {
+                val res = response as LoginResponse
+                EETrackerPreferenceManager.saveLoginPrefs(res.getEmail(),
+                        res.getFname(),
+                        res.getLname(),
+                        context)
+                val intent = Intent(context, DashboardActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context?.startActivity(intent)
+                (context as LoginActivity).finish()
+            }
+
+            override fun onFailure(context: Context?, message: String?) {
+                val snackbar = Snackbar.make(activityLayout, message.toString(),
+                        Snackbar.LENGTH_LONG)
+                context?.let {
+                    snackbar.view.setBackgroundColor(ContextCompat.getColor(it,
+                            android.R.color.holo_red_light))
+                }
+                snackbar.show()
+            }
+
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val response = intent?.getParcelableExtra<LoginResponse>(Constants.EXTRA_API_RESPONSE)
+                response?.let {
+                    val statusSuccess = response.getApiResponseStatus() ?: false
+                    if (statusSuccess) {
+                        onSuccess(context, response)
+                    } else {
+                        onFailure(context, context?.resources?.getString(R.string.failed_login))
+                    }
+                }
+            }
+        }
     }
 
     private fun setUpToolbar() {
@@ -173,37 +208,5 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     fun isValidEmail(email: String?): Boolean {
         return (!email.isNullOrBlank()) && Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    private class LoginResponseReceiver : ApiResponseReceiver() {
-        override fun onSuccess(context: Context?, response: ApiResponse) {
-            val res = response as LoginResponse
-            EETrackerPreferenceManager.saveLoginPrefs(res.getEmail(),
-                    res.getFname(),
-                    res.getLname(),
-                    context)
-            val intent = Intent(context, DashboardActivity::class.java)
-            context?.startActivity(intent)
-            (context as LoginActivity).finish()
-        }
-
-        override fun onFailure(context: Context?, message: String?) {
-            val snackbar = Snackbar.make((context as LoginActivity).activityLayout, message.toString(),
-                    Snackbar.LENGTH_LONG)
-            snackbar.view.setBackgroundColor(context.resources.getColor(android.R.color.holo_red_light))
-            snackbar.show()
-        }
-
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val response = intent?.getParcelableExtra<LoginResponse>(Constants.EXTRA_API_RESPONSE)
-            response?.let {
-                val statusSuccess = response.getApiResponseStatus() ?: false
-                if (statusSuccess) {
-                    onSuccess(context, response)
-                } else {
-                    onFailure(context, context?.resources?.getString(R.string.failed_login))
-                }
-            }
-        }
     }
 }

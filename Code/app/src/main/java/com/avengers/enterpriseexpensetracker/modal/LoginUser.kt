@@ -3,7 +3,7 @@ package com.avengers.enterpriseexpensetracker.modal
 import android.os.Parcel
 import android.os.Parcelable
 
-data class LoginUser(private var email: String? = null,
+data class LoginUser(private var emailId: String? = null,
                      private var password: String? = null) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -12,7 +12,7 @@ data class LoginUser(private var email: String? = null,
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(email)
+        parcel.writeString(emailId)
         parcel.writeString(password)
     }
 

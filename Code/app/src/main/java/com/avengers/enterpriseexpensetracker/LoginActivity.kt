@@ -113,9 +113,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                         res.getFname(),
                         res.getLname(),
                         context)
-                val intent = Intent(context, DashboardActivity::class.java)
-                context?.startActivity(intent)
-                (context as LoginActivity).finish()
+                val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
+                startActivity(intent)
+                finish()
             }
 
             override fun onFailure(context: Context?, message: String?) {

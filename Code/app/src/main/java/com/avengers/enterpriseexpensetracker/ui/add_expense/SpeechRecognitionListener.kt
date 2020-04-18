@@ -13,7 +13,9 @@ import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.VoiceMessage
 import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
+import com.avengers.enterpriseexpensetracker.util.EETrackerDateFormatManager
 import com.avengers.enterpriseexpensetracker.util.Utility
+import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -129,16 +131,25 @@ class SpeechRecognitionListener(private var context: Context?,
                         }
                     }
                     isAmount(command) -> {
-                        toggleUpdateMode = false
-                        currentExpense?.setAmount(command.toFloat())
-                        answer = "Amount is updated to ${currentExpense?.getAmount()}. \n" +
-                                "Do you want to submit expense?"
+                        val changedAmt = getCurrencyAmount(command)
+                        answer = if (changedAmt != null && !changedAmt.isNaN()) {
+                            toggleUpdateMode = false
+                            currentExpense?.setAmount(changedAmt)
+                            "Amount is updated to $${currentExpense?.getAmount()}. \n" +
+                                    "Do you want to submit expense?"
+                        } else {
+                            "invalid amount."
+                        }
                     }
                     isDate(command) -> {
-                        toggleUpdateMode = false
-                        currentExpense?.setDate(command)
-                        answer = "Date is updated to ${currentExpense?.getDate()}. \n" +
-                                "Do you want to submit this expense?"
+                        val changedDate = EETrackerDateFormatManager().parseDate(command)
+                        answer = if (!changedDate.isNullOrBlank()) {
+                            toggleUpdateMode = false
+                            currentExpense?.setDate(changedDate)
+                            "Date is updated to ${currentExpense?.getDate()}. \n" + "Do you want to submit this expense?"
+                        } else {
+                            "Invalid date."
+                        }
                     }
                 }
             } else {
@@ -151,15 +162,15 @@ class SpeechRecognitionListener(private var context: Context?,
                             "What kind of expense you want to submit? Travel, Food, Accommodation or Other."
                     }
                     isExpenseType(command) -> {
-                        answer = "Ok, go ahead and upload expense receipt."
+                        answer = "Please go ahead and upload expense receipt for auto-processing."
                         isUploadEnabled = true
                         isUploadEnabled?.let { (viewModel as AddExpenseViewModel).setUploadButtonVisibility(it) }
                         expenseType?.let { (viewModel as AddExpenseViewModel).setExpenseType(it) }
-                        //answer = "How much amount you want to submit?"
                     }
                     isModify(command) -> {
                         toggleUpdateMode = true
-                        answer = "What would you like to change - category, amount or date?"
+                        answer = "What would you like to change? \n" +
+                                "Category, amount or date?"
                     }
                 }
             }
@@ -168,6 +179,10 @@ class SpeechRecognitionListener(private var context: Context?,
         val response = VoiceMessage(answer, true)
         (viewModel as AddExpenseViewModel).updateConversation(response)
         tts?.speak(answer, TextToSpeech.QUEUE_FLUSH, null, UTTERANCE_ID)
+    }
+
+    private fun getCurrencyAmount(command: String): Float? {
+        return NumberFormat.getCurrencyInstance(Locale.US).parse(command)?.toFloat()
     }
 
     private fun isSubmitRequest(command: String): Boolean {
@@ -253,9 +268,9 @@ class SpeechRecognitionListener(private var context: Context?,
         (viewModel as AddExpenseViewModel).setUploadButtonVisibility(false)
 
         currentExpense?.setAmount(receiptScanResponse.getTotal())
-        currentExpense?.setDate(receiptScanResponse.getExpenseDate())
+        receiptScanResponse.getExpenseDate()?.let { currentExpense?.setDate(it) }
         val answer = "Your expense details after receipt scan are as below: \n" +
-                "Expense Amount : ${currentExpense?.getAmount()} $\n" +
+                "Expense Amount : $${currentExpense?.getAmount()}\n" +
                 "Expense Date : ${currentExpense?.getDate()} \n" +
                 "Do you want to submit these details?"
 

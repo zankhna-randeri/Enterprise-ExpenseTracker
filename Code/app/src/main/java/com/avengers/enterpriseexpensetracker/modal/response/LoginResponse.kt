@@ -48,4 +48,8 @@ data class LoginResponse(private var firstName: String? = null,
     fun getApiResponseStatus(): Boolean? {
         return super.statusToUI
     }
+
+    fun getResponseMessage(): String? {
+        return super.message
+    }
 }

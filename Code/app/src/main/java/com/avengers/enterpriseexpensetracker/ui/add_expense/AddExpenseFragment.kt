@@ -111,9 +111,9 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                     Log.d("EETracker ***", "response $response")
                     val statusSuccess = response.getApiResponseStatus() ?: false
                     if (statusSuccess) {
-                        onFailure(context, context?.getString(R.string.txt_api_failed))
-                    } else {
                         onSuccess(context, response)
+                    } else {
+                        onFailure(context, context?.getString(R.string.txt_api_failed))
                     }
                 }
             }
@@ -124,6 +124,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             }
 
             override fun onFailure(context: Context?, message: String?) {
+                context?.let { Utility.getInstance().showMsg(it, message) }
             }
 
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -132,9 +133,9 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                     Log.d("EETracker ***", "response $response")
                     val statusSuccess = response.getApiResponseStatus() ?: false
                     if (statusSuccess) {
-                        onFailure(context, context?.getString(R.string.txt_api_failed))
-                    } else {
                         onSuccess(context, response)
+                    } else {
+                        onFailure(context, context?.getString(R.string.txt_api_failed))
                     }
                 }
             }

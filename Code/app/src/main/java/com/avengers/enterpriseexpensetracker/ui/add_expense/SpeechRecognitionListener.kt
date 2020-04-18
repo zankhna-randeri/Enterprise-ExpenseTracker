@@ -233,7 +233,7 @@ class SpeechRecognitionListener(private var context: Context?,
 
     private fun submitReport(expenses: MutableList<Expense>, expenseReport: ExpenseReport) {
         expenseReport.setExpenses(expenses)
-
+        (viewModel as AddExpenseViewModel).setExpenseReport(expenseReport)
     }
 
     private fun isDeny(command: String): Boolean {

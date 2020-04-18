@@ -2,6 +2,7 @@ package com.avengers.enterpriseexpensetracker.ui.add_expense
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.VoiceMessage
 
 class AddExpenseViewModel : ViewModel() {
@@ -9,12 +10,14 @@ class AddExpenseViewModel : ViewModel() {
     private var conversationLiveData = MutableLiveData<ArrayList<VoiceMessage>>()
     private var isUploadButtonEnabled = MutableLiveData<Boolean>()
     private var expenseType = MutableLiveData<String>()
+    private var expenseReport = MutableLiveData<ExpenseReport>()
 
     init {
         conversations = ArrayList()
         conversationLiveData.value = conversations
         isUploadButtonEnabled.value = false
         expenseType.value = null
+        expenseReport.value = null
     }
 
     fun updateConversation(message: VoiceMessage) {
@@ -40,5 +43,13 @@ class AddExpenseViewModel : ViewModel() {
 
     fun getExpenseType(): MutableLiveData<String>? {
         return expenseType
+    }
+
+    fun setExpenseReport(expenseReport: ExpenseReport) {
+        this.expenseReport.value = expenseReport
+    }
+
+    fun getExpenseReport(): MutableLiveData<ExpenseReport>? {
+        return expenseReport
     }
 }

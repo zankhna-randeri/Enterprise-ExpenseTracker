@@ -1,6 +1,8 @@
 package com.avengers.enterpriseexpensetracker.service
 
+import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.LoginUser
+import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
 import okhttp3.MultipartBody
@@ -31,4 +33,7 @@ interface ExpenseTrackerWebService {
     fun uploadReceipt(@Part file: MultipartBody.Part,
                       @Part("emailId") emailId: RequestBody,
                       @Part("expenseCategory") category: RequestBody): Call<ReceiptScanResponse>
+
+    @POST("/createExpenseDetails")
+    fun submitExpenseReport(expenseReport: ExpenseReport): Call<ApiResponse>
 }

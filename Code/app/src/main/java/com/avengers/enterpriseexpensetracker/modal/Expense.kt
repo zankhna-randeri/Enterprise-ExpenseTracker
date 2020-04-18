@@ -1,32 +1,71 @@
 package com.avengers.enterpriseexpensetracker.modal
 
-class Expense {
-    private var id: Int = -1
-    private var category: String? = null
-    private var amount: Float = 0f
-    private var date: String? = null
+import android.os.Parcel
+import android.os.Parcelable
 
-    constructor(id: Int, category: String?, amount: Float) {
-        this.id = id
-        this.category = category
-        this.amount = amount
+class Expense() : Parcelable {
+    private var emailId: Int = -1
+    private var businessName: String? = null
+    private var businessAddress: String? = null
+    private var expenseCategory: String? = null
+    private var expenseTotal: Float = 0f
+    private var expenseDate: String? = null
+    private var expenseTime: String? = null
+    private var expenseSubCategory: String? = null
+
+    constructor(parcel: Parcel) : this() {
+        emailId = parcel.readInt()
+        businessName = parcel.readString()
+        businessAddress = parcel.readString()
+        expenseCategory = parcel.readString()
+        expenseTotal = parcel.readFloat()
+        expenseDate = parcel.readString()
+        expenseTime = parcel.readString()
+        expenseSubCategory = parcel.readString()
     }
-
-    constructor()
 
     fun setAmount(amount: Float) {
-        this.amount = amount
+        this.expenseTotal = amount
     }
 
-    fun setDate(date: String?) {
-        this.date = date
+    fun setDate(date: String) {
+        this.expenseDate = date
     }
 
     fun getAmount(): Float {
-        return this.amount
+        return this.expenseTotal
     }
 
     fun getDate(): String? {
-        return this.date
+        return this.expenseDate
+    }
+
+    fun setCategory(category: String) {
+        this.expenseCategory = category
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(emailId)
+        parcel.writeString(businessName)
+        parcel.writeString(businessAddress)
+        parcel.writeString(expenseCategory)
+        parcel.writeFloat(expenseTotal)
+        parcel.writeString(expenseDate)
+        parcel.writeString(expenseTime)
+        parcel.writeString(expenseSubCategory)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Expense> {
+        override fun createFromParcel(parcel: Parcel): Expense {
+            return Expense(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Expense?> {
+            return arrayOfNulls(size)
+        }
     }
 }

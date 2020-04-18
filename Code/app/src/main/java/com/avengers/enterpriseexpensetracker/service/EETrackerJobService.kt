@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.JobIntentService
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.LoginUser
+import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
@@ -52,6 +54,11 @@ class EETrackerJobService : JobIntentService() {
                 val expenseType = intent.getStringExtra(Constants.EXTRA_UPLOAD_EXPENSE_TYPE)
                 handleActionUploadReceipt(receiptPath, expenseType)
             }
+            Constants.ACTION_SUBMIT_EXPENSE_REPORT -> {
+                val expenseReport =
+                    intent.getParcelableExtra<ExpenseReport>(Constants.EXTRA_SUBMIT_EXPENSE_REPORT)
+                expenseReport?.let { handleActionSubmitExpenseReport(it) }
+            }
         }
     }
 
@@ -69,18 +76,25 @@ class EETrackerJobService : JobIntentService() {
             // Create a request body with file and image media type
             val filePart = MultipartBody.Part.createFormData("file",
                     file.name, RequestBody.create(MediaType.parse("image/*"), file))
-            //val fileReqBody = RequestBody.create(MediaType.parse("image/*"), file)
 
             val email = EETrackerPreferenceManager.getUserEmail(applicationContext)
                     ?.let { RequestBody.create(MediaType.parse("text/plain"), it) }
             val expenseType = type?.let {
                 RequestBody.create(MediaType.parse("text/plain"), it)
             }
+
             if (expenseType != null && email != null) {
                 val call = webservice.uploadReceipt(filePart, email, expenseType)
                 val response = call.execute()
                 handleReceiptScanResponse(response.body())
             }
+        }
+    }
+
+    private fun handleActionSubmitExpenseReport(expenseReport: ExpenseReport) {
+        if (NetworkHelper.hasNetworkAccess(applicationContext)) {
+            val call: Call<ApiResponse> = webservice.submitExpenseReport(expenseReport)
+            handleSubmitExpenseResponse(call.execute().body())
         }
     }
 
@@ -94,6 +108,14 @@ class EETrackerJobService : JobIntentService() {
 
     private fun handleLoginResponse(response: LoginResponse?) {
         val responseIntent = Intent(Constants.BROADCAST_LOGIN_RESPONSE).apply {
+            putExtra(Constants.EXTRA_API_RESPONSE, response)
+        }
+        val broadcastManager = LocalBroadcastManager.getInstance(applicationContext)
+        broadcastManager.sendBroadcast(responseIntent)
+    }
+
+    private fun handleSubmitExpenseResponse(response: ApiResponse?) {
+        val responseIntent = Intent(Constants.BROADCAST_SUBMIT_EXPENSE_REPORT_RESPONSE).apply {
             putExtra(Constants.EXTRA_API_RESPONSE, response)
         }
         val broadcastManager = LocalBroadcastManager.getInstance(applicationContext)

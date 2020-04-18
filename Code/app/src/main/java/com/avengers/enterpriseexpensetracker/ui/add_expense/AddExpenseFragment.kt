@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.ConversationAdapter
+import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.VoiceMessage
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
@@ -58,10 +59,12 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private var speechRecognizer: SpeechRecognizer? = null
     private var speechRecognitionListener: SpeechRecognitionListener? = null
     private var speechRecognizerIntent: Intent? = null
-    private var responseReceiver: BroadcastReceiver? = null
+    private var receiptScanResponseReceiver: BroadcastReceiver? = null
+    private var submitExpenseResponseReceiver: BroadcastReceiver? = null
     private var cameraImagePhotoPath: String? = null
     private var isListening = false
     private var expenseType: String? = null
+    private var expenseReport: ExpenseReport? = null
     private val conversations = ArrayList<VoiceMessage>()
 
     //    private var receiptImageUri: Uri? = null
@@ -93,7 +96,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initBroadcast() {
-        responseReceiver = object : ApiResponseReceiver() {
+        receiptScanResponseReceiver = object : ApiResponseReceiver() {
             override fun onSuccess(context: Context?, response: ApiResponse) {
                 updateVoiceBotData(response as ReceiptScanResponse)
             }
@@ -114,6 +117,28 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                     }
                 }
             }
+        }
+
+        submitExpenseResponseReceiver = object : ApiResponseReceiver() {
+            override fun onSuccess(context: Context?, response: ApiResponse) {
+            }
+
+            override fun onFailure(context: Context?, message: String?) {
+            }
+
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val response = intent?.getParcelableExtra<ReceiptScanResponse>(Constants.EXTRA_API_RESPONSE)
+                response?.let {
+                    Log.d("EETracker ***", "response $response")
+                    val statusSuccess = response.getApiResponseStatus() ?: false
+                    if (statusSuccess) {
+                        onFailure(context, context?.getString(R.string.txt_api_failed))
+                    } else {
+                        onSuccess(context, response)
+                    }
+                }
+            }
+
         }
     }
 
@@ -141,6 +166,12 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
         addExpenseViewModel?.getExpenseType()?.observe(viewLifecycleOwner, Observer {
             expenseType = it
+        })
+
+        addExpenseViewModel?.getExpenseReport()?.observe(viewLifecycleOwner, Observer {
+            expenseReport = it
+            // TODO : Show Progress dialog and disable mic and upload buttons
+            submitReport(expenseReport)
         })
     }
 
@@ -186,19 +217,34 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        responseReceiver?.let {
+        receiptScanResponseReceiver?.let { receiver ->
             val intentFilter = IntentFilter(Constants.BROADCAST_RECEIPT_SCAN_RESPONSE)
             activity?.applicationContext?.let {
-                LocalBroadcastManager.getInstance(it).registerReceiver(responseReceiver!!, intentFilter)
+                LocalBroadcastManager.getInstance(it)
+                        .registerReceiver(receiver, intentFilter)
+            }
+        }
+
+        submitExpenseResponseReceiver?.let { receiver ->
+            val intentFilter = IntentFilter(Constants.BROADCAST_SUBMIT_EXPENSE_REPORT_RESPONSE)
+            activity?.applicationContext?.let {
+                LocalBroadcastManager.getInstance(it)
+                        .registerReceiver(receiver, intentFilter)
             }
         }
     }
 
     override fun onPause() {
         super.onPause()
-        responseReceiver?.let {
+        receiptScanResponseReceiver?.let { receiver ->
             activity?.applicationContext?.let {
-                LocalBroadcastManager.getInstance(it).unregisterReceiver(responseReceiver!!)
+                LocalBroadcastManager.getInstance(it).unregisterReceiver(receiver)
+            }
+        }
+
+        submitExpenseResponseReceiver?.let { receiver ->
+            activity?.applicationContext?.let {
+                LocalBroadcastManager.getInstance(it).unregisterReceiver(receiver)
             }
         }
     }
@@ -466,4 +512,14 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private fun updateVoiceBotData(receiptScanResponse: ReceiptScanResponse) {
         speechRecognitionListener?.updateCurrentExpense(receiptScanResponse)
     }
+
+    private fun submitReport(expenseReport: ExpenseReport?) {
+        // Send to webservice
+        val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
+            putExtra(Constants.EXTRA_SUBMIT_EXPENSE_REPORT, expenseReport)
+            action = Constants.ACTION_SUBMIT_EXPENSE_REPORT
+        }
+        Utility.getInstance().startExpenseTrackerService(context, intent)
+    }
+
 }

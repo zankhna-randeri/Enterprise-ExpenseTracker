@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class Expense() : Parcelable {
-    private var emailId: Int = -1
+    private var emailId: String? = null
     private var businessName: String? = null
     private var businessAddress: String? = null
     private var expenseCategory: String? = null
@@ -15,7 +15,7 @@ class Expense() : Parcelable {
     private var receiptURL: String? = null
 
     constructor(parcel: Parcel) : this() {
-        emailId = parcel.readInt()
+        emailId = parcel.readString()
         businessName = parcel.readString()
         businessAddress = parcel.readString()
         expenseCategory = parcel.readString()
@@ -63,7 +63,7 @@ class Expense() : Parcelable {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(emailId)
+        parcel.writeString(emailId)
         parcel.writeString(businessName)
         parcel.writeString(businessAddress)
         parcel.writeString(expenseCategory)

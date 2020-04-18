@@ -12,6 +12,7 @@ class Expense() : Parcelable {
     private var expenseDate: String? = null
     private var expenseTime: String? = null
     private var expenseSubCategory: String? = null
+    private var receiptURL: String? = null
 
     constructor(parcel: Parcel) : this() {
         emailId = parcel.readInt()
@@ -22,6 +23,7 @@ class Expense() : Parcelable {
         expenseDate = parcel.readString()
         expenseTime = parcel.readString()
         expenseSubCategory = parcel.readString()
+        receiptURL = parcel.readString()
     }
 
     fun setAmount(amount: Float) {
@@ -44,8 +46,20 @@ class Expense() : Parcelable {
         this.expenseCategory = category
     }
 
-    fun getCategory() :String? {
+    fun getCategory(): String? {
         return expenseCategory
+    }
+
+    fun setBusinessName(name: String) {
+        this.businessName = name
+    }
+
+    fun getBusinessName(): String {
+        return if (businessName.isNullOrBlank()) {
+            "N/A"
+        } else {
+            businessName as String
+        }
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -57,6 +71,7 @@ class Expense() : Parcelable {
         parcel.writeString(expenseDate)
         parcel.writeString(expenseTime)
         parcel.writeString(expenseSubCategory)
+        parcel.writeString(receiptURL)
     }
 
     override fun describeContents(): Int {

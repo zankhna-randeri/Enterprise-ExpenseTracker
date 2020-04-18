@@ -10,12 +10,14 @@ data class ReceiptScanResponse(private var expenseBusinessName: String? = null,
                                private var expenseTime: String? = null,
                                private var expenseCategory: String? = null,
                                private var expenseSubCategory: String? = null,
-                               private var userEmailId: String? = null) : ApiResponse(), Parcelable {
+                               private var userEmailId: String? = null,
+                               private var receiptURL: String? = null) : ApiResponse(), Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),
             parcel.readValue(Float::class.java.classLoader) as Float,
+            parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
@@ -33,6 +35,7 @@ data class ReceiptScanResponse(private var expenseBusinessName: String? = null,
         parcel.writeString(expenseCategory)
         parcel.writeString(expenseSubCategory)
         parcel.writeString(userEmailId)
+        parcel.writeString(receiptURL)
     }
 
     override fun describeContents(): Int {

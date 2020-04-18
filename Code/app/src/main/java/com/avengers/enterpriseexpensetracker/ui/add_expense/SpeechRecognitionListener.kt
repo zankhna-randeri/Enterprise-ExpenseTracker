@@ -23,28 +23,29 @@ class SpeechRecognitionListener(private var context: Context?,
                                 private var viewModel: ViewModel?) : RecognitionListener {
     private var tts: TextToSpeech? = null
     private var expenseType: String? = null
-    private var amount: Int? = -1
-    private var date: String? = null
-    private var toggleUpdateMode: Boolean = false
-    private var isUploadEnabled: Boolean? = null
     private var expenseReport: ExpenseReport? = null
     private var currentExpense: Expense? = null
     private var expenses: MutableList<Expense>? = null
 
+    // variable to hold current voice chatbot mode
+    private var currentMode: VoiceBotMode
+
+    // Enum for various chatbot mode
+    enum class VoiceBotMode {
+        Normal,
+        Update,
+        Name,
+        Multiple
+    }
+
     init {
-        isUploadEnabled = false
-        expenseReport = ExpenseReport()
         expenses = ArrayList()
-        currentExpense = Expense()
+        currentMode = VoiceBotMode.Normal
         initTTS()
     }
 
     companion object {
         private const val UTTERANCE_ID = "1234"
-    }
-
-    fun setUploadEnabled(enabled: Boolean?) {
-        this.isUploadEnabled = enabled
     }
 
     private fun initTTS() {
@@ -102,7 +103,7 @@ class SpeechRecognitionListener(private var context: Context?,
     }
 
     private fun processUserRequest(command: String?) {
-        var answer = "Sorry I didn't get you!"
+        var answer = "Sorry, I didn't get you!"
 
         if (!command.isNullOrBlank()) {
             if (viewModel != null) {
@@ -110,20 +111,25 @@ class SpeechRecognitionListener(private var context: Context?,
                 (viewModel as AddExpenseViewModel).updateConversation(request)
             }
 
-            if (toggleUpdateMode) {
+            if (currentMode == VoiceBotMode.Update) {
+                // Handle update mode
                 when {
+                    isDeny(command) -> {
+                        // TODO: Handle update/modify deny
+                        currentMode = VoiceBotMode.Normal
+                    }
                     isReqDateChange(command) -> {
-                        answer = "Please provide with the changed date ? "
+                        answer = "Please provide with the changed date? "
                     }
                     isReqAmtChange(command) -> {
-                        answer = "Please provide with the changed amount ?"
+                        answer = "Please provide with the changed amount?"
                     }
                     isReqCategoryChange(command) -> {
                         answer =
-                            "Please provide with the changed category ? Such as - Travel, Food, Accommodation or Other"
+                            "Please provide with the changed category? Such as - Travel, Food, Accommodation or Other"
                     }
                     isExpenseType(command) -> {
-                        toggleUpdateMode = false
+                        currentMode = VoiceBotMode.Normal
                         expenseType?.let {
                             currentExpense?.setCategory(it)
                             answer = "Category is updated to $it. \n" +
@@ -133,18 +139,18 @@ class SpeechRecognitionListener(private var context: Context?,
                     isAmount(command) -> {
                         val changedAmt = getCurrencyAmount(command)
                         answer = if (changedAmt != null && !changedAmt.isNaN()) {
-                            toggleUpdateMode = false
+                            currentMode = VoiceBotMode.Normal
                             currentExpense?.setAmount(changedAmt)
                             "Amount is updated to $${currentExpense?.getAmount()}. \n" +
                                     "Do you want to submit expense?"
                         } else {
-                            "invalid amount."
+                            "Invalid amount."
                         }
                     }
                     isDate(command) -> {
                         val changedDate = EETrackerDateFormatManager().parseDate(command)
                         answer = if (!changedDate.isNullOrBlank()) {
-                            toggleUpdateMode = false
+                            currentMode = VoiceBotMode.Normal
                             currentExpense?.setDate(changedDate)
                             "Date is updated to ${currentExpense?.getDate()}. \n" + "Do you want to submit this expense?"
                         } else {
@@ -153,24 +159,68 @@ class SpeechRecognitionListener(private var context: Context?,
                     }
                 }
             } else {
+                // Handle normal flow
                 when {
-                    isUserAgreed(command) -> {
-                        answer = "Thank you! Your expense report will be submitted."
+                    isDiscard(command) -> {
+                        // reset all data if changes are discarded.
+                        answer = "Your all changes are discarded. Your report is not submitted."
+                        expenseReport = null
+                        currentExpense = null
                     }
-                    isSubmitRequest(command) -> {
+                    isUserAgreed(command) -> {
+                        currentExpense?.let { expenses?.add(it) }
+                        answer = "Do you want to add more expenses or submit report?"
+                        currentMode = VoiceBotMode.Multiple
+                    }
+                    isSubmitReportRequest(command) -> {
+                        // Submit Report is triggered
+
+                        if (currentMode == VoiceBotMode.Multiple && expenseReport != null &&
+                            !expenses.isNullOrEmpty()) {
+                            // invoke api if "submit report" is triggered as part of user confirmation
+                            submitReport(expenses!!, expenseReport!!)
+                            answer = "Thank you! Your expense report will be submitted."
+                            currentMode = VoiceBotMode.Normal
+                        } else if (expenseReport == null) {
+                            // first initialization of expense report
+                            expenseReport = ExpenseReport()
+                            answer = "Sure, please say your Report Name?"
+                            currentMode = VoiceBotMode.Name
+                        } else {
+                            // ask for discard in case if current report is already in progress and
+                            // submit report is triggered.
+                            answer = "You already have current expense report in progress. " +
+                                    "Do you want to discard all changes or continue?"
+                        }
+                    }
+                    isSubmitExpenseRequest(command) -> {
+                        // reset expense data if adding multiple expenses.
+                        if (currentMode == VoiceBotMode.Multiple) {
+                            currentMode = VoiceBotMode.Normal
+                            currentExpense = null
+                        }
+
+                        // initialize current expense
+                        currentExpense = Expense()
                         answer =
                             "What kind of expense you want to submit? Travel, Food, Accommodation or Other."
                     }
                     isExpenseType(command) -> {
-                        answer = "Please go ahead and upload expense receipt for auto-processing."
-                        isUploadEnabled = true
-                        isUploadEnabled?.let { (viewModel as AddExpenseViewModel).setUploadButtonVisibility(it) }
+                        answer = "Go ahead and upload expense receipt for auto-processing."
+                        (viewModel as AddExpenseViewModel).setUploadButtonVisibility(true)
                         expenseType?.let { (viewModel as AddExpenseViewModel).setExpenseType(it) }
                     }
                     isModify(command) -> {
-                        toggleUpdateMode = true
+                        // TODO: verify whether receipt scan already happened before user tries to modify details.
+                        currentMode = VoiceBotMode.Update
                         answer = "What would you like to change? \n" +
                                 "Category, amount or date?"
+                    }
+                    (currentMode == VoiceBotMode.Name) -> {
+                        expenseReport?.setName(command)
+                        currentMode = VoiceBotMode.Normal
+                        answer =
+                            "What kind of expense you want to submit? Travel, Food, Accommodation or Other."
                     }
                 }
             }
@@ -181,18 +231,39 @@ class SpeechRecognitionListener(private var context: Context?,
         tts?.speak(answer, TextToSpeech.QUEUE_FLUSH, null, UTTERANCE_ID)
     }
 
+    private fun submitReport(expenses: MutableList<Expense>, expenseReport: ExpenseReport) {
+        expenseReport.setExpenses(expenses)
+
+    }
+
+    private fun isDeny(command: String): Boolean {
+        return command.contains("no", true) ||
+                command.contains("nope", true) ||
+                command.contains("not yet", true) ||
+                command.contains("not", true)
+    }
+
+    private fun isDiscard(command: String): Boolean {
+        return command.contains("discard", true)
+    }
+
     private fun getCurrencyAmount(command: String): Float? {
         return NumberFormat.getCurrencyInstance(Locale.US).parse(command)?.toFloat()
     }
 
-    private fun isSubmitRequest(command: String): Boolean {
-        return command.contains("submit expenses", true) ||
-                command.contains("submit my expenses", true) ||
-                command.contains("submit expense", true) ||
-                command.contains("submit my expense", true) ||
+    private fun isSubmitReportRequest(command: String): Boolean {
+        return command.contains("report", true) ||
+                command.contains("expense report", true) ||
+                command.contains("submit expense report", true)
+    }
+
+    private fun isSubmitExpenseRequest(command: String): Boolean {
+        return command.contains("submit expense", true) ||
+                command.contains("add expense", true) ||
+                command.contains("add more expense", true) ||
+                command.contains("add more expenses", true) ||
                 command.contains("expenses", true) ||
-                command.contains("expense", true) ||
-                command.contains("submit", true)
+                command.contains("expense", true)
     }
 
     private fun isExpenseType(command: String): Boolean {
@@ -270,6 +341,7 @@ class SpeechRecognitionListener(private var context: Context?,
         currentExpense?.setAmount(receiptScanResponse.getTotal())
         receiptScanResponse.getExpenseDate()?.let { currentExpense?.setDate(it) }
         val answer = "Your expense details after receipt scan are as below: \n" +
+                "Expense Category: ${currentExpense?.getCategory()?.let { it }}" +
                 "Expense Amount : $${currentExpense?.getAmount()}\n" +
                 "Expense Date : ${currentExpense?.getDate()} \n" +
                 "Do you want to submit these details?"

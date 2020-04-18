@@ -2,12 +2,13 @@ package com.avengers.enterpriseexpensetracker.util
 
 class Constants {
     companion object {
+
         //Expense type
         enum class ExpenseType {
-            FOOD,
-            TRAVEL,
-            STAY,
-            OTHER
+            Food,
+            Travel,
+            Accommodation,
+            Other
         }
 
         // SharedPreference

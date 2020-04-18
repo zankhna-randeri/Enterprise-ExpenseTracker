@@ -1,6 +1,9 @@
 package com.avengers.enterpriseexpensetracker.modal
 
-class ExpenseReport {
+import android.os.Parcel
+import android.os.Parcelable
+
+class ExpenseReport : Parcelable {
     private var reportId: Int? = -1
     private var reportName: String? = null
     private var emailId: String? = null
@@ -10,26 +13,18 @@ class ExpenseReport {
     private var status: String? = null
     private var total: Float? = 0f
 
-    init {
-        expenseDetailsRequest = ArrayList()
+    constructor(parcel: Parcel) : this() {
+        reportId = parcel.readValue(Int::class.java.classLoader) as? Int
+        reportName = parcel.readString()
+        emailId = parcel.readString()
+        approvalDate = parcel.readString()
+        submissionDate = parcel.readString()
+        status = parcel.readString()
+        total = parcel.readValue(Float::class.java.classLoader) as? Float
     }
 
-    constructor(id: Int?,
-                reportName: String?,
-                emailId: String?,
-                expenses: MutableList<Expense>?,
-                approvalDate: String?,
-                submissionDate: String?,
-                status: String?,
-                total: Float?) {
-        this.reportId = id
-        this.reportName = reportName
-        this.emailId = emailId
-        this.expenseDetailsRequest = expenses
-        this.approvalDate = approvalDate
-        this.submissionDate = submissionDate
-        this.status = status
-        this.total = total
+    init {
+        expenseDetailsRequest = ArrayList()
     }
 
     constructor()
@@ -48,5 +43,29 @@ class ExpenseReport {
 
     fun setExpenses(expenses: MutableList<Expense>) {
         this.expenseDetailsRequest = expenses
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(reportId)
+        parcel.writeString(reportName)
+        parcel.writeString(emailId)
+        parcel.writeString(approvalDate)
+        parcel.writeString(submissionDate)
+        parcel.writeString(status)
+        parcel.writeValue(total)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<ExpenseReport> {
+        override fun createFromParcel(parcel: Parcel): ExpenseReport {
+            return ExpenseReport(parcel)
+        }
+
+        override fun newArray(size: Int): Array<ExpenseReport?> {
+            return arrayOfNulls(size)
+        }
     }
 }

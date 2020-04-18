@@ -44,6 +44,10 @@ class Expense() : Parcelable {
         this.expenseCategory = category
     }
 
+    fun getCategory() :String? {
+        return expenseCategory
+    }
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(emailId)
         parcel.writeString(businessName)

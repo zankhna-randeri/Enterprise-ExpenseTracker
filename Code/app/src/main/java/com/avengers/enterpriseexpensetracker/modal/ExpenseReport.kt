@@ -38,4 +38,15 @@ class ExpenseReport {
         this.reportName = name
     }
 
+    fun getName(): String? {
+        return reportName
+    }
+
+    fun getExpenses(): MutableList<Expense>? {
+        return expenseDetailsRequest
+    }
+
+    fun setExpenses(expenses: MutableList<Expense>) {
+        this.expenseDetailsRequest = expenses
+    }
 }

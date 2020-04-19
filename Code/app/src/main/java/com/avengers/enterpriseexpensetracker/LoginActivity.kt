@@ -223,7 +223,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun showLoadingView() {
         progress?.visibility = View.VISIBLE
-        txtProgressMsg!!.text = getString(R.string.txt_login_progress)
+        txtProgressMsg?.text = getString(R.string.txt_login_progress)
     }
 
     private fun hideLoadingView() {

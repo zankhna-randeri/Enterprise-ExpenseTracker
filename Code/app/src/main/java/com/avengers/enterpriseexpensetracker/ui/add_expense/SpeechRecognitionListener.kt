@@ -14,6 +14,7 @@ import com.avengers.enterpriseexpensetracker.modal.VoiceMessage
 import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerDateFormatManager
+import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.Utility
 import java.text.NumberFormat
 import java.util.*
@@ -178,7 +179,7 @@ class SpeechRecognitionListener(private var context: Context?,
                         if (currentMode == VoiceBotMode.Multiple && expenseReport != null &&
                             !expenses.isNullOrEmpty()) {
                             // invoke api if "submit report" is triggered as part of user confirmation
-                            submitReport(expenses!!, expenseReport!!)
+                            submitReport()
                             answer = "Thank you! Your expense report will be submitted."
                             currentMode = VoiceBotMode.Normal
                         } else if (expenseReport == null) {
@@ -200,12 +201,13 @@ class SpeechRecognitionListener(private var context: Context?,
                             currentExpense = null
                         }
 
-                        // initialize current expense
-                        currentExpense = Expense()
                         answer =
                             "What kind of expense you want to submit? Travel, Food, Accommodation or Other."
                     }
                     isExpenseType(command) -> {
+                        // initialize current expense
+                        currentExpense = Expense()
+
                         answer = "Go ahead and upload expense receipt for auto-processing."
                         (viewModel as AddExpenseViewModel).setUploadButtonVisibility(true)
                         expenseType?.let { (viewModel as AddExpenseViewModel).setExpenseType(it) }
@@ -214,7 +216,7 @@ class SpeechRecognitionListener(private var context: Context?,
                         // TODO: verify whether receipt scan already happened before user tries to modify details.
                         currentMode = VoiceBotMode.Update
                         answer = "What would you like to change? \n" +
-                                "Category, amount or date?"
+                                "Category, amount, date or business name?"
                     }
                     (currentMode == VoiceBotMode.Name) -> {
                         expenseReport?.setName(command)
@@ -231,9 +233,9 @@ class SpeechRecognitionListener(private var context: Context?,
         tts?.speak(answer, TextToSpeech.QUEUE_FLUSH, null, UTTERANCE_ID)
     }
 
-    private fun submitReport(expenses: MutableList<Expense>, expenseReport: ExpenseReport) {
-        expenseReport.setExpenses(expenses)
-        (viewModel as AddExpenseViewModel).setExpenseReport(expenseReport)
+    private fun submitReport() {
+        expenses?.let { expenseReport?.setExpenses(it) }
+        expenseReport?.let { (viewModel as AddExpenseViewModel).setExpenseReport(it) }
     }
 
     private fun isDeny(command: String): Boolean {
@@ -334,20 +336,33 @@ class SpeechRecognitionListener(private var context: Context?,
                 command.contains("december", true)
     }
 
-    fun updateCurrentExpense(receiptScanResponse: ReceiptScanResponse) {
+    fun updateVoiceBotWithScanResponse(receiptScanResponse: ReceiptScanResponse) {
         //hide upload button
         (viewModel as AddExpenseViewModel).setUploadButtonVisibility(false)
 
-        currentExpense?.setAmount(receiptScanResponse.getTotal())
-        receiptScanResponse.getExpenseDate()?.let { currentExpense?.setDate(it) }
+        // update all latest fields from API response
+        currentExpense = updateCurrentExpense(receiptScanResponse)
+
         val answer = "Your expense details after receipt scan are as below: \n" +
-                "Expense Category: ${currentExpense?.getCategory()?.let { it }}" +
+                "Expense Category: ${currentExpense?.getCategory()?.let { it }}\n" +
                 "Expense Amount : $${currentExpense?.getAmount()}\n" +
                 "Expense Date : ${currentExpense?.getDate()} \n" +
+                "Business Name : ${currentExpense?.getBusinessName()} \n" +
                 "Do you want to submit these details?"
 
         val response = VoiceMessage(answer, true)
         (viewModel as AddExpenseViewModel).updateConversation(response)
         tts?.speak(answer, TextToSpeech.QUEUE_FLUSH, null, UTTERANCE_ID)
+    }
+
+    private fun updateCurrentExpense(receiptScanResponse: ReceiptScanResponse): Expense? {
+        return Expense(EETrackerPreferenceManager.getUserEmail(context),
+                receiptScanResponse.getBusinessName(),
+                receiptScanResponse.getBusinessAddress(),
+                receiptScanResponse.getCategory(),
+                receiptScanResponse.getSubCategory(),
+                receiptScanResponse.getTotal(),
+                receiptScanResponse.getExpenseDate(),
+                receiptScanResponse.getExpenseTime(), receiptScanResponse.getReceiptUrl())
     }
 }

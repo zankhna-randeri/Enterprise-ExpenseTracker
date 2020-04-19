@@ -53,7 +53,7 @@ data class ReceiptScanResponse(private var expenseBusinessName: String? = null,
     }
 
     fun getApiResponseStatus(): Boolean? {
-        return super.statusToUI
+        return super.getStatus()
     }
 
     fun getTotal(): Float {
@@ -62,5 +62,29 @@ data class ReceiptScanResponse(private var expenseBusinessName: String? = null,
 
     fun getExpenseDate(): String? {
         return this.expenseDate
+    }
+
+    fun getBusinessName(): String? {
+        return expenseBusinessName
+    }
+
+    fun getCategory(): String? {
+        return expenseCategory
+    }
+
+    fun getBusinessAddress(): String? {
+        return expenseBusinessAddress
+    }
+
+    fun getSubCategory(): String? {
+        return expenseSubCategory
+    }
+
+    fun getExpenseTime(): String? {
+        return expenseTime
+    }
+
+    fun getReceiptUrl(): String? {
+        return receiptURL
     }
 }

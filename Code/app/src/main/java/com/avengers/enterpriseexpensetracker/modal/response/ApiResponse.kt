@@ -3,11 +3,11 @@ package com.avengers.enterpriseexpensetracker.modal.response
 import android.os.Parcel
 import android.os.Parcelable
 
-open class ApiResponse(protected var statusToUI: Boolean? = null,
-                       protected var message: String? = null) : Parcelable {
+open class ApiResponse(private var statusToUI: Boolean = false,
+                       private var message: String? = null) : Parcelable {
 
     constructor(parcel: Parcel) : this(
-            parcel.readValue(Boolean::class.java.classLoader) as? Boolean) {
+            parcel.readValue(Boolean::class.java.classLoader) as Boolean) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -26,5 +26,13 @@ open class ApiResponse(protected var statusToUI: Boolean? = null,
         override fun newArray(size: Int): Array<ApiResponse?> {
             return arrayOfNulls(size)
         }
+    }
+
+    fun getStatus(): Boolean {
+        return statusToUI
+    }
+
+    fun getMessage(): String? {
+        return message
     }
 }

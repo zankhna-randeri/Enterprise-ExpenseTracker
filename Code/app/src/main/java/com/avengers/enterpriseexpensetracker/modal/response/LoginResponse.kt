@@ -45,11 +45,11 @@ data class LoginResponse(private var firstName: String? = null,
         return this.lastName
     }
 
-    fun getApiResponseStatus(): Boolean? {
-        return super.statusToUI
+    fun getApiResponseStatus(): Boolean {
+        return super.getStatus()
     }
 
     fun getResponseMessage(): String? {
-        return super.message
+        return super.getMessage()
     }
 }

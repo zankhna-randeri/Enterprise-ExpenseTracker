@@ -29,4 +29,8 @@ data class LoginUser(private var emailId: String? = null,
             return arrayOfNulls(size)
         }
     }
+
+    override fun toString(): String {
+        return "LoginUser(emailId=$emailId, password=$password)"
+    }
 }

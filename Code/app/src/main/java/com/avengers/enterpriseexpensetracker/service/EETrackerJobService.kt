@@ -65,6 +65,7 @@ class EETrackerJobService : JobIntentService() {
 
     private fun handleActionLogin(user: LoginUser) {
         if (NetworkHelper.hasNetworkAccess(applicationContext)) {
+            Log.d("EETracker ***", "Login request $user ")
             val call: Call<LoginResponse> = webservice.loginUser(user)
             handleLoginResponse(call.execute().body())
         }

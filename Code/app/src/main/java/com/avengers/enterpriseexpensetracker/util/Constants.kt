@@ -11,6 +11,12 @@ class Constants {
             Other
         }
 
+        enum class Status {
+            Pending,
+            Approved,
+            Rejected
+        }
+
         // SharedPreference
         const val PREFS_LOGIN = "is_login"
         const val PREFS_EMAIL = "email"

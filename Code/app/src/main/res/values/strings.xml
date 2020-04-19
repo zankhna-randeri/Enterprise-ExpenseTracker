@@ -8,6 +8,7 @@
     <string name="enter_login_info">Please Enter Valid Login Details</string>
     <string name="forgot_pwd">Forgot Password"</string>
     <string name="failed_login">Login failed! Please try again.</string>
+    <string name="txt_login_progress">Login In Progress</string>
 
     <!--    TTS-->
     <string name="tts_init_failed">TTS initialization failed!</string>

@@ -82,6 +82,13 @@ class Expense() : Parcelable {
         }
     }
 
+    fun getSubCategory(): String? {
+        return expenseSubCategory
+    }
+
+    fun getBusinessAddress(): String? {
+        return businessAddress
+    }
     fun setEmailId(emailId: String) {
         this.emailId = emailId
     }

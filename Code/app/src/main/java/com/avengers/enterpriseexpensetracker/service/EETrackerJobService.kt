@@ -2,6 +2,7 @@ package com.avengers.enterpriseexpensetracker.service
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.JobIntentService
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
@@ -56,8 +57,8 @@ class EETrackerJobService : JobIntentService() {
             }
             Constants.ACTION_SUBMIT_EXPENSE_REPORT -> {
                 val expenseReport =
-                    intent.getParcelableExtra<ExpenseReport>(Constants.EXTRA_SUBMIT_EXPENSE_REPORT)
-                expenseReport?.let { handleActionSubmitExpenseReport(it) }
+                    intent.getParcelableExtra(Constants.EXTRA_SUBMIT_EXPENSE_REPORT) as ExpenseReport
+                handleActionSubmitExpenseReport(expenseReport)
             }
         }
     }
@@ -83,6 +84,7 @@ class EETrackerJobService : JobIntentService() {
                 RequestBody.create(MediaType.parse("text/plain"), it)
             }
 
+            Log.d("EETracker ***", "Upload request email: $email and expensetype: $expenseType ")
             if (expenseType != null && email != null) {
                 val call = webservice.uploadReceipt(filePart, email, expenseType)
                 val response = call.execute()
@@ -93,8 +95,11 @@ class EETrackerJobService : JobIntentService() {
 
     private fun handleActionSubmitExpenseReport(expenseReport: ExpenseReport) {
         if (NetworkHelper.hasNetworkAccess(applicationContext)) {
-            val call: Call<ApiResponse> = webservice.submitExpenseReport(expenseReport)
-            handleSubmitExpenseResponse(call.execute().body())
+            Log.d("EETracker ***", "API Request expenseReport: $expenseReport")
+            val call = webservice.submitExpenseReport(expenseReport)
+            val response = call.execute()
+            Log.d("EETracker ***", "API Response expenseReport: $response")
+            handleSubmitExpenseResponse(response.body())
         }
     }
 

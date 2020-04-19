@@ -43,6 +43,7 @@ import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
 import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
 import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
 import com.avengers.enterpriseexpensetracker.util.Constants
+import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.Utility
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -121,6 +122,9 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
         submitExpenseResponseReceiver = object : ApiResponseReceiver() {
             override fun onSuccess(context: Context?, response: ApiResponse) {
+                // TODO: dismiss dialog, close fragment
+                context?.let { Utility.getInstance().showMsg(it, response.getMessage()) }
+                activity?.supportFragmentManager?.popBackStack()
             }
 
             override fun onFailure(context: Context?, message: String?) {
@@ -128,10 +132,10 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             }
 
             override fun onReceive(context: Context?, intent: Intent?) {
-                val response = intent?.getParcelableExtra<ReceiptScanResponse>(Constants.EXTRA_API_RESPONSE)
+                val response = intent?.getParcelableExtra<ApiResponse>(Constants.EXTRA_API_RESPONSE)
                 response?.let {
                     Log.d("EETracker ***", "response $response")
-                    val statusSuccess = response.getApiResponseStatus() ?: false
+                    val statusSuccess = response.getStatus() ?: false
                     if (statusSuccess) {
                         onSuccess(context, response)
                     } else {
@@ -139,7 +143,6 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                     }
                 }
             }
-
         }
     }
 
@@ -172,7 +175,9 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         addExpenseViewModel?.getExpenseReport()?.observe(viewLifecycleOwner, Observer {
             expenseReport = it
             // TODO : Show Progress dialog and disable mic and upload buttons
-            submitReport(expenseReport)
+            if (expenseReport != null) {
+                submitReport(expenseReport!!)
+            }
         })
     }
 
@@ -511,10 +516,14 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     }
 
     private fun updateVoiceBotData(receiptScanResponse: ReceiptScanResponse) {
-        speechRecognitionListener?.updateCurrentExpense(receiptScanResponse)
+        speechRecognitionListener?.updateVoiceBotWithScanResponse(receiptScanResponse)
     }
 
-    private fun submitReport(expenseReport: ExpenseReport?) {
+    private fun submitReport(expenseReport: ExpenseReport) {
+        expenseReport.setReportStatus(Constants.Companion.Status.Pending.name)
+        EETrackerPreferenceManager.getUserEmail(activity?.applicationContext)
+                ?.let { expenseReport.setEmailId(it) }
+
         // Send to webservice
         val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
             putExtra(Constants.EXTRA_SUBMIT_EXPENSE_REPORT, expenseReport)
@@ -522,5 +531,4 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         }
         Utility.getInstance().startExpenseTrackerService(context, intent)
     }
-
 }

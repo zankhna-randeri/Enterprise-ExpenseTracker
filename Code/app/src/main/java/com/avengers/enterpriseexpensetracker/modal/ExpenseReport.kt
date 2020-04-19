@@ -10,7 +10,7 @@ class ExpenseReport : Parcelable {
     private var expenseDetailsRequest: MutableList<Expense>? = null
     private var approvalDate: String? = null
     private var submissionDate: String? = null
-    private var status: String? = null
+    private var reportStatus: String? = null
     private var total: Float? = 0f
 
     constructor(parcel: Parcel) : this() {
@@ -19,7 +19,7 @@ class ExpenseReport : Parcelable {
         emailId = parcel.readString()
         approvalDate = parcel.readString()
         submissionDate = parcel.readString()
-        status = parcel.readString()
+        reportStatus = parcel.readString()
         total = parcel.readValue(Float::class.java.classLoader) as? Float
     }
 
@@ -51,12 +51,23 @@ class ExpenseReport : Parcelable {
         parcel.writeString(emailId)
         parcel.writeString(approvalDate)
         parcel.writeString(submissionDate)
-        parcel.writeString(status)
+        parcel.writeString(reportStatus)
         parcel.writeValue(total)
     }
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    override fun toString(): String {
+        return "ExpenseReport(reportId=$reportId, " +
+                "reportName=$reportName, " +
+                "emailId=$emailId, " +
+                "expenseDetailsRequest=$expenseDetailsRequest," +
+                " approvalDate=$approvalDate," +
+                " submissionDate=$submissionDate," +
+                " status=$reportStatus," +
+                " total=$total)"
     }
 
     companion object CREATOR : Parcelable.Creator<ExpenseReport> {
@@ -67,5 +78,13 @@ class ExpenseReport : Parcelable {
         override fun newArray(size: Int): Array<ExpenseReport?> {
             return arrayOfNulls(size)
         }
+    }
+
+    fun setReportStatus(status: String) {
+        this.reportStatus = status
+    }
+
+    fun setEmailId(emailId: String) {
+        this.emailId = emailId
     }
 }

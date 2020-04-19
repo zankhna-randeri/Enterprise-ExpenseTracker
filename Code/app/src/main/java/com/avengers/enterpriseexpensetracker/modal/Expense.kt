@@ -26,6 +26,26 @@ class Expense() : Parcelable {
         receiptURL = parcel.readString()
     }
 
+    constructor(email: String?,
+                businessName: String?,
+                address: String?,
+                category: String?,
+                subCategory: String?,
+                total: Float,
+                date: String?,
+                time: String?,
+                url: String?) : this() {
+        this.emailId = email
+        this.businessName = businessName
+        this.businessAddress = address
+        this.expenseCategory = category
+        this.expenseSubCategory = subCategory
+        this.expenseTotal = total
+        this.expenseDate = date
+        this.expenseTime = time
+        this.receiptURL = url
+    }
+
     fun setAmount(amount: Float) {
         this.expenseTotal = amount
     }
@@ -60,6 +80,26 @@ class Expense() : Parcelable {
         } else {
             businessName as String
         }
+    }
+
+    fun setEmailId(emailId: String) {
+        this.emailId = emailId
+    }
+
+    fun setBusinessAddress(address: String) {
+        this.businessAddress = address
+    }
+
+    fun setExpenseTime(time: String) {
+        this.expenseTime = time
+    }
+
+    fun setSubCategory(subCategory: String) {
+        this.expenseSubCategory = subCategory
+    }
+
+    fun setReceiptUrl(url: String) {
+        this.receiptURL = url
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

@@ -34,6 +34,6 @@ interface ExpenseTrackerWebService {
                       @Part("emailId") emailId: RequestBody,
                       @Part("expenseCategory") category: RequestBody): Call<ReceiptScanResponse>
 
-    @POST("/createExpenseDetails")
-    fun submitExpenseReport(expenseReport: ExpenseReport): Call<ApiResponse>
+    @POST("/createReport")
+    fun submitExpenseReport(@Body expenseReport: ExpenseReport): Call<ApiResponse>
 }

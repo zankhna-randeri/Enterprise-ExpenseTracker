@@ -21,10 +21,8 @@ class ExpenseReport : Parcelable {
         submissionDate = parcel.readString()
         reportStatus = parcel.readString()
         total = parcel.readValue(Float::class.java.classLoader) as? Float
-    }
-
-    init {
         expenseDetailsRequest = ArrayList()
+        parcel.readTypedList(expenseDetailsRequest!!, Expense.CREATOR)
     }
 
     constructor()
@@ -45,20 +43,6 @@ class ExpenseReport : Parcelable {
         this.expenseDetailsRequest = expenses
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeValue(reportId)
-        parcel.writeString(reportName)
-        parcel.writeString(emailId)
-        parcel.writeString(approvalDate)
-        parcel.writeString(submissionDate)
-        parcel.writeString(reportStatus)
-        parcel.writeValue(total)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
     override fun toString(): String {
         return "ExpenseReport(reportId=$reportId, " +
                 "reportName=$reportName, " +
@@ -70,6 +54,29 @@ class ExpenseReport : Parcelable {
                 " total=$total)"
     }
 
+    fun setReportStatus(status: String) {
+        this.reportStatus = status
+    }
+
+    fun setEmailId(emailId: String) {
+        this.emailId = emailId
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(reportId)
+        parcel.writeString(reportName)
+        parcel.writeString(emailId)
+        parcel.writeString(approvalDate)
+        parcel.writeString(submissionDate)
+        parcel.writeString(reportStatus)
+        parcel.writeValue(total)
+        parcel.writeTypedList(expenseDetailsRequest)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
     companion object CREATOR : Parcelable.Creator<ExpenseReport> {
         override fun createFromParcel(parcel: Parcel): ExpenseReport {
             return ExpenseReport(parcel)
@@ -78,13 +85,5 @@ class ExpenseReport : Parcelable {
         override fun newArray(size: Int): Array<ExpenseReport?> {
             return arrayOfNulls(size)
         }
-    }
-
-    fun setReportStatus(status: String) {
-        this.reportStatus = status
-    }
-
-    fun setEmailId(emailId: String) {
-        this.emailId = emailId
     }
 }

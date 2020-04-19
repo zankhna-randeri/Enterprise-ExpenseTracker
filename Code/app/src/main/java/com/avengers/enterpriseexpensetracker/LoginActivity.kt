@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.MenuItem
 import android.view.View
@@ -36,6 +37,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import java.lang.Exception
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var activityLayout: CoordinatorLayout
@@ -135,11 +137,13 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     if (statusSuccess) {
                         onSuccess(context, res)
                     } else {
+                        Log.d("EETracker *** ", "Failed Login message: ${res.getResponseMessage()}")
                         onFailure(context,
                                 res.getResponseMessage()
                                     ?: context?.resources?.getString(R.string.failed_login))
                     }
                 }
+                hideLoadingView()
             }
         }
     }
@@ -163,7 +167,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_login_submit -> {
+            btnSubmit?.id -> {
                 AnalyticsHelper.getInstance().trackLogin(this, TrackLoginData("email"))
                 val email = inputEmail?.editText?.text.toString()
                 val password = inputPassword?.editText?.text.toString()
@@ -193,20 +197,36 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun handleLogin(email: String?, password: String?) {
-        if (password.isNullOrBlank() || !isValidEmail(email)) {
-            Utility.getInstance().showMsg(applicationContext,
-                    getString(R.string.enter_login_info))
-        } else {
-            val user = LoginUser(email, password)
-            val intent = Intent(this, EETrackerJobService::class.java).apply {
-                putExtra(Constants.EXTRA_LOGIN_USER, user)
-                action = Constants.ACTION_LOGIN
+        try {
+            if (password.isNullOrBlank() || !isValidEmail(email)) {
+                Utility.getInstance().showMsg(applicationContext,
+                        getString(R.string.enter_login_info))
+            } else {
+                showLoadingView()
+                val user = LoginUser(email, password)
+                val intent = Intent(this, EETrackerJobService::class.java).apply {
+                    putExtra(Constants.EXTRA_LOGIN_USER, user)
+                    action = Constants.ACTION_LOGIN
+                }
+                Utility.getInstance().startExpenseTrackerService(this, intent)
             }
-            Utility.getInstance().startExpenseTrackerService(this, intent)
+        } catch (e: Exception) {
+            Log.e("EETracker ***", "Exception in handleLogin ${e.message}")
+            e.printStackTrace()
+            hideLoadingView()
         }
     }
 
     fun isValidEmail(email: String?): Boolean {
         return (!email.isNullOrBlank()) && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    private fun showLoadingView() {
+        progress?.visibility = View.VISIBLE
+        txtProgressMsg!!.text = getString(R.string.txt_login_progress)
+    }
+
+    private fun hideLoadingView() {
+        progress?.visibility = View.GONE
     }
 }

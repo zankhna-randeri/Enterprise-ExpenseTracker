@@ -2,9 +2,8 @@ package com.avengers.enterpriseexpensetracker.modal
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 
-class ExpenseReport : ApiResponse, Parcelable {
+class ExpenseReport : Parcelable {
     private var reportId: String? = null
     private var reportName: String? = null
     private var emailId: String? = null
@@ -90,9 +89,5 @@ class ExpenseReport : ApiResponse, Parcelable {
         override fun newArray(size: Int): Array<ExpenseReport?> {
             return arrayOfNulls(size)
         }
-    }
-
-    fun getApiResponseStatus(): Boolean? {
-        return super.getStatus()
     }
 }

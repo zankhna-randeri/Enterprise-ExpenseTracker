@@ -37,7 +37,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import java.lang.Exception
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var activityLayout: CoordinatorLayout
@@ -52,7 +51,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private var loginResponseReceiver: BroadcastReceiver? = null
 
     companion object {
-        private const val TAG = "LoginActivity"
         private const val REQUEST_CODE = 1
     }
 
@@ -88,14 +86,14 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun initView() {
         activityLayout = findViewById(R.id.lyt_login)
-        progress = findViewById(R.id.lyt_progress)
-        txtProgressMsg = progress?.findViewById(R.id.txt_progress_msg)
         toolbar = findViewById(R.id.toolbar)
         title = findViewById(R.id.toolbar_title)
         inputEmail = findViewById(R.id.txt_input_email)
         inputPassword = findViewById(R.id.txt_input_password)
         btnSubmit = findViewById(R.id.btn_login_submit)
         btnSubmit?.setOnClickListener(this)
+        progress = findViewById(R.id.lyt_progress)
+        txtProgressMsg = progress?.findViewById(R.id.txt_progress_msg)
 
         // Setup forgot password link
         forgotPwd = findViewById(R.id.txt_forgot_pwd)
@@ -198,6 +196,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun handleLogin(email: String?, password: String?) {
         try {
+            Utility.getInstance().hideKeyboard(this)
+
             if (password.isNullOrBlank() || !isValidEmail(email)) {
                 Utility.getInstance().showMsg(applicationContext,
                         getString(R.string.enter_login_info))

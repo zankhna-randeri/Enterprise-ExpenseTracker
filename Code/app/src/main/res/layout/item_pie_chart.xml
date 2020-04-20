@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.mikephil.charting.charts.PieChart xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/expenseChart"
+    android:layout_width="@dimen/dimen_chart"
+    android:layout_height="@dimen/dimen_chart"
+    android:layout_gravity="center_horizontal" />

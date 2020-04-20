@@ -45,6 +45,20 @@
         <item name="android:textSize">@dimen/font_20</item>
     </style>
 
+    <style name="ListDateTextTheme" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/app_font</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/font_medium</item>
+    </style>
+
+    <style name="ListTextDetailTheme" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/app_font</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/font_small</item>
+    </style>
+
     <style name="EditTextDetailTheme" parent="android:Widget.EditText">
         <item name="android:fontFamily">@font/app_font</item>
         <item name="android:textAllCaps">false</item>

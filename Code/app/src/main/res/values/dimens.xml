@@ -33,4 +33,7 @@
     <dimen name="dimen_chart">350dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_height">176dp</dimen>
+
+    <dimen name="corner_radius_4">4dp</dimen>
+    <dimen name="elevation_4">4dp</dimen>
 </resources>

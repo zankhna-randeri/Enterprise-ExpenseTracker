@@ -285,7 +285,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
                 putExtra(Constants.EXTRA_UPLOAD_RECEIPT_PATH, receiptPath)
                 putExtra(Constants.EXTRA_UPLOAD_EXPENSE_TYPE, expenseType)
-                action = Constants.ACTION_UPLOAD
+                action = Constants.ACTION_RECEIPT_SCAN
             }
             Utility.getInstance().startExpenseTrackerService(context, intent)
             showUploadProgress()

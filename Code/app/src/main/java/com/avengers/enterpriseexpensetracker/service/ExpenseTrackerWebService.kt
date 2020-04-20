@@ -3,6 +3,7 @@ package com.avengers.enterpriseexpensetracker.service
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
+import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
 import okhttp3.MultipartBody
@@ -11,6 +12,8 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -36,4 +39,7 @@ interface ExpenseTrackerWebService {
 
     @POST("/createReport")
     fun submitExpenseReport(@Body expenseReport: ExpenseReport): Call<ApiResponse>
+
+    @GET("/categoryTotalAmountDetails")
+    fun getCategoryWiseExpenseApproved(@Field("emailId") emailId: String): Call<CategoryWiseTotalResponse>
 }

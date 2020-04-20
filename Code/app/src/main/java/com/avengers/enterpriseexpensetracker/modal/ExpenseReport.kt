@@ -4,23 +4,25 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class ExpenseReport : Parcelable {
-    private var reportId: Int? = -1
+    private var reportId: String? = null
     private var reportName: String? = null
     private var emailId: String? = null
     private var expenseDetailsRequest: MutableList<Expense>? = null
-    private var approvalDate: String? = null
-    private var submissionDate: String? = null
+    private var approvedDate: String? = null
+    private var reportCreateDate: String? = null
+    private var reportLastModified: String? = null
     private var reportStatus: String? = null
-    private var total: Float? = 0f
+    private var reportTotalAmount: Double = 0.0
 
     constructor(parcel: Parcel) : this() {
-        reportId = parcel.readValue(Int::class.java.classLoader) as? Int
+        reportId = parcel.readString()
         reportName = parcel.readString()
         emailId = parcel.readString()
-        approvalDate = parcel.readString()
-        submissionDate = parcel.readString()
+        approvedDate = parcel.readString()
+        reportCreateDate = parcel.readString()
+        reportLastModified = parcel.readString()
         reportStatus = parcel.readString()
-        total = parcel.readValue(Float::class.java.classLoader) as? Float
+        reportTotalAmount = parcel.readDouble()
         expenseDetailsRequest = ArrayList()
         parcel.readTypedList(expenseDetailsRequest!!, Expense.CREATOR)
     }
@@ -48,10 +50,11 @@ class ExpenseReport : Parcelable {
                 "reportName=$reportName, " +
                 "emailId=$emailId, " +
                 "expenseDetailsRequest=$expenseDetailsRequest," +
-                " approvalDate=$approvalDate," +
-                " submissionDate=$submissionDate," +
+                " approvalDate=$approvedDate," +
+                " submissionDate=$reportCreateDate," +
+                " reportLastModified=$reportLastModified," +
                 " status=$reportStatus," +
-                " total=$total)"
+                " total=$reportTotalAmount)"
     }
 
     fun setReportStatus(status: String) {
@@ -63,13 +66,14 @@ class ExpenseReport : Parcelable {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeValue(reportId)
+        parcel.writeString(reportId)
         parcel.writeString(reportName)
         parcel.writeString(emailId)
-        parcel.writeString(approvalDate)
-        parcel.writeString(submissionDate)
+        parcel.writeString(approvedDate)
+        parcel.writeString(reportCreateDate)
+        parcel.writeString(reportLastModified)
         parcel.writeString(reportStatus)
-        parcel.writeValue(total)
+        parcel.writeDouble(reportTotalAmount)
         parcel.writeTypedList(expenseDetailsRequest)
     }
 

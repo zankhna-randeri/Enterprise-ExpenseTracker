@@ -5,7 +5,7 @@ import android.os.Parcelable
 
 data class ReceiptScanResponse(private var expenseBusinessName: String? = null,
                                private var expenseBusinessAddress: String? = null,
-                               private var total: Float = 0f,
+                               private var total: Double = 0.0,
                                private var expenseDate: String? = null,
                                private var expenseTime: String? = null,
                                private var expenseCategory: String? = null,
@@ -16,7 +16,7 @@ data class ReceiptScanResponse(private var expenseBusinessName: String? = null,
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),
-            parcel.readValue(Float::class.java.classLoader) as Float,
+            parcel.readValue(Double::class.java.classLoader) as Double,
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
@@ -56,7 +56,7 @@ data class ReceiptScanResponse(private var expenseBusinessName: String? = null,
         return super.getStatus()
     }
 
-    fun getTotal(): Float {
+    fun getTotal(): Double {
         return this.total
     }
 

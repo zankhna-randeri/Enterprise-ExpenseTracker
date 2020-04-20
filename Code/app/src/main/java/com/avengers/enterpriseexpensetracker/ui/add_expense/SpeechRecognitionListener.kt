@@ -278,8 +278,8 @@ class SpeechRecognitionListener(private var context: Context?,
         return command.contains("discard", true) || isDeny(command)
     }
 
-    private fun getCurrencyAmount(command: String): Float? {
-        return NumberFormat.getCurrencyInstance(Locale.US).parse(command)?.toFloat()
+    private fun getCurrencyAmount(command: String): Double? {
+        return NumberFormat.getCurrencyInstance(Locale.US).parse(command)?.toDouble()
     }
 
     private fun isSubmitReportRequest(command: String): Boolean {

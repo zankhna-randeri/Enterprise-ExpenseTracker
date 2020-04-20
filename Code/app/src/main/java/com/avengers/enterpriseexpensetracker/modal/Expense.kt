@@ -8,7 +8,7 @@ class Expense() : Parcelable {
     private var businessName: String? = null
     private var businessAddress: String? = null
     private var expenseCategory: String? = null
-    private var expenseTotal: Float = 0f
+    private var expenseTotal: Double = 0.0
     private var expenseDate: String? = null
     private var expenseTime: String? = null
     private var expenseSubCategory: String? = null
@@ -19,7 +19,7 @@ class Expense() : Parcelable {
         businessName = parcel.readString()
         businessAddress = parcel.readString()
         expenseCategory = parcel.readString()
-        expenseTotal = parcel.readFloat()
+        expenseTotal = parcel.readDouble()
         expenseDate = parcel.readString()
         expenseTime = parcel.readString()
         expenseSubCategory = parcel.readString()
@@ -31,7 +31,7 @@ class Expense() : Parcelable {
                 address: String?,
                 category: String?,
                 subCategory: String?,
-                total: Float,
+                total: Double,
                 date: String?,
                 time: String?,
                 url: String?) : this() {
@@ -46,7 +46,7 @@ class Expense() : Parcelable {
         this.receiptURL = url
     }
 
-    fun setAmount(amount: Float) {
+    fun setAmount(amount: Double) {
         this.expenseTotal = amount
     }
 
@@ -54,7 +54,7 @@ class Expense() : Parcelable {
         this.expenseDate = date
     }
 
-    fun getAmount(): Float {
+    fun getAmount(): Double {
         return this.expenseTotal
     }
 
@@ -89,6 +89,7 @@ class Expense() : Parcelable {
     fun getBusinessAddress(): String? {
         return businessAddress
     }
+
     fun setEmailId(emailId: String) {
         this.emailId = emailId
     }
@@ -114,7 +115,7 @@ class Expense() : Parcelable {
         parcel.writeString(businessName)
         parcel.writeString(businessAddress)
         parcel.writeString(expenseCategory)
-        parcel.writeFloat(expenseTotal)
+        parcel.writeDouble(expenseTotal)
         parcel.writeString(expenseDate)
         parcel.writeString(expenseTime)
         parcel.writeString(expenseSubCategory)

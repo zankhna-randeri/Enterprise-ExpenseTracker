@@ -22,6 +22,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AppCompatImageButton
@@ -55,6 +57,9 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private var btnVoice: AppCompatImageButton? = null
     private var btnUpload: Button? = null
     private var conversationView: RecyclerView? = null
+    private var progress: LinearLayout? = null
+    private var txtProgressMsg: TextView? = null
+
     private var addExpenseViewModel: AddExpenseViewModel? = null
     private var conversationAdapter: ConversationAdapter? = null
     private var speechRecognizer: SpeechRecognizer? = null
@@ -62,11 +67,12 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private var speechRecognizerIntent: Intent? = null
     private var receiptScanResponseReceiver: BroadcastReceiver? = null
     private var submitExpenseResponseReceiver: BroadcastReceiver? = null
+    private var expenseReport: ExpenseReport? = null
+    private val conversations = ArrayList<VoiceMessage>()
+
     private var cameraImagePhotoPath: String? = null
     private var isListening = false
     private var expenseType: String? = null
-    private var expenseReport: ExpenseReport? = null
-    private val conversations = ArrayList<VoiceMessage>()
 
     //    private var receiptImageUri: Uri? = null
     private val PERMISSION_RECORD_AUDIO = 1
@@ -89,6 +95,8 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         btnUpload?.setOnClickListener(this)
         btnVoice = view.findViewById(R.id.btnListen)
         btnVoice?.setOnClickListener(this)
+        progress = view.findViewById(R.id.lyt_progress)
+        txtProgressMsg = progress?.findViewById(R.id.txt_progress_msg)
 
         initBroadcast()
         initSpeechRecognizer()
@@ -107,6 +115,8 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             }
 
             override fun onReceive(context: Context?, intent: Intent?) {
+                hideLoadingView()
+
                 val response = intent?.getParcelableExtra<ReceiptScanResponse>(Constants.EXTRA_API_RESPONSE)
                 response?.let {
                     Log.d("EETracker ***", "response $response")
@@ -132,6 +142,8 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             }
 
             override fun onReceive(context: Context?, intent: Intent?) {
+                hideLoadingView()
+
                 val response = intent?.getParcelableExtra<ApiResponse>(Constants.EXTRA_API_RESPONSE)
                 response?.let {
                     Log.d("EETracker ***", "response $response")
@@ -256,25 +268,32 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     }
 
     private fun handleSelectImageResponse(isCamera: Boolean, data: Intent?) {
-        val receiptPath = if (isCamera) {
-            handleCameraResponse()
-        } else {
-            handlePhotosResponse(data)
-        }
-        // Do nothing if failed to get image path
-        if (receiptPath.isNullOrBlank()) {
-            activity?.applicationContext?.let {
-                Utility.getInstance().showMsg(it, getString(R.string.txt_failed_image_path))
+        try {
+            val receiptPath = if (isCamera) {
+                handleCameraResponse()
+            } else {
+                handlePhotosResponse(data)
             }
-            return
+            // Do nothing if failed to get image path
+            if (receiptPath.isNullOrBlank()) {
+                activity?.applicationContext?.let {
+                    Utility.getInstance().showMsg(it, getString(R.string.txt_failed_image_path))
+                }
+                return
+            }
+            // Send to webservice
+            val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
+                putExtra(Constants.EXTRA_UPLOAD_RECEIPT_PATH, receiptPath)
+                putExtra(Constants.EXTRA_UPLOAD_EXPENSE_TYPE, expenseType)
+                action = Constants.ACTION_UPLOAD
+            }
+            Utility.getInstance().startExpenseTrackerService(context, intent)
+            showUploadProgress()
+        } catch (e: Exception) {
+            Log.e("EETracker ***", "Exception in handleSelectImageResponse ${e.message}")
+            e.printStackTrace()
+            hideLoadingView()
         }
-        // Send to webservice
-        val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
-            putExtra(Constants.EXTRA_UPLOAD_RECEIPT_PATH, receiptPath)
-            putExtra(Constants.EXTRA_UPLOAD_EXPENSE_TYPE, expenseType)
-            action = Constants.ACTION_UPLOAD
-        }
-        Utility.getInstance().startExpenseTrackerService(context, intent)
     }
 
     private fun handleCameraResponse(): String? {
@@ -520,15 +539,37 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     }
 
     private fun submitReport(expenseReport: ExpenseReport) {
-        expenseReport.setReportStatus(Constants.Companion.Status.Pending.name)
-        EETrackerPreferenceManager.getUserEmail(activity?.applicationContext)
-                ?.let { expenseReport.setEmailId(it) }
+        try {
+            expenseReport.setReportStatus(Constants.Companion.Status.Pending.name)
+            EETrackerPreferenceManager.getUserEmail(activity?.applicationContext)
+                    ?.let { expenseReport.setEmailId(it) }
 
-        // Send to webservice
-        val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
-            putExtra(Constants.EXTRA_SUBMIT_EXPENSE_REPORT, expenseReport)
-            action = Constants.ACTION_SUBMIT_EXPENSE_REPORT
+            showSubmitProgress()
+
+            // Send to webservice
+            val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
+                putExtra(Constants.EXTRA_SUBMIT_EXPENSE_REPORT, expenseReport)
+                action = Constants.ACTION_SUBMIT_EXPENSE_REPORT
+            }
+            Utility.getInstance().startExpenseTrackerService(context, intent)
+        } catch (e: Exception) {
+            Log.e("EETracker ***", "Exception in submitReport ${e.message}")
+            e.printStackTrace()
+            hideLoadingView()
         }
-        Utility.getInstance().startExpenseTrackerService(context, intent)
+    }
+
+    private fun showUploadProgress() {
+        progress?.visibility = View.VISIBLE
+        txtProgressMsg?.text = getString(R.string.txt_upload_progress)
+    }
+
+    private fun showSubmitProgress() {
+        progress?.visibility = View.VISIBLE
+        txtProgressMsg?.text = getString(R.string.txt_submit_report_progress)
+    }
+
+    private fun hideLoadingView() {
+        progress?.visibility = View.GONE
     }
 }

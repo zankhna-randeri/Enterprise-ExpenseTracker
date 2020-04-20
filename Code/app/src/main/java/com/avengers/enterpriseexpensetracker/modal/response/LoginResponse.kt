@@ -3,8 +3,8 @@ package com.avengers.enterpriseexpensetracker.modal.response
 import android.os.Parcel
 import android.os.Parcelable
 
-data class LoginResponse(private var firstName: String? = null,
-                         private var lastName: String? = null,
+data class LoginResponse(private var firstname: String? = null,
+                         private var lastname: String? = null,
                          private var emailid: String?) : ApiResponse(), Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -24,8 +24,8 @@ data class LoginResponse(private var firstName: String? = null,
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(firstName)
-        parcel.writeString(lastName)
+        parcel.writeString(firstname)
+        parcel.writeString(lastname)
         parcel.writeString(emailid)
     }
 
@@ -38,11 +38,11 @@ data class LoginResponse(private var firstName: String? = null,
     }
 
     fun getFname(): String? {
-        return this.firstName
+        return this.firstname
     }
 
     fun getLname(): String? {
-        return this.lastName
+        return this.lastname
     }
 
     fun getApiResponseStatus(): Boolean {

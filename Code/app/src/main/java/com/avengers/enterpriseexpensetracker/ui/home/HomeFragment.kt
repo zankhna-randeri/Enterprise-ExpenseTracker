@@ -1,34 +1,40 @@
 package com.avengers.enterpriseexpensetracker.ui.home
 
-import android.graphics.Color
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
+import com.avengers.enterpriseexpensetracker.adapter.HomeViewExpenseAdapter
+import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
+import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
+import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
+import com.avengers.enterpriseexpensetracker.modal.response.HomeFragmentResponse
 import com.avengers.enterpriseexpensetracker.modal.tracking.TrackScreenData
+import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
+import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
 import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
-import com.avengers.enterpriseexpensetracker.util.CurrencyFormatter
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.utils.MPPointF
+import com.avengers.enterpriseexpensetracker.util.Constants
+import com.avengers.enterpriseexpensetracker.util.Utility
 
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
-    private var chart: PieChart? = null
+    private var approvedExpenseView: RecyclerView? = null
+    private var homeScreenResponse: HomeFragmentResponse? = null
+    private var categoryWiseTotalResponse: CategoryWiseTotalResponse? = null
+    private var allExpenseReports: MutableList<ExpenseReport>? = null
+    private var approvedExpenseReports: MutableList<ExpenseReport>? = null
+    private var homeScreenResponseReceiver: BroadcastReceiver? = null
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -44,118 +50,106 @@ class HomeFragment : Fragment() {
         }
 
         initView(view)
+        intiBroadcastReceiver()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        homeScreenResponseReceiver?.let { receiver ->
+            val intentFilter = IntentFilter(Constants.BROADCAST_HOME_DATA_RESPONSE)
+            activity?.applicationContext?.let { context ->
+                LocalBroadcastManager.getInstance(context).registerReceiver(receiver, intentFilter)
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        homeScreenResponseReceiver?.let { receiver ->
+            activity?.applicationContext?.let { context ->
+                LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver)
+            }
+        }
     }
 
     private fun initView(view: View) {
-        val textView: TextView = view.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        initChart(view)
+        approvedExpenseView = view.findViewById(R.id.approvedExpenseView)
+        approvedExpenseView?.layoutManager = LinearLayoutManager(activity)
+
+        fetchHomeScreenData()
     }
 
-    private fun initChart(view: View) {
-        chart = view.findViewById(R.id.expenseChart)
-        chart?.setUsePercentValues(false)
-        chart?.description?.isEnabled = false
-        chart?.setExtraOffsets(5f, 10f, 5f, 5f)
-        chart?.dragDecelerationFrictionCoef = 0.95f
+    private fun intiBroadcastReceiver() {
+        homeScreenResponseReceiver = object : ApiResponseReceiver() {
+            override fun onSuccess(context: Context?, response: ApiResponse) {
+                homeScreenResponse = response as HomeFragmentResponse
+                val categoryWiseTotal = homeScreenResponse?.categoryWiseExpense
+                val allExpenseReports = homeScreenResponse?.expenseReports
+                val approvedExpenses = fetchApprovedExpenses(allExpenseReports)
 
-        chart?.centerText = generateSpannableText(resources.getString(R.string.chart_dataset_label))
+                // only check approved expenses. If there is no approved expenses,
+                // means `categoryWiseTotal` must be 0.0 for all
+                if (approvedExpenses.isNullOrEmpty()) {
+                    // TODO: Show empty view
+                    // showEmptyView()
+                } else {
+                    bindExpenseView(categoryWiseTotal!!, approvedExpenses)
+                }
+            }
 
-        chart?.isDrawHoleEnabled = true
-        chart?.setHoleColor(Color.WHITE)
+            override fun onFailure(context: Context?, message: String?) {
+                context?.let { Utility.getInstance().showMsg(it, message) }
+            }
 
-        chart?.setTransparentCircleColor(Color.WHITE);
-        chart?.setTransparentCircleAlpha(110);
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val homeFragmentResponse =
+                    intent?.getParcelableExtra<HomeFragmentResponse>(Constants.EXTRA_API_RESPONSE)
 
-        chart?.holeRadius = 50f
-        chart?.transparentCircleRadius = 55f
-
-        chart?.setDrawCenterText(true)
-
-        chart?.rotationAngle = 0f
-        // enable rotation of the chart by touch
-        chart?.isRotationEnabled = true
-        chart?.isHighlightPerTapEnabled = true
-        // add a selection listener
-        //chart?.setOnChartValueSelectedListener(this);
-        chart?.animateY(1400, Easing.EaseInOutQuad)
-        setLegend(chart)
-        chart?.setEntryLabelTypeface(context?.let { ResourcesCompat.getFont(it, R.font.app_font) })
-        val textSizeInSp = resources.getDimension(R.dimen.font_5)
-        chart?.setEntryLabelTextSize(textSizeInSp)
-        //rounded
-        chart?.setDrawRoundedSlices(true)
-        setData(3, 10f)
-    }
-
-    private fun generateSpannableText(source: String): CharSequence? {
-        val spannableString = SpannableString(source)
-        val typeface = context?.let { ResourcesCompat.getFont(it, R.font.app_font) }
-        spannableString.setSpan(typeface?.style?.let { StyleSpan(typeface.style) },
-                0,
-                source.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        return spannableString
-    }
-
-    private fun setLegend(chart: PieChart?) {
-        val l = chart?.legend
-        l?.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        l?.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
-        l?.orientation = Legend.LegendOrientation.HORIZONTAL
-        l?.setDrawInside(false)
-        l?.xEntrySpace = 20f
-        l?.yEntrySpace = 0f
-        l?.yOffset = 6f
-        val typeFace = context?.let { ResourcesCompat.getFont(it, R.font.app_font) }
-        l?.typeface = typeFace
-        // affects legend text size
-        l?.textSize = resources.getDimension(R.dimen.font_5)
-        // this affects legend square shape
-        l?.formSize = 10f
-        context?.let { ContextCompat.getColor(it, android.R.color.white) }
-                ?.let { chart?.setEntryLabelColor(it) }
-    }
-
-    private fun setData(count: Int, range: Float) {
-        val entries = ArrayList<PieEntry>()
-        for (i in 0 until count) {
-            entries.add(PieEntry((Math.random() * range + range / 5).toFloat(),
-                    "Food",
-                    ContextCompat.getDrawable(activity!!.applicationContext, R.mipmap.ic_launcher_round)))
+                var categoryStatus = false
+                homeFragmentResponse?.let { response ->
+                    Log.d("EETracker ***", "response $response")
+                    response.expenseReports?.let { allReports ->
+                        categoryStatus = response.categoryWiseExpense?.getApiResponseStatus() ?: false
+                        if (categoryStatus && !allReports.isNullOrEmpty()) {
+                            onSuccess(context, response)
+                        } else {
+                            onFailure(context, context?.getString(R.string.txt_api_failed))
+                        }
+                    } ?: run {
+                        onFailure(context, context?.getString(R.string.txt_api_failed))
+                    }
+                }
+            }
         }
-        val dataSet = PieDataSet(entries, "")
-        setDataSetStyle(dataSet)
-        val data = PieData(dataSet)
-        chart?.let { setPieDataStyle(data, it) }
-        chart?.data = data
-        // undo all highlights
-        chart?.highlightValues(null)
-        chart?.invalidate()
     }
 
-    private fun setPieDataStyle(data: PieData,
-                                chart: PieChart) {
-        data.setValueFormatter(CurrencyFormatter(chart))
-        val textSizeInSp = resources.getDimension(R.dimen.font_5)
-        data.setValueTextSize(textSizeInSp)
-        context?.let { ContextCompat.getColor(it, android.R.color.white) }?.let { data.setValueTextColor(it) }
-        val typeFace = context?.let { ResourcesCompat.getFont(it, R.font.app_font) }
-        data.setValueTypeface(typeFace)
+    private fun fetchApprovedExpenses(allExpenseReports: List<ExpenseReport>?): List<ExpenseReport> {
+        val approvedExpenses = ArrayList<ExpenseReport>()
+        val iterator = allExpenseReports?.iterator()
+        iterator?.forEach { expenseReport ->
+            if (expenseReport.getReportStatus().equals(Constants.Companion.Status.Approved.name, false)) {
+                approvedExpenses.add(expenseReport)
+            }
+        }
+
+        return approvedExpenses
     }
 
-    private fun setDataSetStyle(dataSet: PieDataSet) {
-        dataSet.setDrawIcons(false)
-        dataSet.sliceSpace = 3f
-        dataSet.iconsOffset = MPPointF(0f, 40f)
-        dataSet.selectionShift = 5f
-        // add a lot of colors
-        val colors: ArrayList<Int> = ArrayList()
-        context?.let { ContextCompat.getColor(it, R.color.color_chart_1) }?.let { colors.add(it) }
-        context?.let { ContextCompat.getColor(it, R.color.color_chart_2) }?.let { colors.add(it) }
-        context?.let { ContextCompat.getColor(it, R.color.color_chart_3) }?.let { colors.add(it) }
-        dataSet.colors = colors
+    private fun bindExpenseView(categoryWiseTotal: CategoryWiseTotalResponse,
+                                approvedExpenses: List<ExpenseReport>) {
+        val adapter =
+            activity?.applicationContext?.let {
+                HomeViewExpenseAdapter(it,
+                        categoryWiseTotal,
+                        approvedExpenses)
+            }
+        approvedExpenseView?.adapter = adapter
+    }
+
+    private fun fetchHomeScreenData() {
+        val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
+            action = Constants.ACTION_FETCH_HOME_DATA
+        }
+        Utility.getInstance().startExpenseTrackerService(context, intent)
     }
 }

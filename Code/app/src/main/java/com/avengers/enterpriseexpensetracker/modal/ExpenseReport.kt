@@ -2,6 +2,7 @@ package com.avengers.enterpriseexpensetracker.modal
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.avengers.enterpriseexpensetracker.util.Constants
 
 class ExpenseReport : Parcelable {
     private var reportId: String? = null
@@ -11,7 +12,7 @@ class ExpenseReport : Parcelable {
     private var approvedDate: String? = null
     private var reportCreateDate: String? = null
     private var reportLastModified: String? = null
-    private var reportStatus: String? = null
+    private var reportStatus: String = Constants.Companion.Status.Pending.name
     private var reportTotalAmount: Double = 0.0
 
     constructor(parcel: Parcel) : this() {
@@ -21,7 +22,7 @@ class ExpenseReport : Parcelable {
         approvedDate = parcel.readString()
         reportCreateDate = parcel.readString()
         reportLastModified = parcel.readString()
-        reportStatus = parcel.readString()
+        reportStatus = parcel.readString() as String
         reportTotalAmount = parcel.readDouble()
         expenseDetailsRequest = ArrayList()
         parcel.readTypedList(expenseDetailsRequest!!, Expense.CREATOR)
@@ -89,5 +90,9 @@ class ExpenseReport : Parcelable {
         override fun newArray(size: Int): Array<ExpenseReport?> {
             return arrayOfNulls(size)
         }
+    }
+
+    fun getReportStatus(): String {
+        return reportStatus
     }
 }

@@ -12,11 +12,11 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.Field
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 interface ExpenseTrackerWebService {
     companion object {
@@ -41,5 +41,8 @@ interface ExpenseTrackerWebService {
     fun submitExpenseReport(@Body expenseReport: ExpenseReport): Call<ApiResponse>
 
     @GET("/categoryTotalAmountDetails")
-    fun getCategoryWiseExpenseApproved(@Field("emailId") emailId: String): Call<CategoryWiseTotalResponse>
+    fun getCategoryWiseExpenseApproved(@Query("emailId") emailId: String): Call<CategoryWiseTotalResponse>
+
+    @GET("/getAllReports")
+    fun getAllExpenseReports(@Query("emailId") emailId: String): Call<List<ExpenseReport>>
 }

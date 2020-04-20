@@ -8,6 +8,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
+import com.avengers.enterpriseexpensetracker.modal.response.HomeFragmentResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
@@ -60,8 +61,8 @@ class EETrackerJobService : JobIntentService() {
                         intent.getParcelableExtra(Constants.EXTRA_SUBMIT_EXPENSE_REPORT) as ExpenseReport
                     handleActionSubmitExpenseReport(expenseReport, action)
                 }
-                Constants.ACTION_CATEGORY_TOTAL_EXPENSE -> {
-                    handleCategoryWiseExpense(action)
+                Constants.ACTION_FETCH_HOME_DATA -> {
+                    handleFetchHomeScreen(action)
                 }
             }
         }
@@ -109,12 +110,19 @@ class EETrackerJobService : JobIntentService() {
         }
     }
 
-    private fun handleCategoryWiseExpense(action: String) {
+    private fun handleFetchHomeScreen(action: String) {
         if (NetworkHelper.hasNetworkAccess(applicationContext)) {
-            EETrackerPreferenceManager.getUserEmail(applicationContext)?.let {
-                val call = webservice.getCategoryWiseExpenseApproved(it)
-                val response = call.execute()
-                handleApiResponse(response.body(), action)
+            EETrackerPreferenceManager.getUserEmail(applicationContext)?.let { emailId ->
+                val categoryTotalCall = webservice.getCategoryWiseExpenseApproved(emailId)
+                val categoryTotalResponse = categoryTotalCall.execute()
+
+                val getAllReportCall = webservice.getAllExpenseReports(emailId)
+                val getAllReportResponse = getAllReportCall.execute()
+
+                val combinedResponse =
+                    HomeFragmentResponse(categoryTotalResponse.body(), getAllReportResponse.body())
+                Log.d("EETracker ***", "API Response handleFetchHomeScreen: $combinedResponse")
+                handleApiResponse(combinedResponse, action)
             }
         }
     }
@@ -131,8 +139,8 @@ class EETrackerJobService : JobIntentService() {
             Constants.ACTION_SUBMIT_EXPENSE_REPORT -> {
                 responseIntent = Intent(Constants.BROADCAST_SUBMIT_EXPENSE_REPORT_RESPONSE)
             }
-            Constants.ACTION_CATEGORY_TOTAL_EXPENSE -> {
-                responseIntent = Intent(Constants.BROADCAST_CATEGORY_TOTAL_EXPENSE_RESPONSE)
+            Constants.ACTION_FETCH_HOME_DATA -> {
+                responseIntent = Intent(Constants.BROADCAST_HOME_DATA_RESPONSE)
             }
         }
 

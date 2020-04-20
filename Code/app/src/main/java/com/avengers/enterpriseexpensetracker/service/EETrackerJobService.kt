@@ -9,7 +9,6 @@ import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
-import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.NetworkHelper
@@ -45,33 +44,39 @@ class EETrackerJobService : JobIntentService() {
     }
 
     override fun onHandleWork(intent: Intent) {
-        when (intent.action) {
-            Constants.ACTION_LOGIN -> {
-                val user = intent.getParcelableExtra(Constants.EXTRA_LOGIN_USER) as LoginUser
-                handleActionLogin(user)
-            }
-            Constants.ACTION_UPLOAD -> {
-                val receiptPath = intent.getStringExtra(Constants.EXTRA_UPLOAD_RECEIPT_PATH)
-                val expenseType = intent.getStringExtra(Constants.EXTRA_UPLOAD_EXPENSE_TYPE)
-                handleActionUploadReceipt(receiptPath, expenseType)
-            }
-            Constants.ACTION_SUBMIT_EXPENSE_REPORT -> {
-                val expenseReport =
-                    intent.getParcelableExtra(Constants.EXTRA_SUBMIT_EXPENSE_REPORT) as ExpenseReport
-                handleActionSubmitExpenseReport(expenseReport)
+        intent.action?.let { action ->
+            when (action) {
+                Constants.ACTION_LOGIN -> {
+                    val user = intent.getParcelableExtra(Constants.EXTRA_LOGIN_USER) as LoginUser
+                    handleActionLogin(user, action)
+                }
+                Constants.ACTION_RECEIPT_SCAN -> {
+                    val receiptPath = intent.getStringExtra(Constants.EXTRA_UPLOAD_RECEIPT_PATH)
+                    val expenseType = intent.getStringExtra(Constants.EXTRA_UPLOAD_EXPENSE_TYPE)
+                    handleActionUploadReceipt(receiptPath, expenseType, action)
+                }
+                Constants.ACTION_SUBMIT_EXPENSE_REPORT -> {
+                    val expenseReport =
+                        intent.getParcelableExtra(Constants.EXTRA_SUBMIT_EXPENSE_REPORT) as ExpenseReport
+                    handleActionSubmitExpenseReport(expenseReport, action)
+                }
+                Constants.ACTION_CATEGORY_TOTAL_EXPENSE -> {
+                    handleCategoryWiseExpense(action)
+                }
             }
         }
     }
 
-    private fun handleActionLogin(user: LoginUser) {
+    private fun handleActionLogin(user: LoginUser, action: String) {
         if (NetworkHelper.hasNetworkAccess(applicationContext)) {
             Log.d("EETracker ***", "Login request $user ")
             val call: Call<LoginResponse> = webservice.loginUser(user)
-            handleLoginResponse(call.execute().body())
+            val response = call.execute()
+            handleApiResponse(response.body(), action)
         }
     }
 
-    private fun handleActionUploadReceipt(receiptPath: String, type: String?) {
+    private fun handleActionUploadReceipt(receiptPath: String, type: String?, action: String) {
         if (NetworkHelper.hasNetworkAccess(applicationContext)) {
             //Create a file object using file path
             val file = File(receiptPath);
@@ -89,42 +94,52 @@ class EETrackerJobService : JobIntentService() {
             if (expenseType != null && email != null) {
                 val call = webservice.uploadReceipt(filePart, email, expenseType)
                 val response = call.execute()
-                handleReceiptScanResponse(response.body())
+                handleApiResponse(response.body(), action)
             }
         }
     }
 
-    private fun handleActionSubmitExpenseReport(expenseReport: ExpenseReport) {
+    private fun handleActionSubmitExpenseReport(expenseReport: ExpenseReport, action: String) {
         if (NetworkHelper.hasNetworkAccess(applicationContext)) {
             Log.d("EETracker ***", "API Request expenseReport: $expenseReport")
             val call = webservice.submitExpenseReport(expenseReport)
             val response = call.execute()
             Log.d("EETracker ***", "API Response expenseReport: $response")
-            handleSubmitExpenseResponse(response.body())
+            handleApiResponse(response.body(), action)
         }
     }
 
-    private fun handleReceiptScanResponse(response: ReceiptScanResponse?) {
-        val responseIntent = Intent(Constants.BROADCAST_RECEIPT_SCAN_RESPONSE).apply {
-            putExtra(Constants.EXTRA_API_RESPONSE, response)
+    private fun handleCategoryWiseExpense(action: String) {
+        if (NetworkHelper.hasNetworkAccess(applicationContext)) {
+            EETrackerPreferenceManager.getUserEmail(applicationContext)?.let {
+                val call = webservice.getCategoryWiseExpenseApproved(it)
+                val response = call.execute()
+                handleApiResponse(response.body(), action)
+            }
         }
-        val broadcastManager = LocalBroadcastManager.getInstance(applicationContext)
-        broadcastManager.sendBroadcast(responseIntent)
     }
 
-    private fun handleLoginResponse(response: LoginResponse?) {
-        val responseIntent = Intent(Constants.BROADCAST_LOGIN_RESPONSE).apply {
-            putExtra(Constants.EXTRA_API_RESPONSE, response)
+    private fun handleApiResponse(response: ApiResponse?, action: String) {
+        var responseIntent: Intent? = null
+        when (action) {
+            Constants.ACTION_LOGIN -> {
+                responseIntent = Intent(Constants.BROADCAST_LOGIN_RESPONSE)
+            }
+            Constants.ACTION_RECEIPT_SCAN -> {
+                responseIntent = Intent(Constants.BROADCAST_RECEIPT_SCAN_RESPONSE)
+            }
+            Constants.ACTION_SUBMIT_EXPENSE_REPORT -> {
+                responseIntent = Intent(Constants.BROADCAST_SUBMIT_EXPENSE_REPORT_RESPONSE)
+            }
+            Constants.ACTION_CATEGORY_TOTAL_EXPENSE -> {
+                responseIntent = Intent(Constants.BROADCAST_CATEGORY_TOTAL_EXPENSE_RESPONSE)
+            }
         }
-        val broadcastManager = LocalBroadcastManager.getInstance(applicationContext)
-        broadcastManager.sendBroadcast(responseIntent)
-    }
 
-    private fun handleSubmitExpenseResponse(response: ApiResponse?) {
-        val responseIntent = Intent(Constants.BROADCAST_SUBMIT_EXPENSE_REPORT_RESPONSE).apply {
-            putExtra(Constants.EXTRA_API_RESPONSE, response)
+        responseIntent?.let {
+            it.putExtra(Constants.EXTRA_API_RESPONSE, response)
+            val broadcastManager = LocalBroadcastManager.getInstance(applicationContext)
+            broadcastManager.sendBroadcast(it)
         }
-        val broadcastManager = LocalBroadcastManager.getInstance(applicationContext)
-        broadcastManager.sendBroadcast(responseIntent)
     }
 }

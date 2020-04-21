@@ -109,7 +109,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         loginResponseReceiver = object : ApiResponseReceiver() {
             override fun onSuccess(context: Context?, response: ApiResponse) {
                 val res = response as LoginResponse
-                EETrackerPreferenceManager.saveLoginPrefs(res.getEmail(),
+                EETrackerPreferenceManager.saveLoginPrefs(res.getEmail()?.trim(),
                         res.getFname(),
                         res.getLname(),
                         context)
@@ -203,7 +203,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                         getString(R.string.enter_login_info))
             } else {
                 showLoadingView()
-                val user = LoginUser(email, password)
+                val user = LoginUser(email!!.trim(), password)
                 val intent = Intent(this, EETrackerJobService::class.java).apply {
                     putExtra(Constants.EXTRA_LOGIN_USER, user)
                     action = Constants.ACTION_LOGIN

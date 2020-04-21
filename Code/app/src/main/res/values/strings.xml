@@ -33,7 +33,6 @@
     <string name="txt_currency_dollar_amount">$ %1$.2f</string>
 
     <!--    Dashboard-->
-    <string name="title_activity_dashboard">DashboardActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>

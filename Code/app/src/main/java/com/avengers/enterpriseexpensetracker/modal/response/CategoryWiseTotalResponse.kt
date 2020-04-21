@@ -2,10 +2,8 @@ package com.avengers.enterpriseexpensetracker.modal.response
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 
 data class CategoryWiseTotalResponse(
-    @SerializedName("accomadationTotalExpense")
     private var accommodationExpense: Double = 0.0,
     private var otherTotalExpense: Double = 0.0,
     private var travelTotalExpense: Double = 0.0,

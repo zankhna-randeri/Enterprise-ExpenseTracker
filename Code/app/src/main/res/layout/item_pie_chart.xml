@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.mikephil.charting.charts.PieChart xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/expenseChart"
-    android:layout_width="@dimen/dimen_chart"
-    android:layout_height="@dimen/dimen_chart"
-    android:layout_gravity="center_horizontal" />
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/expenseChart"
+        android:layout_width="@dimen/dimen_chart"
+        android:layout_height="@dimen/dimen_chart"
+        android:layout_gravity="center_horizontal" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/margin_8"
+        android:background="@color/color_progress" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginEnd="@dimen/margin_8"
+        android:layout_marginBottom="@dimen/margin_8"
+        android:text="Pending Expense Reports"
+        android:textStyle="bold"
+        android:theme="@style/TextDetailTheme" />
+</androidx.appcompat.widget.LinearLayoutCompat>

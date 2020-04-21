@@ -127,8 +127,7 @@ class EETrackerJobService : JobIntentService() {
     private fun buildQueryParams(expenseReport: ExpenseReport): String {
         var result = ""
         expenseReport.getExpenses()?.let { expenses ->
-            var count = 0
-            for (expense in expenses) {
+            for ((count, expense) in expenses.withIndex()) {
                 result += (count.toString() + ":" +
                         EETrackerPreferenceManager.getUserEmail(applicationContext) + ","
                         + expense.getCategory() + ","

@@ -92,7 +92,7 @@ class HomeViewExpenseAdapter(private var context: Context,
         chart.animateY(1400, Easing.EaseInOutQuad)
         setLegend(chart)
         chart.setEntryLabelTypeface(ResourcesCompat.getFont(context, R.font.app_font))
-        val textSizeInSp = context.resources.getDimension(R.dimen.font_5)
+        val textSizeInSp = context.resources.getDimension(R.dimen.font_4)
         chart.setEntryLabelTextSize(textSizeInSp)
         //rounded
         chart.setDrawRoundedSlices(true)
@@ -121,7 +121,7 @@ class HomeViewExpenseAdapter(private var context: Context,
         val typeFace = ResourcesCompat.getFont(context, R.font.app_font)
         l?.typeface = typeFace
         // affects legend text size
-        l?.textSize = context.resources.getDimension(R.dimen.font_5)
+        l?.textSize = context.resources.getDimension(R.dimen.font_4)
         // this affects legend square shape
         l?.formSize = 10f
         chart.setEntryLabelColor(ContextCompat.getColor(context, android.R.color.white))
@@ -155,7 +155,7 @@ class HomeViewExpenseAdapter(private var context: Context,
     private fun setPieDataStyle(data: PieData,
                                 chart: PieChart) {
         data.setValueFormatter(CurrencyFormatter(chart))
-        val textSizeInSp = context.resources.getDimension(R.dimen.font_5)
+        val textSizeInSp = context.resources.getDimension(R.dimen.font_4)
         data.setValueTextSize(textSizeInSp)
         data.setValueTextColor(ContextCompat.getColor(context, android.R.color.white))
         val typeFace = ResourcesCompat.getFont(context, R.font.app_font)

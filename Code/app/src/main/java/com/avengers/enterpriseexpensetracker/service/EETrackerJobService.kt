@@ -101,13 +101,43 @@ class EETrackerJobService : JobIntentService() {
     }
 
     private fun handleActionSubmitExpenseReport(expenseReport: ExpenseReport, action: String) {
-        if (NetworkHelper.hasNetworkAccess(applicationContext)) {
-            Log.d("EETracker ***", "API Request expenseReport: $expenseReport")
-            val call = webservice.submitExpenseReport(expenseReport)
-            val response = call.execute()
-            Log.d("EETracker ***", "API Response expenseReport: $response")
-            handleApiResponse(response.body(), action)
+        try {
+            if (NetworkHelper.hasNetworkAccess(applicationContext)) {
+                Log.d("EETracker ***", "API Request expenseReport: $expenseReport")
+                val call = webservice.submitExpenseReport(expenseReport)
+                val response = call.execute()
+                Log.d("EETracker ***", "API Response expenseReport: $response")
+
+                // lambda to send email notification on submitting expense report
+                val originalURL = "https://jr41wuzksd.execute-api.us-east-1.amazonaws.com/Test"
+                val lambdaUrl = "https://cors-anywhere.herokuapp.com/$originalURL"
+                val queryParams = buildQueryParams(expenseReport)
+                val emailLambda = webservice.submitReportLambda(lambdaUrl, queryParams)
+                Log.d("EETracker ***", "API Request expenseReport: $emailLambda")
+                val lambdaRes = emailLambda.execute()
+
+                // handle submit report api response
+                handleApiResponse(response.body(), action)
+            }
+        } catch (e: Exception) {
+            Log.e("EETracker ***", "API Request handleActionSubmitExpenseReport: ${e.message}")
         }
+    }
+
+    private fun buildQueryParams(expenseReport: ExpenseReport): String {
+        var result = ""
+        expenseReport.getExpenses()?.let { expenses ->
+            var count = 0
+            for (expense in expenses) {
+                result += (count.toString() + ":" +
+                        EETrackerPreferenceManager.getUserEmail(applicationContext) + ","
+                        + expense.getCategory() + ","
+                        + "$" + expense.getAmount() + ","
+                        + expense.getDate() + "--NER--")
+            }
+        }
+
+        return result
     }
 
     private fun handleFetchHomeScreen(action: String) {

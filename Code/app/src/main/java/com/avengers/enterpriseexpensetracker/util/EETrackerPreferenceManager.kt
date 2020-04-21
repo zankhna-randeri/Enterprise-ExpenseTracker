@@ -21,5 +21,12 @@ class EETrackerPreferenceManager {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             return sharedPreferences.getString(Constants.PREFS_EMAIL, null)
         }
+
+        fun logout(context: Context?) {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(Constants.PREFS_LOGIN, false)
+            editor.apply()
+        }
     }
 }

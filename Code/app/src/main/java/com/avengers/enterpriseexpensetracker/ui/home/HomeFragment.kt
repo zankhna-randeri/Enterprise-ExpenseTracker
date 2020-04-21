@@ -87,13 +87,6 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 R.color.color_chart_1,
                 R.color.color_chart_3)
 
-//        swipeRefreshLayout?.post {
-//            Runnable {
-//                swipeRefreshLayout?.isRefreshing = true
-//
-//            }
-//        }
-
         fetchHomeScreenData()
     }
 
@@ -103,15 +96,15 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 homeScreenResponse = response as HomeFragmentResponse
                 val categoryWiseTotal = homeScreenResponse?.categoryWiseExpense
                 val allExpenseReports = homeScreenResponse?.expenseReports
-                val approvedExpenses = fetchApprovedExpenses(allExpenseReports)
+                val pendingExpenses = fetchPendingExpenses(allExpenseReports)
 
                 // only check approved expenses. If there is no approved expenses,
                 // means `categoryWiseTotal` must be 0.0 for all
-                if (approvedExpenses.isNullOrEmpty()) {
+                if (pendingExpenses.isNullOrEmpty()) {
                     // TODO: Show empty view
                     // showEmptyView()
                 } else {
-                    bindExpenseView(categoryWiseTotal!!, approvedExpenses)
+                    bindExpenseView(categoryWiseTotal!!, pendingExpenses)
                 }
             }
 
@@ -145,25 +138,25 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    private fun fetchApprovedExpenses(allExpenseReports: List<ExpenseReport>?): List<ExpenseReport> {
-        val approvedExpenses = ArrayList<ExpenseReport>()
+    private fun fetchPendingExpenses(allExpenseReports: List<ExpenseReport>?): List<ExpenseReport> {
+        val pendingExpenses = ArrayList<ExpenseReport>()
         val iterator = allExpenseReports?.iterator()
         iterator?.forEach { expenseReport ->
-            if (expenseReport.getReportStatus().equals(Constants.Companion.Status.Approved.name, true)) {
-                approvedExpenses.add(expenseReport)
+            if (expenseReport.getReportStatus().equals(Constants.Companion.Status.Pending.name, true)) {
+                pendingExpenses.add(expenseReport)
             }
         }
 
-        return approvedExpenses
+        return pendingExpenses
     }
 
     private fun bindExpenseView(categoryWiseTotal: CategoryWiseTotalResponse,
-                                approvedExpenses: List<ExpenseReport>) {
+                                pendingExpenses: List<ExpenseReport>) {
         val adapter =
             activity?.applicationContext?.let {
                 HomeViewExpenseAdapter(it,
                         categoryWiseTotal,
-                        approvedExpenses)
+                        pendingExpenses)
             }
         approvedExpenseView?.adapter = adapter
     }

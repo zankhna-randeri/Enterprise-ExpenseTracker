@@ -27,7 +27,7 @@ import com.github.mikephil.charting.utils.MPPointF
 
 class HomeViewExpenseAdapter(private var context: Context,
                              private var categoryWiseTotal: CategoryWiseTotalResponse,
-                             private var approvedExpenses: List<ExpenseReport>) :
+                             private var pendingExpenses: List<ExpenseReport>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_HEADER = 0
@@ -51,7 +51,7 @@ class HomeViewExpenseAdapter(private var context: Context,
     }
 
     override fun getItemCount(): Int {
-        return approvedExpenses.size + 1
+        return pendingExpenses.size + 1
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -59,9 +59,11 @@ class HomeViewExpenseAdapter(private var context: Context,
             val chart = holder.getChartView()
             initChart(chart)
         } else if (holder is ExpenseReportViewHolder) {
-            holder.getDateView().text = approvedExpenses[position - 1].getApprovedDate()
-            holder.getNameView().text = approvedExpenses[position - 1].getName()
-            holder.getAmountView().text = approvedExpenses[position - 1].getTotal().toString()
+            holder.getDateView().text = pendingExpenses[position - 1].getCreationDate()
+            holder.getDateView().setBackgroundResource(R.drawable.report_pending)
+            holder.getNameView().text = pendingExpenses[position - 1].getName()
+            holder.getAmountView().text = context.resources.getString(R.string.txt_currency_dollar_amount,
+                    pendingExpenses[position - 1].getTotal())
         }
     }
 

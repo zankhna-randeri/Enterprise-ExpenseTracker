@@ -11,7 +11,7 @@ class CurrencyFormatter : ValueFormatter {
     private var pieChart: PieChart? = null
 
     constructor() : super() {
-        format = NumberFormat.getCurrencyInstance(Locale.getDefault())
+        format = NumberFormat.getCurrencyInstance(Locale.US)
         format?.minimumFractionDigits = 2
     }
 

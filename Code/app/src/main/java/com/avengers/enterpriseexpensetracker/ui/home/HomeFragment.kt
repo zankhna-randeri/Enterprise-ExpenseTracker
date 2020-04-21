@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.HomeViewExpenseAdapter
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
@@ -27,9 +28,10 @@ import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.Utility
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var homeViewModel: HomeViewModel
     private var approvedExpenseView: RecyclerView? = null
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private var homeScreenResponse: HomeFragmentResponse? = null
     private var categoryWiseTotalResponse: CategoryWiseTotalResponse? = null
     private var allExpenseReports: MutableList<ExpenseReport>? = null
@@ -72,9 +74,25 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onRefresh() {
+        fetchHomeScreenData()
+    }
+
     private fun initView(view: View) {
         approvedExpenseView = view.findViewById(R.id.approvedExpenseView)
         approvedExpenseView?.layoutManager = LinearLayoutManager(activity)
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshHome)
+        swipeRefreshLayout?.setOnRefreshListener(this)
+        swipeRefreshLayout?.setColorSchemeResources(R.color.colorPrimary,
+                R.color.color_chart_1,
+                R.color.color_chart_3)
+
+//        swipeRefreshLayout?.post {
+//            Runnable {
+//                swipeRefreshLayout?.isRefreshing = true
+//
+//            }
+//        }
 
         fetchHomeScreenData()
     }
@@ -102,6 +120,8 @@ class HomeFragment : Fragment() {
             }
 
             override fun onReceive(context: Context?, intent: Intent?) {
+                swipeRefreshLayout?.isRefreshing = false
+
                 val homeFragmentResponse =
                     intent?.getParcelableExtra<HomeFragmentResponse>(Constants.EXTRA_API_RESPONSE)
 
@@ -116,7 +136,9 @@ class HomeFragment : Fragment() {
                             onFailure(context, context?.getString(R.string.txt_api_failed))
                         }
                     } ?: run {
-                        onFailure(context, context?.getString(R.string.txt_api_failed))
+                        // TODO: Show empty view
+                        // showEmptyView()
+
                     }
                 }
             }
@@ -127,7 +149,7 @@ class HomeFragment : Fragment() {
         val approvedExpenses = ArrayList<ExpenseReport>()
         val iterator = allExpenseReports?.iterator()
         iterator?.forEach { expenseReport ->
-            if (expenseReport.getReportStatus().equals(Constants.Companion.Status.Approved.name, false)) {
+            if (expenseReport.getReportStatus().equals(Constants.Companion.Status.Approved.name, true)) {
                 approvedExpenses.add(expenseReport)
             }
         }
@@ -147,6 +169,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchHomeScreenData() {
+        swipeRefreshLayout?.isRefreshing = true
+
         val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
             action = Constants.ACTION_FETCH_HOME_DATA
         }

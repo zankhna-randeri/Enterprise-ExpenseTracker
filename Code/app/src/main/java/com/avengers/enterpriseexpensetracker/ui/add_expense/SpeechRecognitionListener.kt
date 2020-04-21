@@ -251,8 +251,15 @@ class SpeechRecognitionListener(private var context: Context?,
     }
 
     private fun formUpdateAnswer(expense: Expense): String {
-        var answer = "Response has been changed with Category as ${expense.getSubCategory()} in " +
-                "${expense.getCategory()} "
+        var answer = "Response has been changed with Category as "
+
+        // append sub category if it is not null
+        expense.getSubCategory()?.let {
+            answer += "${expense.getSubCategory()} in "
+        }
+
+        // append category
+        answer += "${expense.getCategory()} "
 
         // only append business name if it is not null
         expense.getBusinessName()?.let {
@@ -287,18 +294,24 @@ class SpeechRecognitionListener(private var context: Context?,
 
     private fun isSubmitReportRequest(command: String): Boolean {
         return command.contains("report", true) ||
+                command.contains("create report", true) ||
                 command.contains("expense report", true) ||
-                command.contains("submit expense report", true)
+                command.contains("submit expense report", true) ||
+                command.contains("create expense report", true)
+//                isUserAgreed(command)
+
     }
 
     private fun isSubmitExpenseRequest(command: String): Boolean {
-        return command.contains("submit expense", true) ||
-                command.contains("add expense", true) ||
+        return command.contains("add expense", true) ||
                 command.contains("add more expense", true) ||
-                command.contains("add more expenses", true) ||
-                command.contains("expenses", true) ||
-                command.contains("expense", true) ||
-                isUserAgreed(command)
+                command.contains("add more expenses", true)
+
+//        command.contains("submit expense", true) ||
+//                command.contains("expenses", true) ||
+//                command.contains("expense", true) ||
+//                isUserAgreed(command)
+
     }
 
     private fun isExpenseType(command: String): Boolean {
@@ -397,10 +410,8 @@ class SpeechRecognitionListener(private var context: Context?,
         var answer = "Receipt Scanned Details: Category as "
 
         // append subcategory if category is food and subcategory is not null
-        currentExpense?.getCategory()?.let {
-            if (it.equals(Constants.Companion.ExpenseType.Food.name, true)) {
-                answer = answer + currentExpense?.getSubCategory() + " in "
-            }
+        currentExpense?.getSubCategory()?.let { subCategory ->
+            answer += "$subCategory in "
         }
 
         answer += "${currentExpense?.getCategory()?.let { it }}, "

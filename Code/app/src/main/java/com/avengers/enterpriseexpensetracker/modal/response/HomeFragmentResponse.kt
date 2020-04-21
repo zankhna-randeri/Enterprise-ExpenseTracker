@@ -4,3 +4,5 @@ import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 
 data class HomeFragmentResponse(var categoryWiseExpense: CategoryWiseTotalResponse?,
                                 var expenseReports: List<ExpenseReport>?) : ApiResponse()
+
+data class GetAllReportsResponse(var reports: List<ExpenseReport>?) : ApiResponse()

@@ -178,11 +178,7 @@ class SpeechRecognitionListener(private var context: Context?,
                     (currentMode == VoiceBotMode.Name) -> {
                         expenseReport?.setName(command)
                         currentMode = VoiceBotMode.Normal
-                        /*answer = "You have chosen expense name as ${expenseReport?.getName()}. " +
-                                "Please upload your receipt for auto scanning.\n"
 
-                        (viewModel as AddExpenseViewModel).setUploadButtonVisibility(true)
-                        expenseType?.let { (viewModel as AddExpenseViewModel).setExpenseType(it) }*/
                         answer =
                             "Please provide us with Expense Category such as Food, Travel, Accommodation or Other."
                     }
@@ -207,8 +203,7 @@ class SpeechRecognitionListener(private var context: Context?,
                         } else if (expenseReport == null) {
                             // first initialization of expense report
                             expenseReport = ExpenseReport()
-//                            answer =
-//                                "Please provide us with Expense Category such as Food, Travel, Accommodation or Other."
+
                             currentMode = VoiceBotMode.Name
                             answer = "Sure, please say your Report Name?"
                         } else {
@@ -391,13 +386,26 @@ class SpeechRecognitionListener(private var context: Context?,
         // update all latest fields from API response
         currentExpense = updateCurrentExpense(receiptScanResponse)
 
-        val answer =
-            "Receipt Scanned Details: Category as ${currentExpense?.getSubCategory()?.let { it }} in " +
-                    "${currentExpense?.getCategory()?.let { it }} at " +
-                    "${currentExpense?.getBusinessName()}, " +
-                    "Amount as $${currentExpense?.getAmount()} and " +
-                    "Date as ${currentExpense?.getDate()} \n" +
-                    "Do you want to submit the report, or add more expenses?"
+        var answer = "Receipt Scanned Details: Category as "
+
+        // append subcategory if category is food and subcategory is not null
+        currentExpense?.getCategory()?.let {
+            if (it.equals(Constants.Companion.ExpenseType.Food.name, true)) {
+                answer = answer + currentExpense?.getSubCategory() + " in "
+            }
+        }
+
+        answer += "${currentExpense?.getCategory()?.let { it }}, "
+
+        // append businessname only if it is not null
+        currentExpense?.getBusinessName()?.let {
+            answer += "at ${currentExpense?.getBusinessName()}, "
+        }
+
+        answer = answer + "Amount as $${currentExpense?.getAmount()} and " +
+                "Date as ${currentExpense?.getDate()} \n" +
+                "Do you want to submit the report, or add more expenses?"
+
         currentMode = VoiceBotMode.Confirmation
         val response = VoiceMessage(answer, true)
         (viewModel as AddExpenseViewModel).updateConversation(response)

@@ -74,12 +74,8 @@ class Expense() : Parcelable {
         this.businessName = name
     }
 
-    fun getBusinessName(): String {
-        return if (businessName.isNullOrBlank()) {
-            "N/A"
-        } else {
-            businessName as String
-        }
+    fun getBusinessName(): String? {
+        return businessName
     }
 
     fun getSubCategory(): String? {

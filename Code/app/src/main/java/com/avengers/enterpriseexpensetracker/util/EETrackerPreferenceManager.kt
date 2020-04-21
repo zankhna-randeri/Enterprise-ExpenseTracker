@@ -28,5 +28,11 @@ class EETrackerPreferenceManager {
             editor.putBoolean(Constants.PREFS_LOGIN, false)
             editor.apply()
         }
+
+        fun getUserFullName(context: Context?): String? {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            return sharedPreferences.getString(Constants.PREFS_FNAME, null) + " " +
+            sharedPreferences.getString(Constants.PREFS_LNAME, null)
+        }
     }
 }

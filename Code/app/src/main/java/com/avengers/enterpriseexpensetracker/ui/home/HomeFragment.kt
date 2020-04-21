@@ -30,7 +30,7 @@ import com.avengers.enterpriseexpensetracker.util.Utility
 
 class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var homeViewModel: HomeViewModel
-    private var approvedExpenseView: RecyclerView? = null
+    private var pendingExpenseView: RecyclerView? = null
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private var homeScreenResponse: HomeFragmentResponse? = null
     private var categoryWiseTotalResponse: CategoryWiseTotalResponse? = null
@@ -42,7 +42,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_reports, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,8 +79,8 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun initView(view: View) {
-        approvedExpenseView = view.findViewById(R.id.approvedExpenseView)
-        approvedExpenseView?.layoutManager = LinearLayoutManager(activity)
+        pendingExpenseView = view.findViewById(R.id.approvedExpenseView)
+        pendingExpenseView?.layoutManager = LinearLayoutManager(activity)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshHome)
         swipeRefreshLayout?.setOnRefreshListener(this)
         swipeRefreshLayout?.setColorSchemeResources(R.color.colorPrimary,
@@ -158,7 +158,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         categoryWiseTotal,
                         pendingExpenses)
             }
-        approvedExpenseView?.adapter = adapter
+        pendingExpenseView?.adapter = adapter
     }
 
     private fun fetchHomeScreenData() {

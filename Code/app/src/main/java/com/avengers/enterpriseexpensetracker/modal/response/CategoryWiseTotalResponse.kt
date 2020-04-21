@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class CategoryWiseTotalResponse(
-    private var accommodationExpense: Double = 0.0,
+    private var accommodationTotalExpense: Double = 0.0,
     private var otherTotalExpense: Double = 0.0,
     private var travelTotalExpense: Double = 0.0,
     private var foodTotalExpense: Double = 0.0,
@@ -20,7 +20,7 @@ data class CategoryWiseTotalResponse(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         super.writeToParcel(parcel, flags)
-        parcel.writeDouble(accommodationExpense)
+        parcel.writeDouble(accommodationTotalExpense)
         parcel.writeDouble(otherTotalExpense)
         parcel.writeDouble(travelTotalExpense)
         parcel.writeDouble(foodTotalExpense)
@@ -50,7 +50,7 @@ data class CategoryWiseTotalResponse(
     }
 
     fun getAccommodationExpense(): Float {
-        return accommodationExpense.toFloat()
+        return accommodationTotalExpense.toFloat()
     }
 
     fun getOtherExpense(): Float {

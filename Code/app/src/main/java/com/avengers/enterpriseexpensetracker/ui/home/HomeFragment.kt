@@ -79,7 +79,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun initView(view: View) {
-        pendingExpenseView = view.findViewById(R.id.approvedExpenseView)
+        pendingExpenseView = view.findViewById(R.id.expenseReportView)
         pendingExpenseView?.layoutManager = LinearLayoutManager(activity)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshHome)
         swipeRefreshLayout?.setOnRefreshListener(this)

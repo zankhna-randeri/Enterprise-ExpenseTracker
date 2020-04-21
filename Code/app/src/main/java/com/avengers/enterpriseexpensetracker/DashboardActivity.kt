@@ -2,6 +2,7 @@ package com.avengers.enterpriseexpensetracker
 
 import android.os.Bundle
 import android.view.Menu
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -10,6 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -37,6 +39,13 @@ class DashboardActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_add_expense, R.id.nav_report_history, R.id.nav_logout), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val header = navigationView.getHeaderView(0)
+        val txtName = header.findViewById<TextView>(R.id.navHeader)
+        val txtEmail = header.findViewById<TextView>(R.id.navSubHeader)
+        txtName.text = EETrackerPreferenceManager.getUserFullName(this)
+        txtEmail.text = EETrackerPreferenceManager.getUserEmail(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

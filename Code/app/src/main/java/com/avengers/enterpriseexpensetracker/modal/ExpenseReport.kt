@@ -103,6 +103,10 @@ class ExpenseReport : Parcelable {
         return formattedDate(approvedDate)
     }
 
+    fun getCreationDate(): String {
+        return formattedDate(reportCreateDate)
+    }
+
     private fun formattedDate(dateString: String?): String {
         // convert to MMMM dd, yyyy format -> June 10, 2020
         dateString?.let {

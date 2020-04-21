@@ -12,6 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.viewholder.ChartViewHolder
+import com.avengers.enterpriseexpensetracker.adapter.viewholder.ExpenseReportViewHolder
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
@@ -40,6 +41,10 @@ class HomeViewExpenseAdapter(private var context: Context,
                 val reqViewHolder = inflater.inflate(R.layout.item_pie_chart, parent, false)
                 viewHolder = ChartViewHolder(reqViewHolder)
             }
+            VIEW_LIST -> {
+                val reqViewHolder = inflater.inflate(R.layout.item_expense_report, parent, false)
+                viewHolder = ExpenseReportViewHolder(reqViewHolder)
+            }
         }
 
         return viewHolder
@@ -53,6 +58,10 @@ class HomeViewExpenseAdapter(private var context: Context,
         if (holder is ChartViewHolder) {
             val chart = holder.getChartView()
             initChart(chart)
+        } else if (holder is ExpenseReportViewHolder) {
+            holder.getDateView().text = approvedExpenses[position - 1].getApprovedDate()
+            holder.getNameView().text = approvedExpenses[position - 1].getName()
+            holder.getAmountView().text = approvedExpenses[position - 1].getTotal().toString()
         }
     }
 

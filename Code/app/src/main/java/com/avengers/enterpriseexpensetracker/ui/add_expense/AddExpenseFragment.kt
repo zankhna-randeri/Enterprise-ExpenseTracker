@@ -540,7 +540,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
     private fun submitReport(expenseReport: ExpenseReport) {
         try {
-            expenseReport.setReportStatus(Constants.Companion.Status.Pending.name)
+            expenseReport.setReportStatus(Constants.Companion.Status.Pending.name.toLowerCase())
             EETrackerPreferenceManager.getUserEmail(activity?.applicationContext)
                     ?.let { expenseReport.setEmailId(it) }
 

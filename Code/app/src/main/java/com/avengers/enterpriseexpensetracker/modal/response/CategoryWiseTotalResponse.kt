@@ -46,4 +46,20 @@ data class CategoryWiseTotalResponse(
     fun getApiResponseStatus(): Boolean? {
         return super.getStatus()
     }
+
+    fun getFoodExpense(): Float {
+        return foodTotalExpense.toFloat()
+    }
+
+    fun getAccommodationExpense(): Float {
+        return accommodationExpense.toFloat()
+    }
+
+    fun getOtherExpense(): Float {
+        return otherTotalExpense.toFloat()
+    }
+
+    fun getTravelExpense(): Float {
+        return travelTotalExpense.toFloat()
+    }
 }

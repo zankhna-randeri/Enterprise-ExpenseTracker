@@ -14,6 +14,7 @@ import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.viewholder.ChartViewHolder
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
+import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.CurrencyFormatter
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
@@ -95,7 +96,7 @@ class HomeViewExpenseAdapter(private var context: Context,
         chart.setEntryLabelTextSize(textSizeInSp)
         //rounded
         chart.setDrawRoundedSlices(true)
-        setData(3, 10f, chart)
+        setData(chart)
     }
 
     private fun generateSpannableText(source: String): CharSequence? {
@@ -126,15 +127,21 @@ class HomeViewExpenseAdapter(private var context: Context,
         chart.setEntryLabelColor(ContextCompat.getColor(context, android.R.color.white))
     }
 
-    private fun setData(count: Int,
-                        range: Float,
-                        chart: PieChart) {
+    private fun setData(chart: PieChart) {
         val entries = ArrayList<PieEntry>()
-        for (i in 0 until count) {
-            entries.add(PieEntry((Math.random() * range + range / 5).toFloat(),
-                    "Food",
-                    ContextCompat.getDrawable(context, R.mipmap.ic_launcher_round)))
-        }
+        entries.add(PieEntry(categoryWiseTotal.getAccommodationExpense(),
+                Constants.Companion.ExpenseType.Accommodation.name,
+                ContextCompat.getDrawable(context, R.mipmap.ic_launcher_round)))
+        entries.add(PieEntry(categoryWiseTotal.getFoodExpense(),
+                Constants.Companion.ExpenseType.Food.name,
+                ContextCompat.getDrawable(context, R.mipmap.ic_launcher_round)))
+        entries.add(PieEntry(categoryWiseTotal.getOtherExpense(),
+                Constants.Companion.ExpenseType.Other.name,
+                ContextCompat.getDrawable(context, R.mipmap.ic_launcher_round)))
+        entries.add(PieEntry(categoryWiseTotal.getTravelExpense(),
+                Constants.Companion.ExpenseType.Travel.name,
+                ContextCompat.getDrawable(context, R.mipmap.ic_launcher_round)))
+
         val dataSet = PieDataSet(entries, "")
         setDataSetStyle(dataSet)
         val data = PieData(dataSet)
@@ -165,6 +172,7 @@ class HomeViewExpenseAdapter(private var context: Context,
         colors.add(ContextCompat.getColor(context, R.color.color_chart_1))
         colors.add(ContextCompat.getColor(context, R.color.color_chart_2))
         colors.add(ContextCompat.getColor(context, R.color.color_chart_3))
+        colors.add(ContextCompat.getColor(context, R.color.color_chart_4))
         dataSet.colors = colors
     }
 }

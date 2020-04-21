@@ -42,7 +42,7 @@
     <!--    Menu-->
     <string name="menu_home">Home</string>
     <string name="menu_add_expense">Add Expense</string>
-    <string name="menu_track_status">Track Report Status</string>
+    <string name="menu_report_history">Reports</string>
     <string name="menu_change_pwd">Change Password</string>
     <string name="menu_logout">Logout</string>
     <string name="action_settings">Settings</string>

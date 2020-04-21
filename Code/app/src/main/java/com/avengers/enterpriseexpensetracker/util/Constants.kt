@@ -30,12 +30,15 @@ class Constants {
             "com.avengers.enterpriseexpensetracker.action.SUBMIT_EXPENSE_REPORT"
         const val ACTION_FETCH_HOME_DATA =
             "com.avengers.enterpriseexpensetracker.action.HOME_DATA"
+        const val ACTION_FETCH_ALL_REPORTS =
+            "com.avengers.enterpriseexpensetracker.action.ALL_REPORTS"
 
         // Extras
         const val EXTRA_LOGIN_USER = "login_user"
         const val EXTRA_UPLOAD_RECEIPT_PATH = "receipt_path"
         const val EXTRA_UPLOAD_EXPENSE_TYPE = "expense_type"
         const val EXTRA_SUBMIT_EXPENSE_REPORT = "expense_report"
+        const val EXTRA_UPDATE_DEVICE_TOKEN = "device_token"
         const val EXTRA_API_RESPONSE = "api_response"
 
         // Broadcast
@@ -47,5 +50,7 @@ class Constants {
             "com.avengers.enterpriseexpensetracker.service.action.SUBMIT_EXPENSE_REPORT_RESPONSE"
         const val BROADCAST_HOME_DATA_RESPONSE =
             "com.avengers.enterpriseexpensetracker.service.action.HOME_DATA_RESPONSE"
+        const val BROADCAST_FETCH_ALL_REPORTS =
+            "com.avengers.enterpriseexpensetracker.service.action.FETCH_ALL_REPORTS"
     }
 }

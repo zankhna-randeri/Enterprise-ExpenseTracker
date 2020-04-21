@@ -8,6 +8,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
+import com.avengers.enterpriseexpensetracker.modal.response.GetAllReportsResponse
 import com.avengers.enterpriseexpensetracker.modal.response.HomeFragmentResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
@@ -63,6 +64,9 @@ class EETrackerJobService : JobIntentService() {
                 }
                 Constants.ACTION_FETCH_HOME_DATA -> {
                     handleFetchHomeScreen(action)
+                }
+                Constants.ACTION_FETCH_ALL_REPORTS -> {
+                    handleActionAllReports(action)
                 }
             }
         }
@@ -156,6 +160,19 @@ class EETrackerJobService : JobIntentService() {
         }
     }
 
+    private fun handleActionAllReports(action: String) {
+        if (NetworkHelper.hasNetworkAccess(applicationContext)) {
+            EETrackerPreferenceManager.getUserEmail(applicationContext)?.let { emailId ->
+                val getAllReportCall = webservice.getAllExpenseReports(emailId)
+                val getAllReportResponse = getAllReportCall.execute()
+                val response = GetAllReportsResponse(getAllReportResponse.body())
+
+                Log.d("EETracker ***", "API Response handleActionAllReports: $getAllReportResponse")
+                handleApiResponse(response, action)
+            }
+        }
+    }
+
     private fun handleApiResponse(response: ApiResponse?, action: String) {
         var responseIntent: Intent? = null
         when (action) {
@@ -170,6 +187,9 @@ class EETrackerJobService : JobIntentService() {
             }
             Constants.ACTION_FETCH_HOME_DATA -> {
                 responseIntent = Intent(Constants.BROADCAST_HOME_DATA_RESPONSE)
+            }
+            Constants.ACTION_FETCH_ALL_REPORTS -> {
+                responseIntent = Intent(Constants.BROADCAST_FETCH_ALL_REPORTS)
             }
         }
 

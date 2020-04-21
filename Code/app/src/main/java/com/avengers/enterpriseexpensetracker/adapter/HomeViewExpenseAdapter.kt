@@ -140,18 +140,25 @@ class HomeViewExpenseAdapter(private var context: Context,
 
     private fun setData(chart: PieChart) {
         val entries = ArrayList<PieEntry>()
-        entries.add(PieEntry(categoryWiseTotal.getAccommodationExpense(),
-                Constants.Companion.ExpenseType.Accommodation.name,
-                ContextCompat.getDrawable(context, R.mipmap.ic_launcher_round)))
-        entries.add(PieEntry(categoryWiseTotal.getFoodExpense(),
-                Constants.Companion.ExpenseType.Food.name,
-                ContextCompat.getDrawable(context, R.mipmap.ic_launcher_round)))
-        entries.add(PieEntry(categoryWiseTotal.getOtherExpense(),
-                Constants.Companion.ExpenseType.Other.name,
-                ContextCompat.getDrawable(context, R.mipmap.ic_launcher_round)))
-        entries.add(PieEntry(categoryWiseTotal.getTravelExpense(),
-                Constants.Companion.ExpenseType.Travel.name,
-                ContextCompat.getDrawable(context, R.mipmap.ic_launcher_round)))
+        if (categoryWiseTotal.getAccommodationExpense() > 0) {
+            entries.add(PieEntry(categoryWiseTotal.getAccommodationExpense(),
+                    Constants.Companion.ExpenseType.Accommodation.name))
+        }
+
+        if (categoryWiseTotal.getFoodExpense() > 0) {
+            entries.add(PieEntry(categoryWiseTotal.getFoodExpense(),
+                    Constants.Companion.ExpenseType.Food.name))
+        }
+
+        if (categoryWiseTotal.getOtherExpense() > 0) {
+            entries.add(PieEntry(categoryWiseTotal.getOtherExpense(),
+                    Constants.Companion.ExpenseType.Other.name))
+        }
+
+        if (categoryWiseTotal.getTravelExpense() > 0) {
+            entries.add(PieEntry(categoryWiseTotal.getTravelExpense(),
+                    Constants.Companion.ExpenseType.Travel.name))
+        }
 
         val dataSet = PieDataSet(entries, "")
         setDataSetStyle(dataSet)

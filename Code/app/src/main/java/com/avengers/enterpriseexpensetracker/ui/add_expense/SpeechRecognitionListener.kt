@@ -251,10 +251,18 @@ class SpeechRecognitionListener(private var context: Context?,
     }
 
     private fun formUpdateAnswer(expense: Expense): String {
-        return "Response has been changed with Category as ${expense.getSubCategory()} in " +
-                "${expense.getCategory()} at ${expense.getBusinessName()}, " +
-                "amount as $${expense.getAmount()} and date as ${expense.getDate()}. \n" +
+        var answer = "Response has been changed with Category as ${expense.getSubCategory()} in " +
+                "${expense.getCategory()} "
+
+        // only append business name if it is not null
+        expense.getBusinessName()?.let {
+            answer += "at ${expense.getBusinessName()}, "
+        }
+
+        // append remaining answer
+        answer += "amount as $${expense.getAmount()} and date as ${expense.getDate()}. \n" +
                 "Do you want to submit the report, or add more expenses?"
+        return answer
     }
 
     private fun submitReport() {

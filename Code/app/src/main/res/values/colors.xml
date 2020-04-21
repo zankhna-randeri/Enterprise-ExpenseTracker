@@ -16,5 +16,6 @@
     <!--    Pie chart-->
     <color name="color_chart_1">#6AA786</color>
     <color name="color_chart_2">#D9508A</color>
-    <color name="color_chart_3">#F39531</color>
+    <color name="color_chart_3">#F88B18</color>
+    <color name="color_chart_4">#673AB7</color>
 </resources>

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.HomeViewExpenseAdapter
+import com.avengers.enterpriseexpensetracker.adapter.ItemClickListener
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
@@ -120,7 +121,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                 var categoryStatus = false
                 homeFragmentResponse?.let { response ->
-                    Log.d("EETracker ***", "response $response")
+                    Log.d("EETracker *******", "response $response")
                     response.expenseReports?.let { allReports ->
                         categoryStatus = response.categoryWiseExpense?.getApiResponseStatus() ?: false
                         if (categoryStatus && !allReports.isNullOrEmpty()) {
@@ -156,7 +157,14 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             activity?.applicationContext?.let {
                 HomeViewExpenseAdapter(it,
                         categoryWiseTotal,
-                        pendingExpenses)
+                        pendingExpenses,
+                        object : ItemClickListener {
+                            override fun onPositionClickListener(position: Int) {
+                                pendingExpenses[position].getReportId()?.let { id ->
+                                    deletePendingReport(id)
+                                }
+                            }
+                        })
             }
         pendingExpenseView?.adapter = adapter
     }

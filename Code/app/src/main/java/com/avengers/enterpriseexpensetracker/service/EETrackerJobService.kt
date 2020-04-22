@@ -74,7 +74,7 @@ class EETrackerJobService : JobIntentService() {
 
     private fun handleActionLogin(user: LoginUser, action: String) {
         if (NetworkHelper.hasNetworkAccess(applicationContext)) {
-            Log.d("EETracker ***", "Login request $user ")
+            Log.d("EETracker *******", "Login request $user ")
             val call: Call<LoginResponse> = webservice.loginUser(user)
             val response = call.execute()
             handleApiResponse(response.body(), action)
@@ -95,7 +95,7 @@ class EETrackerJobService : JobIntentService() {
                 RequestBody.create(MediaType.parse("text/plain"), it)
             }
 
-            Log.d("EETracker ***", "Upload request email: $email and expensetype: $expenseType ")
+            Log.d("EETracker *******", "Upload request email: $email and expensetype: $expenseType ")
             if (expenseType != null && email != null) {
                 val call = webservice.uploadReceipt(filePart, email, expenseType)
                 val response = call.execute()
@@ -107,24 +107,24 @@ class EETrackerJobService : JobIntentService() {
     private fun handleActionSubmitExpenseReport(expenseReport: ExpenseReport, action: String) {
         try {
             if (NetworkHelper.hasNetworkAccess(applicationContext)) {
-                Log.d("EETracker ***", "API Request expenseReport: $expenseReport")
+                Log.d("EETracker *******", "API Request expenseReport: $expenseReport")
                 val call = webservice.submitExpenseReport(expenseReport)
                 val response = call.execute()
-                Log.d("EETracker ***", "API Response expenseReport: $response")
+                Log.d("EETracker *******", "API Response expenseReport: $response")
 
                 // lambda to send email notification on submitting expense report
                 val originalURL = "https://jr41wuzksd.execute-api.us-east-1.amazonaws.com/Test"
                 val lambdaUrl = "https://cors-anywhere.herokuapp.com/$originalURL"
                 val queryParams = buildQueryParams(expenseReport)
                 val emailLambda = webservice.submitReportLambda(lambdaUrl, queryParams)
-                Log.d("EETracker ***", "API Request expenseReport: $emailLambda")
+                Log.d("EETracker *******", "API Request expenseReport: $emailLambda")
                 val lambdaRes = emailLambda.execute()
 
                 // handle submit report api response
                 handleApiResponse(response.body(), action)
             }
         } catch (e: Exception) {
-            Log.e("EETracker ***", "API Request handleActionSubmitExpenseReport: ${e.message}")
+            Log.e("EETracker *******", "API Request handleActionSubmitExpenseReport: ${e.message}")
         }
     }
 
@@ -154,7 +154,7 @@ class EETrackerJobService : JobIntentService() {
 
                 val combinedResponse =
                     HomeFragmentResponse(categoryTotalResponse.body(), getAllReportResponse.body())
-                Log.d("EETracker ***", "API Response handleFetchHomeScreen: $combinedResponse")
+                Log.d("EETracker *******", "API Response handleFetchHomeScreen: $combinedResponse")
                 handleApiResponse(combinedResponse, action)
             }
         }
@@ -167,7 +167,7 @@ class EETrackerJobService : JobIntentService() {
                 val getAllReportResponse = getAllReportCall.execute()
                 val response = GetAllReportsResponse(getAllReportResponse.body())
 
-                Log.d("EETracker ***", "API Response handleActionAllReports: $getAllReportResponse")
+                Log.d("EETracker *******", "API Response handleActionAllReports: $getAllReportResponse")
                 handleApiResponse(response, action)
             }
         }

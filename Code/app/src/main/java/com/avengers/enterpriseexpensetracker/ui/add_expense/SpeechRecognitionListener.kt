@@ -95,7 +95,7 @@ class SpeechRecognitionListener(private var context: Context?,
     }
 
     override fun onError(error: Int) {
-        Log.e("EETracker ****** ", error.toString())
+        Log.e("EETracker *******", error.toString())
     }
 
     override fun onResults(results: Bundle?) {

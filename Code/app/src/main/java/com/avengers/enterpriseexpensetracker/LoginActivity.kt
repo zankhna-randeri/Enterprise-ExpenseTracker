@@ -135,7 +135,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     if (statusSuccess) {
                         onSuccess(context, res)
                     } else {
-                        Log.d("EETracker *** ", "Failed Login message: ${res.getResponseMessage()}")
+                        Log.d("EETracker *******", "Failed Login message: ${res.getResponseMessage()}")
                         onFailure(context,
                                 res.getResponseMessage()
                                     ?: context?.resources?.getString(R.string.failed_login))
@@ -211,7 +211,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 Utility.getInstance().startExpenseTrackerService(this, intent)
             }
         } catch (e: Exception) {
-            Log.e("EETracker ***", "Exception in handleLogin ${e.message}")
+            Log.e("EETracker *******", "Exception in handleLogin ${e.message}")
             e.printStackTrace()
             hideLoadingView()
         }

@@ -112,7 +112,7 @@ class ReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     intent?.getParcelableExtra<GetAllReportsResponse>(Constants.EXTRA_API_RESPONSE)
 
                 getAllReportsResponse?.let { response ->
-                    Log.d("EETracker ***", "response $response")
+                    Log.d("EETracker *******", "response $response")
                     response.reports?.let { allReports ->
                         onSuccess(context, response)
                     } ?: run {

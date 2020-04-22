@@ -119,7 +119,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
                 val response = intent?.getParcelableExtra<ReceiptScanResponse>(Constants.EXTRA_API_RESPONSE)
                 response?.let {
-                    Log.d("EETracker ***", "response $response")
+                    Log.d("EETracker *******", "response $response")
                     val statusSuccess = response.getApiResponseStatus() ?: false
                     if (statusSuccess) {
                         onSuccess(context, response)
@@ -146,7 +146,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
                 val response = intent?.getParcelableExtra<ApiResponse>(Constants.EXTRA_API_RESPONSE)
                 response?.let {
-                    Log.d("EETracker ***", "response $response")
+                    Log.d("EETracker *******", "response $response")
                     val statusSuccess = response.getStatus() ?: false
                     if (statusSuccess) {
                         onSuccess(context, response)
@@ -160,7 +160,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
     private fun setUpConversations() {
         val conversationObserver = Observer<ArrayList<VoiceMessage>>() {
-            Log.d("EETracker ****", "Inside observer")
+            Log.d("EETracker *******", "Inside observer")
             conversations.clear()
             if (!it.isNullOrEmpty()) {
                 conversations.addAll(it)
@@ -212,11 +212,11 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                     while (i < grantResults.size) {
                         if (permissions[i] == Manifest.permission.CAMERA &&
                             grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                            Log.d("EETRacker ****", "Camera permission granted ")
+                            Log.d("EETRacker *******", "Camera permission granted ")
                         } else if (permissions[i] == Manifest.permission.WRITE_EXTERNAL_STORAGE && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                            Log.d("EETRacker ****", "Storage write permission granted ")
+                            Log.d("EETRacker *******", "Storage write permission granted ")
                         } else if (permissions[i] == Manifest.permission.READ_EXTERNAL_STORAGE && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                            Log.d("EETRacker ****", "Read storage permission granted ")
+                            Log.d("EETRacker *******", "Read storage permission granted ")
                         }
                     }
                 }
@@ -290,7 +290,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             Utility.getInstance().startExpenseTrackerService(context, intent)
             showUploadProgress()
         } catch (e: Exception) {
-            Log.e("EETracker ***", "Exception in handleSelectImageResponse ${e.message}")
+            Log.e("EETracker *******", "Exception in handleSelectImageResponse ${e.message}")
             e.printStackTrace()
             hideLoadingView()
         }
@@ -307,7 +307,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             photo = if (activity != null) MediaStore.Images.Media.getBitmap(activity!!.contentResolver,
                     Uri.fromFile(file)) else null
         } catch (e: IOException) {
-            Log.e("EETracker **** ", " handleCameraResponse: ${e.message}")
+            Log.e("EETracker *******", " handleCameraResponse: ${e.message}")
             e.printStackTrace()
         }
         /*if (photo != null) {
@@ -320,7 +320,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private fun handlePhotosResponse(data: Intent?): String? {
         val receiptImageUri = data?.data
         //cardImage.setImageURI(cardImageUri)
-        Log.d("EETracker ****", "handlePhotoResponse cardImageUri: $receiptImageUri")
+        Log.d("EETracker *******", "handlePhotoResponse cardImageUri: $receiptImageUri")
         return getPathFromPhotoURL(receiptImageUri)
     }
 
@@ -409,7 +409,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                 try {
                     photoFile = createImageFile()
                 } catch (e: IOException) {
-                    Log.e("EETracker **** ", " openCamera: ${e.message}")
+                    Log.e("EETracker *******", " openCamera: ${e.message}")
                     e.printStackTrace()
                 }
                 if (photoFile != null) {
@@ -443,7 +443,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         )
         // Save a file: path for use with ACTION_VIEW intents
         cameraImagePhotoPath = image.absolutePath
-        Log.d("EETracker ****", cameraImagePhotoPath)
+        Log.d("EETracker *******", cameraImagePhotoPath)
         return image
     }
 
@@ -524,13 +524,13 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                 uri.path
             }
         } catch (e: Exception) {
-            Log.e("EETracker **** ", " getPathFromPhotoURL: ${e.message}")
+            Log.e("EETracker *******", " getPathFromPhotoURL: ${e.message}")
             e.printStackTrace()
         } finally {
             cursor?.close()
         }
 
-        Log.d("EETracker **** ", " getPathFromPhotoURL: $path")
+        Log.d("EETracker *******", " getPathFromPhotoURL: $path")
         return path
     }
 
@@ -553,7 +553,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             }
             Utility.getInstance().startExpenseTrackerService(context, intent)
         } catch (e: Exception) {
-            Log.e("EETracker ***", "Exception in submitReport ${e.message}")
+            Log.e("EETracker *******", "Exception in submitReport ${e.message}")
             e.printStackTrace()
             hideLoadingView()
         }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="@dimen/margin_8"
     app:cardBackgroundColor="@color/colorAccent"
     app:cardCornerRadius="@dimen/corner_radius_4"
@@ -14,18 +14,40 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txt_date"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/report_approved"
-            android:padding="@dimen/padding_5"
-            tools:text="April 21 2020"
-            android:theme="@style/ListDateTextTheme" />
+            android:background="@drawable/report_pending">
+
+            <TextView
+                android:id="@+id/txt_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.90"
+                android:padding="@dimen/padding_5"
+                android:theme="@style/ListDateTextTheme"
+                tools:text="April 21 2020" />
+
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.10"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/txt_delete_tooltip"
+                android:src="@drawable/ic_delete"
+                android:tooltipText="@string/txt_delete_tooltip"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_5"
             android:padding="@dimen/padding_5">
 
             <TextView
@@ -37,8 +59,8 @@
                 android:gravity="start"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
-                tools:text="Conference Expense"
-                android:theme="@style/ListTextDetailTheme" />
+                android:theme="@style/ListTextDetailTheme"
+                tools:text="Conference Expense" />
 
             <TextView
                 android:id="@+id/txt_amount"
@@ -49,8 +71,8 @@
                 android:gravity="end"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
-                tools:text="$80.99"
-                android:theme="@style/ListTextDetailTheme" />
+                android:theme="@style/ListTextDetailTheme"
+                tools:text="$80.99" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.cardview.widget.CardView>

@@ -28,7 +28,8 @@ import com.github.mikephil.charting.utils.MPPointF
 
 class HomeViewExpenseAdapter(private var context: Context,
                              private var categoryWiseTotal: CategoryWiseTotalResponse,
-                             private var pendingExpenses: List<ExpenseReport>) :
+                             private var pendingExpenses: List<ExpenseReport>,
+                             private var clickListener: ItemClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -46,7 +47,7 @@ class HomeViewExpenseAdapter(private var context: Context,
             }
             VIEW_LIST -> {
                 val reqViewHolder = inflater.inflate(R.layout.item_expense_report, parent, false)
-                viewHolder = ExpenseReportViewHolder(reqViewHolder)
+                viewHolder = ExpenseReportViewHolder(reqViewHolder, clickListener)
             }
         }
 

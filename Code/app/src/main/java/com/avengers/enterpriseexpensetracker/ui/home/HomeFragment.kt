@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.HomeViewExpenseAdapter
-import com.avengers.enterpriseexpensetracker.adapter.ItemClickListener
+import com.avengers.enterpriseexpensetracker.adapter.ItemButtonClickListener
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
@@ -27,6 +28,7 @@ import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
 import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
 import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
 import com.avengers.enterpriseexpensetracker.util.Constants
+import com.avengers.enterpriseexpensetracker.util.NetworkHelper
 import com.avengers.enterpriseexpensetracker.util.Utility
 
 class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -34,10 +36,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var pendingExpenseView: RecyclerView? = null
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private var homeScreenResponse: HomeFragmentResponse? = null
-    private var categoryWiseTotalResponse: CategoryWiseTotalResponse? = null
-    private var allExpenseReports: MutableList<ExpenseReport>? = null
-    private var approvedExpenseReports: MutableList<ExpenseReport>? = null
     private var homeScreenResponseReceiver: BroadcastReceiver? = null
+    private var pendingExpenses: MutableList<ExpenseReport>? = null
+    private var adapter: HomeViewExpenseAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -54,6 +55,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         initView(view)
         intiBroadcastReceiver()
+        initObserver()
     }
 
     override fun onResume() {
@@ -97,7 +99,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 homeScreenResponse = response as HomeFragmentResponse
                 val categoryWiseTotal = homeScreenResponse?.categoryWiseExpense
                 val allExpenseReports = homeScreenResponse?.expenseReports
-                val pendingExpenses = fetchPendingExpenses(allExpenseReports)
+                pendingExpenses = fetchPendingExpenses(allExpenseReports)
 
                 // only check approved expenses. If there is no approved expenses,
                 // means `categoryWiseTotal` must be 0.0 for all
@@ -105,7 +107,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     // TODO: Show empty view
                     // showEmptyView()
                 } else {
-                    bindExpenseView(categoryWiseTotal!!, pendingExpenses)
+                    bindExpenseView(categoryWiseTotal!!, pendingExpenses!!)
                 }
             }
 
@@ -132,14 +134,25 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     } ?: run {
                         // TODO: Show empty view
                         // showEmptyView()
-
                     }
                 }
             }
         }
     }
 
-    private fun fetchPendingExpenses(allExpenseReports: List<ExpenseReport>?): List<ExpenseReport> {
+    private fun initObserver() {
+        homeViewModel.getPendingExpense()
+                ?.observe(viewLifecycleOwner,
+                        Observer {
+                            pendingExpenses?.clear()
+                            if (!it.isNullOrEmpty()) {
+                                pendingExpenses?.addAll(it)
+                            }
+                            adapter?.notifyDataSetChanged()
+                        })
+    }
+
+    private fun fetchPendingExpenses(allExpenseReports: List<ExpenseReport>?): MutableList<ExpenseReport> {
         val pendingExpenses = ArrayList<ExpenseReport>()
         val iterator = allExpenseReports?.iterator()
         iterator?.forEach { expenseReport ->
@@ -152,17 +165,23 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun bindExpenseView(categoryWiseTotal: CategoryWiseTotalResponse,
-                                pendingExpenses: List<ExpenseReport>) {
-        val adapter =
+                                pendingExpenses: MutableList<ExpenseReport>) {
+        adapter =
             activity?.applicationContext?.let {
                 HomeViewExpenseAdapter(it,
                         categoryWiseTotal,
                         pendingExpenses,
-                        object : ItemClickListener {
+                        object : ItemButtonClickListener {
                             override fun onPositionClickListener(position: Int) {
-                                pendingExpenses[position].getReportId()?.let { id ->
-                                    deletePendingReport(id)
+                                activity?.applicationContext?.let { context ->
+                                    if (NetworkHelper.hasNetworkAccess(context)) {
+                                        val pos = position - 1
+                                        pendingExpenses[pos].getReportId()?.let { id ->
+                                            homeViewModel.deletePendingReport(id, pos)
+                                        }
+                                    }
                                 }
+
                             }
                         })
             }

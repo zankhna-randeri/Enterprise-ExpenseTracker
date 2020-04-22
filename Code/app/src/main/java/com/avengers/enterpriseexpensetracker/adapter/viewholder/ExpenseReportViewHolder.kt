@@ -20,6 +20,7 @@ class ExpenseReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
 
     constructor(itemView: View, clickListener: ItemClickListener) : this(itemView) {
         this.clickListener = WeakReference(clickListener)
+        btnDelete.setOnClickListener(this)
     }
 
     fun getDateView(): TextView {

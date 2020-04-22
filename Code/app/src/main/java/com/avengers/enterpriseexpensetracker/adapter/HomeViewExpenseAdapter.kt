@@ -31,8 +31,10 @@ class HomeViewExpenseAdapter(private var context: Context,
                              private var pendingExpenses: List<ExpenseReport>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val VIEW_HEADER = 0
-    private val VIEW_LIST = 1
+    companion object {
+        private const val VIEW_HEADER = 0
+        private const val VIEW_LIST = 1
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         lateinit var viewHolder: RecyclerView.ViewHolder

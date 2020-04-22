@@ -121,4 +121,8 @@ class ExpenseReport : Parcelable {
     fun getTotal(): Float {
         return reportTotalAmount.toFloat()
     }
+
+    fun getReportId(): String? {
+        return reportId
+    }
 }

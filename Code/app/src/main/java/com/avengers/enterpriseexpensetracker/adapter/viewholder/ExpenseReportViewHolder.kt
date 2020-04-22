@@ -6,7 +6,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
-import com.avengers.enterpriseexpensetracker.adapter.ItemClickListener
+import com.avengers.enterpriseexpensetracker.adapter.ItemButtonClickListener
 import java.lang.ref.WeakReference
 
 class ExpenseReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
@@ -16,10 +16,10 @@ class ExpenseReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
     private var txtAmount = itemView.findViewById<TextView>(R.id.txt_amount)
     private var btnDelete = itemView.findViewById<ImageButton>(R.id.btnDelete)
 
-    private var clickListener: WeakReference<ItemClickListener>? = null
+    private var buttonClickListener: WeakReference<ItemButtonClickListener>? = null
 
-    constructor(itemView: View, clickListener: ItemClickListener) : this(itemView) {
-        this.clickListener = WeakReference(clickListener)
+    constructor(itemView: View, buttonClickListener: ItemButtonClickListener) : this(itemView) {
+        this.buttonClickListener = WeakReference(buttonClickListener)
         btnDelete.setOnClickListener(this)
     }
 
@@ -40,7 +40,7 @@ class ExpenseReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
     }
 
     override fun onClick(v: View?) {
-        Log.e("EETracker *******", "Adapter position on click: $adapterPosition")
-        clickListener?.get()?.onPositionClickListener(adapterPosition)
+        Log.d("EETracker *******", "Adapter position on click: $adapterPosition")
+        buttonClickListener?.get()?.onPositionClickListener(adapterPosition)
     }
 }

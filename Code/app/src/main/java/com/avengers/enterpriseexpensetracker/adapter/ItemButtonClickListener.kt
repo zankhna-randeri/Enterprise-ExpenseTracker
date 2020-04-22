@@ -1,6 +1,6 @@
 package com.avengers.enterpriseexpensetracker.adapter
 
-interface ItemClickListener {
+interface ItemButtonClickListener {
 
     fun onPositionClickListener(position: Int)
 }

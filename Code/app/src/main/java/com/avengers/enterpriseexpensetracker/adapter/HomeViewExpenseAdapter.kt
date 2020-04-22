@@ -6,6 +6,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -64,6 +65,7 @@ class HomeViewExpenseAdapter(private var context: Context,
             holder.getNameView().text = pendingExpenses[position - 1].getName()
             holder.getAmountView().text = context.resources.getString(R.string.txt_currency_dollar_amount,
                     pendingExpenses[position - 1].getTotal())
+            holder.getDeleteView().visibility = View.VISIBLE
         }
     }
 

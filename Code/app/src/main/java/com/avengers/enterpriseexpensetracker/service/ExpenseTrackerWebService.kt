@@ -6,12 +6,14 @@ import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
+import com.google.android.gms.common.api.Api
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
@@ -51,4 +53,7 @@ interface ExpenseTrackerWebService {
     @Headers("x-requested-with: xhr")
     @GET
     fun submitReportLambda(@Url url: String, @Query("first_name") param: String): Call<Void>
+
+    @DELETE("/deleteReport")
+    fun deleteReport(@Query("reportID") reportId: String): Call<ApiResponse>
 }

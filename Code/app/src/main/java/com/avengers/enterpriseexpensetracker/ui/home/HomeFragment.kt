@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
@@ -27,7 +29,8 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var homeViewModel: HomeViewModel
     private var pendingExpenseView: RecyclerView? = null
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
-
+    private var progress: LinearLayout? = null
+    private var txtProgressMsg: TextView? = null
     private var adapter: HomeViewExpenseAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -68,6 +71,8 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun initView(view: View) {
         pendingExpenseView = view.findViewById(R.id.expenseReportView)
         pendingExpenseView?.layoutManager = LinearLayoutManager(activity)
+        progress = view.findViewById(R.id.lyt_progress)
+        txtProgressMsg = progress?.findViewById(R.id.txt_progress_msg)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshHome)
         swipeRefreshLayout?.setOnRefreshListener(this)
         swipeRefreshLayout?.setColorSchemeResources(R.color.colorPrimary,
@@ -87,6 +92,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 ?.observe(viewLifecycleOwner,
                         Observer {
                             Log.d("EETracker *******", "Invoked observer on getPendingExpenses()")
+                            hideLoadingView()
                             adapter?.notifyDataSetChanged()
                         })
     }
@@ -124,7 +130,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             activity?.applicationContext?.let { context ->
                 if (NetworkHelper.hasNetworkAccess(context)) {
                     // As there is headerview in Adapter, expense delete position will be actual position - 1
-                    //TODO: Show Progress message
+                    showLoadingView()
                     homeViewModel.deletePendingReport(position - 1)
                 }
             }
@@ -134,5 +140,14 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         builder?.show()
+    }
+
+    private fun showLoadingView() {
+        progress?.visibility = View.VISIBLE
+        txtProgressMsg?.text = getString(R.string.txt_delete_progress)
+    }
+
+    private fun hideLoadingView() {
+        progress?.visibility = View.GONE
     }
 }

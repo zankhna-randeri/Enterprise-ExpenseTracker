@@ -91,8 +91,8 @@ class HomeViewExpenseAdapter(private var context: Context,
         chart.isDrawHoleEnabled = true
         chart.setHoleColor(Color.WHITE)
 
-        chart.setTransparentCircleColor(Color.WHITE);
-        chart.setTransparentCircleAlpha(110);
+        chart.setTransparentCircleColor(Color.WHITE)
+        chart.setTransparentCircleAlpha(110)
 
         chart.holeRadius = 50f
         chart.transparentCircleRadius = 55f

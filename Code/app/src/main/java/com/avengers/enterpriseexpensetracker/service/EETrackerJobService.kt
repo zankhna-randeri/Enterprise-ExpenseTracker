@@ -62,9 +62,6 @@ class EETrackerJobService : JobIntentService() {
                         intent.getParcelableExtra(Constants.EXTRA_SUBMIT_EXPENSE_REPORT) as ExpenseReport
                     handleActionSubmitExpenseReport(expenseReport, action)
                 }
-                Constants.ACTION_FETCH_HOME_DATA -> {
-                    handleFetchHomeScreen(action)
-                }
                 Constants.ACTION_FETCH_ALL_REPORTS -> {
                     handleActionAllReports(action)
                 }
@@ -184,9 +181,6 @@ class EETrackerJobService : JobIntentService() {
             }
             Constants.ACTION_SUBMIT_EXPENSE_REPORT -> {
                 responseIntent = Intent(Constants.BROADCAST_SUBMIT_EXPENSE_REPORT_RESPONSE)
-            }
-            Constants.ACTION_FETCH_HOME_DATA -> {
-                responseIntent = Intent(Constants.BROADCAST_HOME_DATA_RESPONSE)
             }
             Constants.ACTION_FETCH_ALL_REPORTS -> {
                 responseIntent = Intent(Constants.BROADCAST_FETCH_ALL_REPORTS)

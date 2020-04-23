@@ -28,8 +28,6 @@ class Constants {
         const val ACTION_RECEIPT_SCAN = "com.avengers.enterpriseexpensetracker.action.UPLOAD"
         const val ACTION_SUBMIT_EXPENSE_REPORT =
             "com.avengers.enterpriseexpensetracker.action.SUBMIT_EXPENSE_REPORT"
-        const val ACTION_FETCH_HOME_DATA =
-            "com.avengers.enterpriseexpensetracker.action.HOME_DATA"
         const val ACTION_FETCH_ALL_REPORTS =
             "com.avengers.enterpriseexpensetracker.action.ALL_REPORTS"
 
@@ -48,8 +46,6 @@ class Constants {
             "com.avengers.enterpriseexpensetracker.service.action.RECEIPT_SCAN_RESPONSE"
         const val BROADCAST_SUBMIT_EXPENSE_REPORT_RESPONSE =
             "com.avengers.enterpriseexpensetracker.service.action.SUBMIT_EXPENSE_REPORT_RESPONSE"
-        const val BROADCAST_HOME_DATA_RESPONSE =
-            "com.avengers.enterpriseexpensetracker.service.action.HOME_DATA_RESPONSE"
         const val BROADCAST_FETCH_ALL_REPORTS =
             "com.avengers.enterpriseexpensetracker.service.action.FETCH_ALL_REPORTS"
     }

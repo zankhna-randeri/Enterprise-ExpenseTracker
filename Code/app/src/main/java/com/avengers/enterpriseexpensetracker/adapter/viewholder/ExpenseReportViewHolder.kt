@@ -41,6 +41,6 @@ class ExpenseReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
 
     override fun onClick(v: View?) {
         Log.d("EETracker *******", "Adapter position on click: $adapterPosition")
-        buttonClickListener?.get()?.onPositionClickListener(adapterPosition)
+        buttonClickListener?.get()?.onDeleteClickListener(adapterPosition)
     }
 }

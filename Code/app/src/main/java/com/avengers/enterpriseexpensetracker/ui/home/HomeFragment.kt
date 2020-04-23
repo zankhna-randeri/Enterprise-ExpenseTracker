@@ -12,6 +12,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -110,7 +111,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             }
 
                             override fun onItemClickListener(position: Int) {
-
+                                val report = pendingExpenses[position - 1]
+                                val action = HomeFragmentDirections.actionNavHomeToNavReportDetail(report)
+                                view?.findNavController()?.navigate(action)
                             }
                         })
             }

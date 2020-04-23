@@ -46,6 +46,11 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun removeMergeDataSources() {
+        liveDataMerger.removeSource(categoryWiseTotal)
+        liveDataMerger.removeSource(pendingExpenses)
+    }
+
     fun getHomeScreenData(): MediatorLiveData<HomeFragmentResponse> {
         return liveDataMerger
     }

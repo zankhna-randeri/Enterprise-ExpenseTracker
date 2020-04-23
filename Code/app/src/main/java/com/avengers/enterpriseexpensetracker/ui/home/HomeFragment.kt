@@ -45,9 +45,6 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         initView(view)
-        initObserver()
-
-
         fetchHomeScreenData()
     }
 
@@ -61,6 +58,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onPause() {
         super.onPause()
         Log.d("EETracker *******", "Invoked onPause()")
+        homeViewModel.removeMergeDataSources()
     }
 
     override fun onRefresh() {

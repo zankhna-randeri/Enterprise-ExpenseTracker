@@ -6,7 +6,6 @@ import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
-import com.google.android.gms.common.api.Api
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -48,7 +47,7 @@ interface ExpenseTrackerWebService {
     fun getCategoryWiseExpenseApproved(@Query("emailId") emailId: String): Call<CategoryWiseTotalResponse>
 
     @GET("/getAllReports")
-    fun getAllExpenseReports(@Query("emailId") emailId: String): Call<List<ExpenseReport>>
+    fun getAllExpenseReports(@Query("emailId") emailId: String): Call<MutableList<ExpenseReport>>
 
     @Headers("x-requested-with: xhr")
     @GET

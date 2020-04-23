@@ -83,7 +83,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun initObserver() {
         homeViewModel.getHomeScreenData().observe(viewLifecycleOwner, Observer { homeMergedData ->
             Log.d("EETracker *******", "Invoked observer on getHomeScreenData()")
-            if (homeMergedData.categoryWiseExpense != null && !homeMergedData.expenseReports.isNullOrEmpty()) {
+            if (homeMergedData.categoryWiseExpense != null && homeMergedData.expenseReports != null) {
                 swipeRefreshLayout?.isRefreshing = false
                 bindExpenseView(homeMergedData.categoryWiseExpense!!, homeMergedData.expenseReports!!)
             }
@@ -107,6 +107,10 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         object : ItemButtonClickListener {
                             override fun onDeleteClickListener(position: Int) {
                                 confirmDelete(position)
+                            }
+
+                            override fun onItemClickListener(position: Int) {
+
                             }
                         })
             }

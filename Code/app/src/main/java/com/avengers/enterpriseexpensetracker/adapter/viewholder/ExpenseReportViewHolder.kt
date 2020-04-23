@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.ItemButtonClickListener
@@ -15,12 +16,14 @@ class ExpenseReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
     private var txtName = itemView.findViewById<TextView>(R.id.txt_name)
     private var txtAmount = itemView.findViewById<TextView>(R.id.txt_amount)
     private var btnDelete = itemView.findViewById<ImageButton>(R.id.btnDelete)
+    private var reportCardView = itemView.findViewById<CardView>(R.id.reportCardView)
 
     private var buttonClickListener: WeakReference<ItemButtonClickListener>? = null
 
     constructor(itemView: View, buttonClickListener: ItemButtonClickListener) : this(itemView) {
         this.buttonClickListener = WeakReference(buttonClickListener)
         btnDelete.setOnClickListener(this)
+        reportCardView.setOnClickListener(this)
     }
 
     fun getDateView(): TextView {
@@ -41,6 +44,13 @@ class ExpenseReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
 
     override fun onClick(v: View?) {
         Log.d("EETracker *******", "Adapter position on click: $adapterPosition")
-        buttonClickListener?.get()?.onDeleteClickListener(adapterPosition)
+        when (v?.id) {
+            btnDelete.id -> {
+                buttonClickListener?.get()?.onDeleteClickListener(adapterPosition)
+            }
+            reportCardView.id -> {
+                buttonClickListener?.get()?.onItemClickListener(adapterPosition)
+            }
+        }
     }
 }

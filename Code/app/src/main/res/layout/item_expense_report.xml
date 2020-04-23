@@ -17,7 +17,8 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/report_pending">
+            android:background="@drawable/report_pending"
+            android:padding="@dimen/padding_5">
 
             <TextView
                 android:id="@+id/txt_date"
@@ -25,7 +26,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.90"
-                android:padding="@dimen/padding_5"
                 android:theme="@style/ListDateTextTheme"
                 tools:text="April 21 2020" />
 
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.10"
-                android:background="@android:color/transparent"
+                android:background="@drawable/ripple_background"
                 android:contentDescription="@string/txt_delete_tooltip"
                 android:src="@drawable/ic_delete"
                 android:tooltipText="@string/txt_delete_tooltip"
@@ -47,8 +47,12 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_5"
-            android:padding="@dimen/padding_5">
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/padding_5"
+            android:paddingTop="@dimen/padding_8"
+            android:paddingEnd="@dimen/padding_5"
+            android:paddingBottom="@dimen/padding_8">
 
             <TextView
                 android:id="@+id/txt_name"
@@ -56,7 +60,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.75"
                 android:ellipsize="end"
-                android:gravity="start"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
                 android:theme="@style/ListTextDetailTheme"

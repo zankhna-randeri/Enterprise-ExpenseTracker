@@ -116,4 +116,25 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             homeViewModel.fetchHomeScreenData(it)
         }
     }
+
+    private fun confirmDelete(position: Int) {
+        val builder = context?.let { AlertDialog.Builder(ContextThemeWrapper(it, R.style.AlertDialogTheme)) }
+        builder?.setTitle(getString(R.string.txt_confirm_dialog_title))
+        builder?.setMessage(getString(R.string.txt_confirm_delete))
+        builder?.setPositiveButton(getString(R.string.txt_yes)) { dialog, which ->
+            dialog.dismiss()
+            activity?.applicationContext?.let { context ->
+                if (NetworkHelper.hasNetworkAccess(context)) {
+                    // As there is headerview in Adapter, expense delete position will be actual position - 1
+                    //TODO: Show Progress message
+                    homeViewModel.deletePendingReport(position - 1)
+                }
+            }
+        }
+        builder?.setNegativeButton(getString(R.string.txt_no)) { dialog, which ->
+            dialog.dismiss()
+        }
+
+        builder?.show()
+    }
 }

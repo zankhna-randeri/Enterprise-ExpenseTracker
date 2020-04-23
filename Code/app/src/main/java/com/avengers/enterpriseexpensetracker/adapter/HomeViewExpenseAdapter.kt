@@ -29,7 +29,7 @@ import com.github.mikephil.charting.utils.MPPointF
 class HomeViewExpenseAdapter(private var context: Context,
                              private var categoryWiseTotal: CategoryWiseTotalResponse,
                              private var pendingExpenses: List<ExpenseReport>,
-                             private var buttonClickListener: ItemButtonClickListener) :
+                             private var buttonClickListener: RecyclerClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {

@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.HomeViewExpenseAdapter
-import com.avengers.enterpriseexpensetracker.adapter.ItemButtonClickListener
+import com.avengers.enterpriseexpensetracker.adapter.RecyclerClickListener
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
 import com.avengers.enterpriseexpensetracker.modal.tracking.TrackScreenData
@@ -104,7 +104,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 HomeViewExpenseAdapter(it,
                         categoryWiseTotal,
                         pendingExpenses,
-                        object : ItemButtonClickListener {
+                        object : RecyclerClickListener {
                             override fun onDeleteClickListener(position: Int) {
                                 confirmDelete(position)
                             }

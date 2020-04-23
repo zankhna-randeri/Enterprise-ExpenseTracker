@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
-import com.avengers.enterpriseexpensetracker.adapter.ItemButtonClickListener
+import com.avengers.enterpriseexpensetracker.adapter.RecyclerClickListener
 import java.lang.ref.WeakReference
 
 class ExpenseReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
@@ -18,9 +18,9 @@ class ExpenseReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
     private var btnDelete = itemView.findViewById<ImageButton>(R.id.btnDelete)
     private var reportCardView = itemView.findViewById<CardView>(R.id.reportCardView)
 
-    private var buttonClickListener: WeakReference<ItemButtonClickListener>? = null
+    private var buttonClickListener: WeakReference<RecyclerClickListener>? = null
 
-    constructor(itemView: View, buttonClickListener: ItemButtonClickListener) : this(itemView) {
+    constructor(itemView: View, buttonClickListener: RecyclerClickListener) : this(itemView) {
         this.buttonClickListener = WeakReference(buttonClickListener)
         btnDelete.setOnClickListener(this)
         reportCardView.setOnClickListener(this)

@@ -9,7 +9,11 @@
         android:id="@+id/nav_home"
         android:name="com.avengers.enterpriseexpensetracker.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_reports" />
+        tools:layout="@layout/fragment_reports">
+        <action
+            android:id="@+id/action_nav_home_to_nav_report_detail"
+            app:destination="@id/nav_report_detail" />
+    </fragment>
     <fragment
         android:id="@+id/nav_add_expense"
         android:name="com.avengers.enterpriseexpensetracker.ui.add_expense.AddExpenseFragment"
@@ -25,4 +29,13 @@
         android:name="com.avengers.enterpriseexpensetracker.ui.logout.LogoutFragment"
         android:label="@string/menu_logout"
         tools:layout="@layout/fragment_logout" />
+    <fragment
+        android:id="@+id/nav_report_detail"
+        android:name="com.avengers.enterpriseexpensetracker.ui.ReportDetailFragment"
+        android:label="fragment_report_detail"
+        tools:layout="@layout/fragment_report_detail">
+        <argument
+            android:name="report"
+            app:argType="com.avengers.enterpriseexpensetracker.modal.ExpenseReport" />
+    </fragment>
 </navigation>

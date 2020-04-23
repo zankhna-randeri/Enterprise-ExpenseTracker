@@ -381,7 +381,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         options[1] = getString(R.string.txt_select_photos)
         options[2] = getString(R.string.txt_cancel)
         val builder = context?.let { AlertDialog.Builder(ContextThemeWrapper(it, R.style.AlertDialogTheme)) }
-        builder?.setTitle("Choose Photo")
+        builder?.setTitle(getString(R.string.txt_select_img_dialog_title))
         builder?.setItems(options) { dialog, item ->
             when {
                 options[item].equals(getString(R.string.txt_click_pic)) -> {

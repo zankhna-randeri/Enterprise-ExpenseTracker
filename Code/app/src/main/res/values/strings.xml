@@ -25,6 +25,7 @@
     <string name="txt_failed_image_path">Image path is null or blank !</string>
     <string name="txt_upload_progress">Uploading Receipt Image</string>
     <string name="txt_submit_report_progress">Submitting Expense Report</string>
+    <string name="txt_select_img_dialog_title">Choose Photo</string>
 
     <!-- common-->
     <string name="txt_loading">Loading</string>
@@ -32,6 +33,8 @@
     <string name="txt_api_failed">API call failed!</string>
     <string name="txt_currency_dollar_amount">$ %1$.2f</string>
     <string name="txt_delete_tooltip">Delete Report</string>
+    <string name="txt_yes">Yes</string>
+    <string name="txt_no">No</string>
 
     <!--    Dashboard-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -39,6 +42,8 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="txt_confirm_dialog_title">Confirm</string>
+    <string name="txt_confirm_delete"> Do you really want to delete this expense report?</string>
 
     <!--    Menu-->
     <string name="menu_home">Home</string>

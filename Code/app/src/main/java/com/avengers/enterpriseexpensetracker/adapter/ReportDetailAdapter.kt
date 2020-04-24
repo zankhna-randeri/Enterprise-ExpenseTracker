@@ -12,7 +12,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.viewholder.ExpenseDetailViewHolder
-import com.avengers.enterpriseexpensetracker.adapter.viewholder.ExpenseReportViewHolder
 import com.avengers.enterpriseexpensetracker.modal.Expense
 import com.avengers.enterpriseexpensetracker.util.Constants
 
@@ -95,6 +94,15 @@ class ReportDetailAdapter(private var context: Context,
                     category = expense.getSubCategory().toString()
                 }
                 category += ", " + Constants.Companion.ExpenseType.Food.name
+            }
+            Constants.Companion.ExpenseType.Travel.name -> {
+                category += Constants.Companion.ExpenseType.Travel.name
+            }
+            Constants.Companion.ExpenseType.Accommodation.name -> {
+                category += "Stay at"
+            }
+            Constants.Companion.ExpenseType.Other.name -> {
+                category += "Other"
             }
         }
 

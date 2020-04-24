@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.avengers.enterpriseexpensetracker.ui.home.HomeFragment"
+        android:name="com.avengers.enterpriseexpensetracker.ui.fragment.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_reports">
         <action
@@ -16,22 +16,22 @@
     </fragment>
     <fragment
         android:id="@+id/nav_add_expense"
-        android:name="com.avengers.enterpriseexpensetracker.ui.add_expense.AddExpenseFragment"
+        android:name="com.avengers.enterpriseexpensetracker.ui.fragment.AddExpenseFragment"
         android:label="@string/menu_add_expense"
         tools:layout="@layout/fragment_add_expense" />
     <fragment
         android:id="@+id/nav_report_history"
-        android:name="com.avengers.enterpriseexpensetracker.ui.reports_history.ReportsFragment"
+        android:name="com.avengers.enterpriseexpensetracker.ui.fragment.ReportsFragment"
         android:label="@string/menu_report_history"
         tools:layout="@layout/fragment_reports" />
     <fragment
         android:id="@+id/nav_logout"
-        android:name="com.avengers.enterpriseexpensetracker.ui.logout.LogoutFragment"
+        android:name="com.avengers.enterpriseexpensetracker.ui.fragment.LogoutFragment"
         android:label="@string/menu_logout"
         tools:layout="@layout/fragment_logout" />
     <fragment
         android:id="@+id/nav_report_detail"
-        android:name="com.avengers.enterpriseexpensetracker.ui.ReportDetailFragment"
+        android:name="com.avengers.enterpriseexpensetracker.ui.fragment.ReportDetailFragment"
         android:label="fragment_report_detail"
         tools:layout="@layout/fragment_report_detail">
         <argument

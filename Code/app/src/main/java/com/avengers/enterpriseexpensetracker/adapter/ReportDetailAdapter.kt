@@ -63,7 +63,7 @@ class ReportDetailAdapter(private var context: Context,
     private fun generateSpannableString(expense: Expense): CharSequence? {
 
         var category = getCategoryText(expense)
-        var business = if (!expense.getBusinessName().isNullOrEmpty()) {
+        var business = if (!expense.getBusinessName().isNullOrBlank()) {
             "\n\n" + expense.getBusinessName()
         } else {
             ""

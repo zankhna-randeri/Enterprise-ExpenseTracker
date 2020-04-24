@@ -121,6 +121,8 @@ class EETrackerJobService : JobIntentService() {
                 val originalURL = "https://jr41wuzksd.execute-api.us-east-1.amazonaws.com/Test"
                 val lambdaUrl = "https://cors-anywhere.herokuapp.com/$originalURL"
                 val queryParams = buildQueryParams(expenseReport)
+                Log.d(Constants.TAG, "Submit Report Lambda query : $queryParams")
+
                 val emailLambda = webservice.submitReportLambda(lambdaUrl, queryParams)
                 Log.d("EETracker *******", "API Request expenseReport: $emailLambda")
                 val lambdaRes = emailLambda.execute()
@@ -141,7 +143,8 @@ class EETrackerJobService : JobIntentService() {
                         EETrackerPreferenceManager.getUserEmail(applicationContext) + ","
                         + expense.getCategory() + ","
                         + "$" + expense.getAmount() + ","
-                        + expense.getDate() + "--NER--")
+                        + expense.getDate() + ","
+                        + expenseReport.getName() + "--NER--")
             }
         }
 

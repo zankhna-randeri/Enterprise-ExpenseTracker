@@ -6,11 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
+import com.avengers.enterpriseexpensetracker.adapter.ReportDetailAdapter
+import com.avengers.enterpriseexpensetracker.modal.Expense
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
-import com.avengers.enterpriseexpensetracker.ui.ReportDetailFragmentArgs
+import kotlin.math.exp
 
 class ReportDetailFragment : Fragment() {
+    private var expenseView: RecyclerView? = null
     private lateinit var report: ExpenseReport
     private val args: ReportDetailFragmentArgs by navArgs()
 
@@ -23,5 +28,22 @@ class ReportDetailFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_report_detail, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView(view)
+        loadReportDetails(report)
+    }
+
+    private fun initView(view: View) {
+        expenseView = view.findViewById(R.id.expenseReportView)
+        expenseView?.layoutManager = LinearLayoutManager(activity)
+    }
+
+    private fun loadReportDetails(report: ExpenseReport) {
+        activity?.applicationContext?.let {
+            expenseView?.adapter = ReportDetailAdapter(it, report.getExpenses() as List<Expense>)
+        }
     }
 }

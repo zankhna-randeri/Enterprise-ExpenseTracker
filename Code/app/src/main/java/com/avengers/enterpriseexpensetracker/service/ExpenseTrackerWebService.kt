@@ -55,4 +55,8 @@ interface ExpenseTrackerWebService {
 
     @DELETE("/deleteReport")
     fun deleteReport(@Query("reportID") reportId: String): Call<ApiResponse>
+
+    @GET("/updateDeviceId")
+    fun updateDeviceToken(@Query("emailId") emailId: String,
+                          @Query("deviceToken") deviceToken: String): Call<ApiResponse>
 }

@@ -59,6 +59,10 @@ class DashboardActivity : AppCompatActivity() {
         txtEmail.text = EETrackerPreferenceManager.getUserEmail(this)
 
         val deviceToken = getFCMDeviceToken()
+        val savedToken = EETrackerPreferenceManager.getDeviceToken(this)
+        if (!deviceToken.isNullOrBlank() && !savedToken.isNullOrBlank() && savedToken != deviceToken) {
+            updateTokenOnServer(deviceToken)
+        }
     }
 
     private fun getFCMDeviceToken(): String? {
@@ -75,7 +79,6 @@ class DashboardActivity : AppCompatActivity() {
 
                     // Log and toast
                     Log.d(Constants.TAG, "FCM Token : $token")
-
                 })
 
         return token
@@ -83,7 +86,7 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun updateTokenOnServer(token: String) {
         val intent = Intent(applicationContext, EETrackerJobService::class.java).apply {
-            action = Constants.EXTRA_UPDATE_DEVICE_TOKEN
+            action = Constants.ACTION_UPDATE_DEVICE_TOKEN
             putExtra(Constants.EXTRA_UPDATE_DEVICE_TOKEN, token)
         }
         Utility.getInstance().startExpenseTrackerService(applicationContext, intent)

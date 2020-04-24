@@ -65,6 +65,14 @@ class EETrackerJobService : JobIntentService() {
                 Constants.ACTION_FETCH_ALL_REPORTS -> {
                     handleActionAllReports(action)
                 }
+                Constants.ACTION_UPDATE_DEVICE_TOKEN -> {
+                    val deviceToken = intent.getStringExtra(Constants.EXTRA_UPDATE_DEVICE_TOKEN)
+                    deviceToken?.let { handleActionDeviceTokenUpdate(it, action) }
+                }
+                else -> {
+                    Log.e(Constants.TAG, "******* No action received from intent *******")
+                    return
+                }
             }
         }
     }
@@ -166,6 +174,16 @@ class EETrackerJobService : JobIntentService() {
 
                 Log.d("EETracker *******", "API Response handleActionAllReports: $getAllReportResponse")
                 handleApiResponse(response, action)
+            }
+        }
+    }
+
+    private fun handleActionDeviceTokenUpdate(deviceToken: String, action: String) {
+        if (NetworkHelper.hasNetworkAccess(applicationContext)) {
+            EETrackerPreferenceManager.getUserEmail(applicationContext)?.let { emailId ->
+                val call = webservice.updateDeviceToken(emailId, deviceToken)
+                val response = call.execute()
+                Log.d(Constants.TAG, "API Response handleActionDeviceTokenUpdate: $response")
             }
         }
     }

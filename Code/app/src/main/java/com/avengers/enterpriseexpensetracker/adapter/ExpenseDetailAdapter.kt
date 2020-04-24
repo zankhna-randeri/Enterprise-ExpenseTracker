@@ -8,6 +8,7 @@ import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.viewholder.ExpenseDetailViewHolder
 import com.avengers.enterpriseexpensetracker.adapter.viewholder.ExpenseReportViewHolder
 import com.avengers.enterpriseexpensetracker.modal.Expense
+import com.avengers.enterpriseexpensetracker.util.Constants
 
 class ExpenseDetailAdapter(private var context: Context,
                            private var expenses: List<Expense>) :
@@ -31,7 +32,26 @@ class ExpenseDetailAdapter(private var context: Context,
             holder.getNameView().text = "name"
             holder.getAmountView().text = context.resources.getString(R.string.txt_currency_dollar_amount,
                     expenses[position].getAmount())
-
+            holder.getCategoryView().setImageResource(getCategoryResource(expenses[position]))
         }
+    }
+
+    private fun getCategoryResource(expense: Expense): Int {
+        when (expense.getCategory()) {
+            Constants.Companion.ExpenseType.Food.name -> {
+                return R.drawable.ic_food
+            }
+            Constants.Companion.ExpenseType.Travel.name -> {
+                return R.drawable.ic_travel
+            }
+            Constants.Companion.ExpenseType.Accommodation.name -> {
+                return R.drawable.ic_accommodation
+            }
+            Constants.Companion.ExpenseType.Other.name -> {
+                return R.drawable.ic_miscellaneous
+            }
+        }
+
+        return R.mipmap.ic_launcher_round
     }
 }

@@ -17,11 +17,14 @@ class Constants {
             Rejected
         }
 
+        const val TAG = "EETracker *******"
+
         // SharedPreference
         const val PREFS_LOGIN = "is_login"
         const val PREFS_EMAIL = "email"
         const val PREFS_FNAME = "first_name"
         const val PREFS_LNAME = "last_name"
+        const val PREFS_DEVICE_TOKEN = "device_token"
 
         // Actions
         const val ACTION_LOGIN = "com.avengers.enterpriseexpensetracker.action.LOGIN"
@@ -30,6 +33,8 @@ class Constants {
             "com.avengers.enterpriseexpensetracker.action.SUBMIT_EXPENSE_REPORT"
         const val ACTION_FETCH_ALL_REPORTS =
             "com.avengers.enterpriseexpensetracker.action.ALL_REPORTS"
+        const val ACTION_UPDATE_DEVICE_TOKEN =
+            "com.avengers.enterpriseexpensetracker.action.UPDATE_DEVICE_TOKEN"
 
         // Extras
         const val EXTRA_LOGIN_USER = "login_user"

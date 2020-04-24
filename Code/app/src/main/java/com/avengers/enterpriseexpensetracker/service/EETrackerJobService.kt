@@ -2,6 +2,7 @@ package com.avengers.enterpriseexpensetracker.service
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import androidx.core.app.JobIntentService
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -165,13 +166,16 @@ class EETrackerJobService : JobIntentService() {
             EETrackerPreferenceManager.getUserEmail(applicationContext)?.let { emailId ->
                 val call = webservice.updateDeviceToken(emailId, deviceToken)
                 val response = call.execute()
+
                 Log.d(Constants.TAG, "API Response handleActionDeviceTokenUpdate: $response")
-                handleApiResponse(response.body(), action)
+                val appDataBundle = Bundle()
+                appDataBundle.putString(Constants.EXTRA_UPDATE_DEVICE_TOKEN, deviceToken)
+                handleApiResponse(response.body(), action, appDataBundle)
             }
         }
     }
 
-    private fun handleApiResponse(response: ApiResponse?, action: String) {
+    private fun handleApiResponse(response: ApiResponse?, action: String, appDataBundle: Bundle?) {
         var responseIntent: Intent? = null
         when (action) {
             Constants.ACTION_LOGIN -> {
@@ -191,10 +195,17 @@ class EETrackerJobService : JobIntentService() {
             }
         }
 
-        responseIntent?.let {
-            it.putExtra(Constants.EXTRA_API_RESPONSE, response)
+        responseIntent?.let { intent ->
+            intent.putExtra(Constants.EXTRA_API_RESPONSE, response)
+            appDataBundle?.let { bundle ->
+                intent.putExtra(Constants.EXTRA_APP_DATA_BUNDLE, bundle)
+            }
             val broadcastManager = LocalBroadcastManager.getInstance(applicationContext)
-            broadcastManager.sendBroadcast(it)
+            broadcastManager.sendBroadcast(intent)
         }
+    }
+
+    private fun handleApiResponse(response: ApiResponse?, action: String) {
+        handleApiResponse(response, action, null)
     }
 }

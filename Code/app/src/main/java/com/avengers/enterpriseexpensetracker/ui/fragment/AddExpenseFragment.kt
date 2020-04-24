@@ -285,8 +285,8 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             }
             // Send to webservice
             val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
-                putExtra(Constants.EXTRA_UPLOAD_RECEIPT_PATH, receiptPath)
-                putExtra(Constants.EXTRA_UPLOAD_EXPENSE_TYPE, expenseType)
+                putExtra(Constants.EXTRA_RECEIPT_PATH, receiptPath)
+                putExtra(Constants.EXTRA_EXPENSE_TYPE, expenseType)
                 action = Constants.ACTION_RECEIPT_SCAN
             }
             Utility.getInstance().startExpenseTrackerService(context, intent)
@@ -553,7 +553,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
             // Send to webservice
             val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
-                putExtra(Constants.EXTRA_SUBMIT_EXPENSE_REPORT, expenseReport)
+                putExtra(Constants.EXTRA_EXPENSE_REPORT, expenseReport)
                 action = Constants.ACTION_SUBMIT_EXPENSE_REPORT
             }
             Utility.getInstance().startExpenseTrackerService(context, intent)

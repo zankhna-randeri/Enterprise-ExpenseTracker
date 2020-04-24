@@ -82,7 +82,7 @@ class DashboardActivity : AppCompatActivity() {
 
             override fun onSuccess(context: Context?, response: ApiResponse) {
                 appDataBundle?.let { bundle ->
-                    val deviceToken = bundle.getString(Constants.EXTRA_UPDATE_DEVICE_TOKEN)
+                    val deviceToken = bundle.getString(Constants.EXTRA_DEVICE_TOKEN)
                     deviceToken?.let { token ->
                         EETrackerPreferenceManager.saveDeviceToken(context, token)
                     }
@@ -133,7 +133,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun updateTokenOnServer(token: String) {
         val intent = Intent(applicationContext, EETrackerJobService::class.java).apply {
             action = Constants.ACTION_UPDATE_DEVICE_TOKEN
-            putExtra(Constants.EXTRA_UPDATE_DEVICE_TOKEN, token)
+            putExtra(Constants.EXTRA_DEVICE_TOKEN, token)
         }
         Utility.getInstance().startExpenseTrackerService(applicationContext, intent)
     }

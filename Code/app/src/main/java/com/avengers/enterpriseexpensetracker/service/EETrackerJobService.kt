@@ -53,20 +53,20 @@ class EETrackerJobService : JobIntentService() {
                     handleActionLogin(user, action)
                 }
                 Constants.ACTION_RECEIPT_SCAN -> {
-                    val receiptPath = intent.getStringExtra(Constants.EXTRA_UPLOAD_RECEIPT_PATH)
-                    val expenseType = intent.getStringExtra(Constants.EXTRA_UPLOAD_EXPENSE_TYPE)
+                    val receiptPath = intent.getStringExtra(Constants.EXTRA_RECEIPT_PATH)
+                    val expenseType = intent.getStringExtra(Constants.EXTRA_EXPENSE_TYPE)
                     handleActionUploadReceipt(receiptPath, expenseType, action)
                 }
                 Constants.ACTION_SUBMIT_EXPENSE_REPORT -> {
                     val expenseReport =
-                        intent.getParcelableExtra(Constants.EXTRA_SUBMIT_EXPENSE_REPORT) as ExpenseReport
+                        intent.getParcelableExtra(Constants.EXTRA_EXPENSE_REPORT) as ExpenseReport
                     handleActionSubmitExpenseReport(expenseReport, action)
                 }
                 Constants.ACTION_FETCH_ALL_REPORTS -> {
                     handleActionAllReports(action)
                 }
                 Constants.ACTION_UPDATE_DEVICE_TOKEN -> {
-                    val deviceToken = intent.getStringExtra(Constants.EXTRA_UPDATE_DEVICE_TOKEN)
+                    val deviceToken = intent.getStringExtra(Constants.EXTRA_DEVICE_TOKEN)
                     deviceToken?.let { handleActionDeviceTokenUpdate(it, action) }
                 }
                 else -> {
@@ -172,7 +172,7 @@ class EETrackerJobService : JobIntentService() {
 
                 Log.d(Constants.TAG, "API Response handleActionDeviceTokenUpdate: $response")
                 val appDataBundle = Bundle()
-                appDataBundle.putString(Constants.EXTRA_UPDATE_DEVICE_TOKEN, deviceToken)
+                appDataBundle.putString(Constants.EXTRA_DEVICE_TOKEN, deviceToken)
                 handleApiResponse(response.body(), action, appDataBundle)
             }
         }

@@ -16,8 +16,8 @@ import com.avengers.enterpriseexpensetracker.adapter.viewholder.ExpenseReportVie
 import com.avengers.enterpriseexpensetracker.modal.Expense
 import com.avengers.enterpriseexpensetracker.util.Constants
 
-class ExpenseDetailAdapter(private var context: Context,
-                           private var expenses: List<Expense>) :
+class ReportDetailAdapter(private var context: Context,
+                          private var expenses: List<Expense>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

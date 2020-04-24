@@ -53,5 +53,7 @@ class Constants {
             "com.avengers.enterpriseexpensetracker.service.action.SUBMIT_EXPENSE_REPORT_RESPONSE"
         const val BROADCAST_FETCH_ALL_REPORTS =
             "com.avengers.enterpriseexpensetracker.service.action.FETCH_ALL_REPORTS"
+        const val BROADCAST_UPDATE_DEVICE_TOKEN =
+            "com.avengers.enterpriseexpensetracker.service.action.UPDATE_DEVICE_TOKEN"
     }
 }

@@ -24,7 +24,7 @@ class ReportDetailAdapter(private var context: Context,
         lateinit var viewHolder: RecyclerView.ViewHolder
         val inflater = LayoutInflater.from(parent.context)
         val reqViewHolder = inflater.inflate(R.layout.item_expense_detail, parent, false)
-        viewHolder = ExpenseReportViewHolder(reqViewHolder)
+        viewHolder = ExpenseDetailViewHolder(reqViewHolder)
         return viewHolder
     }
 

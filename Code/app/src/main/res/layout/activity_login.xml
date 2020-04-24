@@ -84,7 +84,7 @@
                     style="@style/TextDetailTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_8"
                     android:gravity="center"
                     android:text="@string/forgot_pwd" />
 

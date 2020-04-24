@@ -1,4 +1,4 @@
-package com.avengers.enterpriseexpensetracker.ui.add_expense
+package com.avengers.enterpriseexpensetracker.ui.fragment
 
 import android.Manifest
 import android.app.Activity
@@ -44,7 +44,7 @@ import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
 import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
 import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
-import com.avengers.enterpriseexpensetracker.ui.fragment.SpeechRecognitionListener
+import com.avengers.enterpriseexpensetracker.ui.speech.SpeechRecognitionListener
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.Utility

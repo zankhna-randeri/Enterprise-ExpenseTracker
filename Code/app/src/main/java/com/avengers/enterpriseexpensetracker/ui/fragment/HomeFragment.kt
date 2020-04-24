@@ -1,4 +1,4 @@
-package com.avengers.enterpriseexpensetracker.ui.home
+package com.avengers.enterpriseexpensetracker.ui.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +22,7 @@ import com.avengers.enterpriseexpensetracker.adapter.RecyclerClickListener
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
 import com.avengers.enterpriseexpensetracker.modal.tracking.TrackScreenData
+import com.avengers.enterpriseexpensetracker.ui.home.HomeFragmentDirections
 import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.NetworkHelper
@@ -113,7 +114,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                             override fun onItemClickListener(position: Int) {
                                 val report = pendingExpenses[position - 1]
-                                val action = HomeFragmentDirections.actionNavHomeToNavReportDetail(report)
+                                val action =
+                                    HomeFragmentDirections.actionNavHomeToNavReportDetail(
+                                            report)
                                 view?.findNavController()?.navigate(action)
                             }
                         })

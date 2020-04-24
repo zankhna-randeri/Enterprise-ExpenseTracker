@@ -1,4 +1,4 @@
-package com.avengers.enterpriseexpensetracker.ui
+package com.avengers.enterpriseexpensetracker.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
+import com.avengers.enterpriseexpensetracker.ui.ReportDetailFragmentArgs
 
 class ReportDetailFragment : Fragment() {
     private lateinit var report: ExpenseReport

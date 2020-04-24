@@ -1,4 +1,4 @@
-package com.avengers.enterpriseexpensetracker.ui.add_expense
+package com.avengers.enterpriseexpensetracker.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

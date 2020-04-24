@@ -2,6 +2,7 @@ package com.avengers.enterpriseexpensetracker
 
 import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.avengers.enterpriseexpensetracker.ui.activity.LoginActivity
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -13,7 +14,8 @@ import org.robolectric.annotation.Config
 @Config(sdk = [Build.VERSION_CODES.P], manifest = Config.NONE)
 class LoginUnitTest {
 
-    private val loginActivity = LoginActivity()
+    private val loginActivity =
+        LoginActivity()
 
     @Test
     fun emptyEmailWithWhiteSpaceTest() {

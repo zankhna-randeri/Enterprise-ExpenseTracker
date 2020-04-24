@@ -1,4 +1,4 @@
-package com.avengers.enterpriseexpensetracker
+package com.avengers.enterpriseexpensetracker.ui.activity
 
 import android.os.Bundle
 import android.view.Menu
@@ -11,6 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.FirebaseApp
@@ -36,7 +37,10 @@ class DashboardActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.nav_home, R.id.nav_add_expense, R.id.nav_report_history, R.id.nav_logout), drawerLayout)
+                R.id.nav_home,
+                R.id.nav_add_expense,
+                R.id.nav_report_history,
+                R.id.nav_logout), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 

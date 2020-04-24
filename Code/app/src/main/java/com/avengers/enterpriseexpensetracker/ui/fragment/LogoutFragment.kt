@@ -1,4 +1,4 @@
-package com.avengers.enterpriseexpensetracker.ui.logout
+package com.avengers.enterpriseexpensetracker.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.avengers.enterpriseexpensetracker.LoginActivity
+import com.avengers.enterpriseexpensetracker.ui.activity.LoginActivity
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.Utility

@@ -9,7 +9,6 @@ import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.GetAllReportsResponse
-import com.avengers.enterpriseexpensetracker.modal.response.HomeFragmentResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
@@ -146,23 +145,6 @@ class EETrackerJobService : JobIntentService() {
         }
 
         return result
-    }
-
-    private fun handleFetchHomeScreen(action: String) {
-        if (NetworkHelper.hasNetworkAccess(applicationContext)) {
-            EETrackerPreferenceManager.getUserEmail(applicationContext)?.let { emailId ->
-                val categoryTotalCall = webservice.getCategoryWiseExpenseApproved(emailId)
-                val categoryTotalResponse = categoryTotalCall.execute()
-
-                val getAllReportCall = webservice.getAllExpenseReports(emailId)
-                val getAllReportResponse = getAllReportCall.execute()
-
-                val combinedResponse =
-                    HomeFragmentResponse(categoryTotalResponse.body(), getAllReportResponse.body())
-                Log.d("EETracker *******", "API Response handleFetchHomeScreen: $combinedResponse")
-                handleApiResponse(combinedResponse, action)
-            }
-        }
     }
 
     private fun handleActionAllReports(action: String) {

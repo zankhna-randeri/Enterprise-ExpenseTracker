@@ -23,7 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.avengers.enterpriseexpensetracker.R
-import com.avengers.enterpriseexpensetracker.modal.LoginUser
+import com.avengers.enterpriseexpensetracker.modal.request.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.modal.tracking.TrackLoginData
@@ -204,7 +204,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                         getString(R.string.enter_login_info))
             } else {
                 showLoadingView()
-                val user = LoginUser(email!!.trim(), password)
+                val user = LoginUser(
+                        email!!.trim(),
+                        password)
                 val intent = Intent(this, EETrackerJobService::class.java).apply {
                     putExtra(Constants.EXTRA_LOGIN_USER, user)
                     action = Constants.ACTION_LOGIN

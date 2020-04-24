@@ -1,4 +1,4 @@
-package com.avengers.enterpriseexpensetracker.modal
+package com.avengers.enterpriseexpensetracker.modal.request
 
 import android.os.Parcel
 import android.os.Parcelable

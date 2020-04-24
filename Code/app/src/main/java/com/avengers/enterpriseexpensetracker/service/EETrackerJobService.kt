@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.core.app.JobIntentService
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
-import com.avengers.enterpriseexpensetracker.modal.LoginUser
+import com.avengers.enterpriseexpensetracker.modal.request.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.GetAllReportsResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse

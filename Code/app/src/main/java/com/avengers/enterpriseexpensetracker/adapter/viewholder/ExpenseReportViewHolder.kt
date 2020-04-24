@@ -3,7 +3,9 @@ package com.avengers.enterpriseexpensetracker.adapter.viewholder
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
@@ -17,6 +19,7 @@ class ExpenseReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
     private var txtAmount = itemView.findViewById<TextView>(R.id.txt_amount)
     private var btnDelete = itemView.findViewById<ImageButton>(R.id.btnDelete)
     private var reportCardView = itemView.findViewById<CardView>(R.id.reportCardView)
+    private var itemHeaderView = itemView.findViewById<LinearLayoutCompat>(R.id.item_report_header)
 
     private var buttonClickListener: WeakReference<RecyclerClickListener>? = null
 
@@ -40,6 +43,10 @@ class ExpenseReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
 
     fun getDeleteView(): ImageButton {
         return btnDelete
+    }
+
+    fun getItemHeaderView(): LinearLayoutCompat {
+        return itemHeaderView
     }
 
     override fun onClick(v: View?) {

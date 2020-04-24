@@ -30,9 +30,9 @@ class AllExpenseAdapter(private var context: Context,
             holder.getDateView().text = expenses[position].getCreationDate()
             if (expenses[position].getReportStatus()
                         .equals(Constants.Companion.Status.Rejected.name, true)) {
-                holder.getDateView().setBackgroundResource(R.drawable.report_reject)
+                holder.getItemHeaderView().setBackgroundResource(R.drawable.report_reject)
             } else {
-                holder.getDateView().setBackgroundResource(R.drawable.report_approved)
+                holder.getItemHeaderView().setBackgroundResource(R.drawable.report_approved)
             }
 
             holder.getNameView().text = expenses[position].getName()

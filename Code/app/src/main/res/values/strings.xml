@@ -31,7 +31,7 @@
     <string name="txt_loading">Loading</string>
     <string name="txt_cancel">Cancel</string>
     <string name="txt_api_failed">API call failed!</string>
-    <string name="txt_currency_dollar_amount">$ %1$.2f</string>
+    <string name="txt_currency_dollar_amount">$%1$.2f</string>
     <string name="txt_delete_tooltip">Delete Report</string>
     <string name="txt_yes">Yes</string>
     <string name="txt_no">No</string>

@@ -58,11 +58,37 @@
                 tools:text="$80.99" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <ImageView
-            android:id="@+id/imgCategory"
-            android:layout_width="@dimen/dimen_category_icon"
-            android:layout_height="@dimen/dimen_category_icon"
-            android:background="@android:color/transparent"
-            android:padding="@dimen/padding_5" />
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/padding_5"
+            android:paddingTop="@dimen/padding_8"
+            android:paddingEnd="@dimen/padding_5"
+            android:paddingBottom="@dimen/padding_8">
+
+            <ImageView
+                android:id="@+id/imgCategory"
+                android:layout_width="@dimen/dimen_category_icon"
+                android:layout_height="@dimen/dimen_category_icon"
+                android:background="@android:color/transparent"
+                android:padding="@dimen/padding_2"
+                tools:src="@drawable/ic_food" />
+
+            <ImageButton
+                android:id="@+id/btnViewReceipt"
+                android:layout_width="@dimen/dimen_category_icon"
+                android:layout_height="@dimen/dimen_category_icon"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_15"
+                android:background="@drawable/ripple_background"
+                android:contentDescription="@string/txt_view_receipt"
+                android:padding="@dimen/padding_2"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_receipt"
+                android:tooltipText="@string/txt_view_receipt"
+                app:tooltipText="@string/txt_view_receipt" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.cardview.widget.CardView>

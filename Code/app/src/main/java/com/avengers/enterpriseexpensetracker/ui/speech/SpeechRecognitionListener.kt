@@ -1,4 +1,4 @@
-package com.avengers.enterpriseexpensetracker.ui.add_expense
+package com.avengers.enterpriseexpensetracker.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -16,6 +16,7 @@ import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerDateFormatManager
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.Utility
+import com.avengers.enterpriseexpensetracker.viewmodel.AddExpenseViewModel
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -42,7 +43,8 @@ class SpeechRecognitionListener(private var context: Context?,
 
     init {
         expenses = ArrayList()
-        currentMode = VoiceBotMode.Normal
+        currentMode =
+            VoiceBotMode.Normal
         initTTS()
     }
 
@@ -118,7 +120,8 @@ class SpeechRecognitionListener(private var context: Context?,
                 when {
                     isDeny(command) -> {
                         // TODO: Handle update/modify deny
-                        currentMode = VoiceBotMode.Normal
+                        currentMode =
+                            VoiceBotMode.Normal
                     }
                     isReqDateChange(command) -> {
                         answer = "Please provide with the changed date? "
@@ -135,24 +138,28 @@ class SpeechRecognitionListener(private var context: Context?,
                             "Please provide with the changed business name?"
                     }
                     isExpenseType(command) -> {
-                        currentMode = VoiceBotMode.Normal
+                        currentMode =
+                            VoiceBotMode.Normal
                         expenseType = fetchExpenseType(command)
                         expenseType?.let {
                             currentExpense?.let { updatedExpense ->
                                 updatedExpense.setCategory(it)
                                 answer = formUpdateAnswer(updatedExpense)
-                                currentMode = VoiceBotMode.Confirmation
+                                currentMode =
+                                    VoiceBotMode.Confirmation
                             }
                         }
                     }
                     isAmount(command) -> {
                         val changedAmt = getCurrencyAmount(command)
                         if (changedAmt != null && !changedAmt.isNaN()) {
-                            currentMode = VoiceBotMode.Normal
+                            currentMode =
+                                VoiceBotMode.Normal
                             currentExpense?.let { updatedExpense ->
                                 updatedExpense.setAmount(changedAmt)
                                 answer = formUpdateAnswer(updatedExpense)
-                                currentMode = VoiceBotMode.Confirmation
+                                currentMode =
+                                    VoiceBotMode.Confirmation
                             }
                         } else {
                             answer = "Invalid amount."
@@ -161,11 +168,13 @@ class SpeechRecognitionListener(private var context: Context?,
                     isDate(command) -> {
                         val changedDate = EETrackerDateFormatManager().parseDate(command)
                         if (!changedDate.isNullOrBlank()) {
-                            currentMode = VoiceBotMode.Normal
+                            currentMode =
+                                VoiceBotMode.Normal
                             currentExpense?.let { updatedExpense ->
                                 updatedExpense.setDate(changedDate)
                                 answer = formUpdateAnswer(updatedExpense)
-                                currentMode = VoiceBotMode.Confirmation
+                                currentMode =
+                                    VoiceBotMode.Confirmation
                             }
                         } else {
                             answer = "Invalid date."
@@ -177,7 +186,8 @@ class SpeechRecognitionListener(private var context: Context?,
                 when {
                     (currentMode == VoiceBotMode.Name) -> {
                         expenseReport?.setName(command)
-                        currentMode = VoiceBotMode.Normal
+                        currentMode =
+                            VoiceBotMode.Normal
 
                         answer =
                             "Please provide us with Expense Category such as Food, Travel, Accommodation or Other."
@@ -204,7 +214,8 @@ class SpeechRecognitionListener(private var context: Context?,
                             // first initialization of expense report
                             expenseReport = ExpenseReport()
 
-                            currentMode = VoiceBotMode.Name
+                            currentMode =
+                                VoiceBotMode.Name
                             answer = "Sure, please say your Report Name?"
                         } else {
                             // ask for discard in case if current report is already in progress and
@@ -237,7 +248,8 @@ class SpeechRecognitionListener(private var context: Context?,
                     }
                     isModify(command) -> {
                         // TODO: verify whether receipt scan already happened before user tries to modify details.
-                        currentMode = VoiceBotMode.Update
+                        currentMode =
+                            VoiceBotMode.Update
                         answer = "What would you like to change? \n" +
                                 "Category, amount or date?"
                     }
@@ -247,7 +259,8 @@ class SpeechRecognitionListener(private var context: Context?,
 
         val response = VoiceMessage(answer, true)
         (viewModel as AddExpenseViewModel).updateConversation(response)
-        tts?.speak(answer, TextToSpeech.QUEUE_FLUSH, null, UTTERANCE_ID)
+        tts?.speak(answer, TextToSpeech.QUEUE_FLUSH, null,
+                UTTERANCE_ID)
     }
 
     private fun formUpdateAnswer(expense: Expense): String {
@@ -394,7 +407,8 @@ class SpeechRecognitionListener(private var context: Context?,
     }
 
     private fun reset() {
-        currentMode = VoiceBotMode.Normal
+        currentMode =
+            VoiceBotMode.Normal
         expenseReport = null
         expenses = ArrayList()
         currentExpense = null
@@ -425,10 +439,12 @@ class SpeechRecognitionListener(private var context: Context?,
                 "Date as ${currentExpense?.getDate()} \n" +
                 "Do you want to submit the report, or add more expenses?"
 
-        currentMode = VoiceBotMode.Confirmation
+        currentMode =
+            VoiceBotMode.Confirmation
         val response = VoiceMessage(answer, true)
         (viewModel as AddExpenseViewModel).updateConversation(response)
-        tts?.speak(answer, TextToSpeech.QUEUE_FLUSH, null, UTTERANCE_ID)
+        tts?.speak(answer, TextToSpeech.QUEUE_FLUSH, null,
+                UTTERANCE_ID)
     }
 
     private fun updateCurrentExpense(receiptScanResponse: ReceiptScanResponse): Expense? {

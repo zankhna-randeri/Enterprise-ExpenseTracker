@@ -25,6 +25,7 @@ import com.avengers.enterpriseexpensetracker.modal.tracking.TrackScreenData
 import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.NetworkHelper
+import com.avengers.enterpriseexpensetracker.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var homeViewModel: HomeViewModel

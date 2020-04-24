@@ -44,9 +44,11 @@ import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.ReceiptScanResponse
 import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
 import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
+import com.avengers.enterpriseexpensetracker.ui.fragment.SpeechRecognitionListener
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.Utility
+import com.avengers.enterpriseexpensetracker.viewmodel.AddExpenseViewModel
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -331,7 +333,10 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initSpeechRecognizer() {
-        speechRecognitionListener = SpeechRecognitionListener(activity, addExpenseViewModel)
+        speechRecognitionListener =
+            SpeechRecognitionListener(
+                    activity,
+                    addExpenseViewModel)
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity)
         speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)

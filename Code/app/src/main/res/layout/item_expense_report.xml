@@ -42,6 +42,7 @@
                 android:src="@drawable/ic_delete"
                 android:tooltipText="@string/txt_delete_tooltip"
                 android:visibility="gone"
+                app:tooltipText="@string/txt_delete_tooltip"
                 tools:visibility="visible" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 

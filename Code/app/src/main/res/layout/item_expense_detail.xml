@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_8"
+    app:cardBackgroundColor="@color/colorAccent"
+    app:cardCornerRadius="@dimen/corner_radius_4"
+    app:cardElevation="@dimen/elevation_4">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/expense_header"
+            android:padding="@dimen/padding_5"
+            android:theme="@style/ListDateTextTheme"
+            tools:text="April 21 2020" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/padding_5"
+            android:paddingTop="@dimen/padding_8"
+            android:paddingEnd="@dimen/padding_5"
+            android:paddingBottom="@dimen/padding_8">
+
+            <TextView
+                android:id="@+id/txt_expense_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:theme="@style/ListTextDetailTheme"
+                tools:text="Conference Expense" />
+
+            <TextView
+                android:id="@+id/txt_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.25"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:theme="@style/ListAmountDetailTheme"
+                tools:text="$80.99" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <ImageView
+            android:id="@+id/imgCategory"
+            android:layout_width="@dimen/dimen_category_icon"
+            android:layout_height="@dimen/dimen_category_icon"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/padding_5" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.cardview.widget.CardView>

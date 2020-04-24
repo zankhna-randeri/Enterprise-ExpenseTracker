@@ -43,6 +43,7 @@ class Constants {
         const val EXTRA_SUBMIT_EXPENSE_REPORT = "expense_report"
         const val EXTRA_UPDATE_DEVICE_TOKEN = "device_token"
         const val EXTRA_API_RESPONSE = "api_response"
+        const val EXTRA_APP_DATA_BUNDLE = "app_data_bundle"
 
         // Broadcast
         const val BROADCAST_LOGIN_RESPONSE =

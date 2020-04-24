@@ -184,6 +184,7 @@ class EETrackerJobService : JobIntentService() {
                 val call = webservice.updateDeviceToken(emailId, deviceToken)
                 val response = call.execute()
                 Log.d(Constants.TAG, "API Response handleActionDeviceTokenUpdate: $response")
+                handleApiResponse(response.body(), action)
             }
         }
     }
@@ -202,6 +203,9 @@ class EETrackerJobService : JobIntentService() {
             }
             Constants.ACTION_FETCH_ALL_REPORTS -> {
                 responseIntent = Intent(Constants.BROADCAST_FETCH_ALL_REPORTS)
+            }
+            Constants.ACTION_UPDATE_DEVICE_TOKEN -> {
+                responseIntent = Intent(Constants.BROADCAST_UPDATE_DEVICE_TOKEN)
             }
         }
 

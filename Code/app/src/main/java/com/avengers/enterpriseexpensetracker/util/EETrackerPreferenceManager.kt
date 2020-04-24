@@ -32,7 +32,19 @@ class EETrackerPreferenceManager {
         fun getUserFullName(context: Context?): String? {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             return sharedPreferences.getString(Constants.PREFS_FNAME, null) + " " +
-            sharedPreferences.getString(Constants.PREFS_LNAME, null)
+                    sharedPreferences.getString(Constants.PREFS_LNAME, null)
+        }
+
+        fun getDeviceToken(context: Context?): String? {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            return sharedPreferences.getString(Constants.PREFS_DEVICE_TOKEN, null)
+        }
+
+        fun saveDeviceToken(context: Context?, deviceToken: String) {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val editor = sharedPreferences.edit()
+            editor.putString(Constants.PREFS_DEVICE_TOKEN, deviceToken)
+            editor.apply()
         }
     }
 }

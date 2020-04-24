@@ -62,9 +62,9 @@ class ReportDetailAdapter(private var context: Context,
 
     private fun generateSpannableString(expense: Expense): CharSequence? {
 
-        var category = getCategoryText(expense) + "\n"
+        var category = getCategoryText(expense)
         var business = if (!expense.getBusinessName().isNullOrEmpty()) {
-            expense.getBusinessName()
+            "\n\n" + expense.getBusinessName()
         } else {
             ""
         }
@@ -82,7 +82,7 @@ class ReportDetailAdapter(private var context: Context,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         //make category font bigger
-        spannableString.setSpan(RelativeSizeSpan(2f), 0, category.length, 0)
+        spannableString.setSpan(RelativeSizeSpan(1.1f), 0, category.length, 0)
         return spannableString
     }
 

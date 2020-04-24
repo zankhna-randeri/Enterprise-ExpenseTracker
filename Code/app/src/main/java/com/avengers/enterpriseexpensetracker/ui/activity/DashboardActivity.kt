@@ -65,15 +65,7 @@ class DashboardActivity : AppCompatActivity() {
         txtEmail.text = EETrackerPreferenceManager.getUserEmail(this)
 
         initBroadcastReceiver()
-        updateLatestDeviceToken()
-    }
-
-    private fun updateLatestDeviceToken() {
-        val deviceToken = getFCMDeviceToken()
-        val savedToken = EETrackerPreferenceManager.getDeviceToken(this)
-        if (!deviceToken.isNullOrBlank() && !savedToken.isNullOrBlank() && savedToken != deviceToken) {
-            updateTokenOnServer(deviceToken)
-        }
+        updateDeviceTokenIfRequired()
     }
 
     private fun initBroadcastReceiver() {
@@ -85,6 +77,7 @@ class DashboardActivity : AppCompatActivity() {
                     val deviceToken = bundle.getString(Constants.EXTRA_DEVICE_TOKEN)
                     deviceToken?.let { token ->
                         EETrackerPreferenceManager.saveDeviceToken(context, token)
+                        Log.e(Constants.TAG, "FCM token updated to prefs, Token : $token")
                     }
                 }
             }
@@ -111,8 +104,7 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFCMDeviceToken(): String? {
-        var token: String? = null
+    private fun updateDeviceTokenIfRequired() {
         FirebaseInstanceId.getInstance().instanceId
                 .addOnCompleteListener(OnCompleteListener { task ->
                     if (!task.isSuccessful) {
@@ -121,13 +113,16 @@ class DashboardActivity : AppCompatActivity() {
                     }
 
                     // Get new Instance ID token
-                    token = task.result?.token
+                    val deviceToken = task.result?.token
 
                     // Log and toast
-                    Log.d(Constants.TAG, "FCM Token : $token")
-                })
+                    Log.d(Constants.TAG, "FCM Token : $deviceToken")
 
-        return token
+                    val savedToken = EETrackerPreferenceManager.getDeviceToken(this)
+                    if (!deviceToken.isNullOrBlank() && !savedToken.isNullOrBlank() && savedToken != deviceToken) {
+                        updateTokenOnServer(deviceToken)
+                    }
+                })
     }
 
     private fun updateTokenOnServer(token: String) {

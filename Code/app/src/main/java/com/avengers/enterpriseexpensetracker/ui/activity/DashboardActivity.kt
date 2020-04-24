@@ -65,6 +65,10 @@ class DashboardActivity : AppCompatActivity() {
         txtEmail.text = EETrackerPreferenceManager.getUserEmail(this)
 
         initBroadcastReceiver()
+        updateLatestDeviceToken()
+    }
+
+    private fun updateLatestDeviceToken() {
         val deviceToken = getFCMDeviceToken()
         val savedToken = EETrackerPreferenceManager.getDeviceToken(this)
         if (!deviceToken.isNullOrBlank() && !savedToken.isNullOrBlank() && savedToken != deviceToken) {

@@ -74,15 +74,26 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun initBroadcastReceiver() {
         updateTokenResponseReceiver = object : ApiResponseReceiver() {
+            var appDataBundle: Bundle? = null
+
             override fun onSuccess(context: Context?, response: ApiResponse) {
+                appDataBundle?.let { bundle ->
+                    val deviceToken = bundle.getString(Constants.EXTRA_UPDATE_DEVICE_TOKEN)
+                    deviceToken?.let { token ->
+                        EETrackerPreferenceManager.saveDeviceToken(context, token)
+                    }
+                }
             }
 
             override fun onFailure(context: Context?, message: String?) {
-
+                Log.e(Constants.TAG, "Could not update device token on server")
+                //TODO: Log this on firebase analytics
             }
 
             override fun onReceive(context: Context?, intent: Intent?) {
                 val response = intent?.getParcelableExtra<ApiResponse>(Constants.EXTRA_API_RESPONSE)
+                appDataBundle = intent?.getBundleExtra(Constants.EXTRA_APP_DATA_BUNDLE)
+
                 response?.let {
                     Log.d(Constants.TAG, "response $response")
                     val statusSuccess = response.getStatus()

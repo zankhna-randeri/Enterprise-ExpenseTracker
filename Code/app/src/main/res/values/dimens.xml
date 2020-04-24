@@ -31,6 +31,7 @@
     <dimen name="person_width">32dp</dimen>
     <dimen name="logo_160">160dp</dimen>
     <dimen name="dimen_chart">350dp</dimen>
+    <dimen name="dimen_category_icon">48dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_height">176dp</dimen>
 

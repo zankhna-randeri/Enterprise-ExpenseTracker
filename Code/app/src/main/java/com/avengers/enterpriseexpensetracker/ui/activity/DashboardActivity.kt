@@ -1,5 +1,7 @@
 package com.avengers.enterpriseexpensetracker.ui.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +16,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.avengers.enterpriseexpensetracker.R
+import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
+import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
 import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
@@ -25,7 +29,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 
 class DashboardActivity : AppCompatActivity() {
+
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private var updateTokenResponseReceiver: BroadcastReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,10 +64,35 @@ class DashboardActivity : AppCompatActivity() {
         txtName.text = EETrackerPreferenceManager.getUserFullName(this)
         txtEmail.text = EETrackerPreferenceManager.getUserEmail(this)
 
+        initBroadcastReceiver()
         val deviceToken = getFCMDeviceToken()
         val savedToken = EETrackerPreferenceManager.getDeviceToken(this)
         if (!deviceToken.isNullOrBlank() && !savedToken.isNullOrBlank() && savedToken != deviceToken) {
             updateTokenOnServer(deviceToken)
+        }
+    }
+
+    private fun initBroadcastReceiver() {
+        updateTokenResponseReceiver = object : ApiResponseReceiver() {
+            override fun onSuccess(context: Context?, response: ApiResponse) {
+            }
+
+            override fun onFailure(context: Context?, message: String?) {
+
+            }
+
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val response = intent?.getParcelableExtra<ApiResponse>(Constants.EXTRA_API_RESPONSE)
+                response?.let {
+                    Log.d(Constants.TAG, "response $response")
+                    val statusSuccess = response.getStatus()
+                    if (statusSuccess) {
+                        onSuccess(context, response)
+                    } else {
+                        onFailure(context, context?.getString(R.string.txt_api_failed))
+                    }
+                }
+            }
         }
     }
 

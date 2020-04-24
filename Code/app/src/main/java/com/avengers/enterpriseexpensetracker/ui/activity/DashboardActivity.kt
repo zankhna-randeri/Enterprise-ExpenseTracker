@@ -1,6 +1,8 @@
 package com.avengers.enterpriseexpensetracker.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,10 +14,15 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.avengers.enterpriseexpensetracker.R
+import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
+import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
+import com.avengers.enterpriseexpensetracker.util.Utility
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.iid.FirebaseInstanceId
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -50,6 +57,36 @@ class DashboardActivity : AppCompatActivity() {
         val txtEmail = header.findViewById<TextView>(R.id.navSubHeader)
         txtName.text = EETrackerPreferenceManager.getUserFullName(this)
         txtEmail.text = EETrackerPreferenceManager.getUserEmail(this)
+
+        val deviceToken = getFCMDeviceToken()
+    }
+
+    private fun getFCMDeviceToken(): String? {
+        var token: String? = null
+        FirebaseInstanceId.getInstance().instanceId
+                .addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.w(Constants.TAG, "getInstanceId failed", task.exception)
+                        return@OnCompleteListener
+                    }
+
+                    // Get new Instance ID token
+                    token = task.result?.token
+
+                    // Log and toast
+                    Log.d(Constants.TAG, "FCM Token : $token")
+
+                })
+
+        return token
+    }
+
+    private fun updateTokenOnServer(token: String) {
+        val intent = Intent(applicationContext, EETrackerJobService::class.java).apply {
+            action = Constants.EXTRA_UPDATE_DEVICE_TOKEN
+            putExtra(Constants.EXTRA_UPDATE_DEVICE_TOKEN, token)
+        }
+        Utility.getInstance().startExpenseTrackerService(applicationContext, intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.core.app.JobIntentService
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
+import com.avengers.enterpriseexpensetracker.modal.request.DeviceTokenRequest
 import com.avengers.enterpriseexpensetracker.modal.request.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.GetAllReportsResponse
@@ -167,7 +168,8 @@ class EETrackerJobService : JobIntentService() {
     private fun handleActionDeviceTokenUpdate(deviceToken: String, action: String) {
         if (NetworkHelper.hasNetworkAccess(applicationContext)) {
             EETrackerPreferenceManager.getUserEmail(applicationContext)?.let { emailId ->
-                val call = webservice.updateDeviceToken(emailId, deviceToken)
+                val deviceTokenRequest = DeviceTokenRequest(emailId, deviceToken)
+                val call = webservice.updateDeviceToken(deviceTokenRequest)
                 val response = call.execute()
 
                 Log.d(Constants.TAG, "API Response handleActionDeviceTokenUpdate: $response")

@@ -5,4 +5,6 @@ interface RecyclerClickListener {
     fun onDeleteClickListener(position: Int)
 
     fun onItemClickListener(position: Int)
+
+    fun btnViewReceiptClickListener(position: Int)
 }

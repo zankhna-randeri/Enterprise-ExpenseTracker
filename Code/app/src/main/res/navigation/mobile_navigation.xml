@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_reports">
         <action
             android:id="@+id/action_nav_home_to_nav_report_detail"
-            app:destination="@id/nav_report_detail" />
+            app:destination="@id/nav_report_detail"
+            app:enterAnim="@android:anim/slide_in_left"
+            />
     </fragment>
     <fragment
         android:id="@+id/nav_add_expense"

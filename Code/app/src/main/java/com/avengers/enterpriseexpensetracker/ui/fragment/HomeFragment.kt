@@ -25,6 +25,7 @@ import com.avengers.enterpriseexpensetracker.modal.tracking.TrackScreenData
 import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.NetworkHelper
+import com.avengers.enterpriseexpensetracker.util.Utility
 import com.avengers.enterpriseexpensetracker.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -97,6 +98,14 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             hideLoadingView()
                             adapter?.notifyDataSetChanged()
                         })
+        homeViewModel.getApiCallStatus()?.observe(viewLifecycleOwner, Observer { failed ->
+            Log.d("EETracker *******", "Invoked observer on getApiCallStatus()")
+            if (failed) {
+                activity?.applicationContext?.let {
+                    Utility.getInstance().showMsg(it, it.getString(R.string.txt_api_failed))
+                }
+            }
+        })
     }
 
     private fun bindExpenseView(categoryWiseTotal: CategoryWiseTotalResponse,

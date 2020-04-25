@@ -1,6 +1,7 @@
 package com.avengers.enterpriseexpensetracker.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +10,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
+import com.avengers.enterpriseexpensetracker.adapter.RecyclerClickListener
 import com.avengers.enterpriseexpensetracker.adapter.ReportDetailAdapter
 import com.avengers.enterpriseexpensetracker.modal.Expense
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
-import kotlin.math.exp
+import com.avengers.enterpriseexpensetracker.util.Constants
 
 class ReportDetailFragment : Fragment() {
     private var expenseView: RecyclerView? = null
@@ -42,8 +44,21 @@ class ReportDetailFragment : Fragment() {
     }
 
     private fun loadReportDetails(report: ExpenseReport) {
-        activity?.applicationContext?.let {
-            expenseView?.adapter = ReportDetailAdapter(it, report.getExpenses() as List<Expense>)
+        activity?.applicationContext?.let { context ->
+            expenseView?.adapter = ReportDetailAdapter(context,
+                    report.getExpenses() as List<Expense>,
+                    object : RecyclerClickListener {
+                        override fun onDeleteClickListener(position: Int) {
+                        }
+
+                        override fun onItemClickListener(position: Int) {
+                        }
+
+                        override fun btnViewReceiptClickListener(position: Int) {
+                            val receiptUrl = report.getExpenses()?.get(position)?.getReceiptUrl()
+                            Log.d(Constants.TAG, "Receipt URL: $receiptUrl")
+                        }
+                    })
         }
     }
 }

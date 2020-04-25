@@ -61,7 +61,7 @@ class HomeViewModel : ViewModel() {
         val categoryTotalCall = webservice.getCategoryWiseExpenseApproved(emailId)
         categoryTotalCall.enqueue(object : Callback<CategoryWiseTotalResponse> {
             override fun onFailure(call: Call<CategoryWiseTotalResponse>, t: Throwable) {
-                apiCallFailed?.value = true
+                apiCallFailed?.postValue(true)
             }
 
             override fun onResponse(call: Call<CategoryWiseTotalResponse>,
@@ -71,7 +71,7 @@ class HomeViewModel : ViewModel() {
                     if (it.getStatus()) {
                         categoryWiseTotal.postValue(it)
                     } else {
-                        apiCallFailed?.value = true
+                        apiCallFailed?.postValue(true)
                     }
                 }
             }
@@ -81,7 +81,7 @@ class HomeViewModel : ViewModel() {
         val getAllReportCall = webservice.getAllExpenseReports(emailId)
         getAllReportCall.enqueue(object : Callback<MutableList<ExpenseReport>> {
             override fun onFailure(call: Call<MutableList<ExpenseReport>>, t: Throwable) {
-                apiCallFailed?.value = true
+                apiCallFailed?.postValue(true)
             }
 
             override fun onResponse(call: Call<MutableList<ExpenseReport>>,
@@ -112,7 +112,7 @@ class HomeViewModel : ViewModel() {
             val call = webservice.deleteReport(reportId)
             call.enqueue(object : Callback<ApiResponse> {
                 override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                    apiCallFailed?.value = true
+                    apiCallFailed?.postValue(true)
                 }
 
                 override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
@@ -121,7 +121,7 @@ class HomeViewModel : ViewModel() {
                             pendingExpenses.value?.removeAt(position)
                             pendingExpenses.postValue(pendingExpenses.value)
                         } else {
-                            apiCallFailed?.value = true
+                            apiCallFailed?.postValue(true)
                         }
                     }
                 }
@@ -133,7 +133,7 @@ class HomeViewModel : ViewModel() {
         return pendingExpenses
     }
 
-    fun getApiCallStatus() : MutableLiveData<Boolean>? {
+    fun getApiCallStatus(): MutableLiveData<Boolean>? {
         return apiCallFailed
     }
 }

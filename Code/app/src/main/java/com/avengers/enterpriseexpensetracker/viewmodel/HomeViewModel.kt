@@ -70,6 +70,7 @@ class HomeViewModel : ViewModel() {
                 response.body()?.let {
                     if (it.getStatus()) {
                         categoryWiseTotal.postValue(it)
+                        apiCallFailed?.postValue(false)
                     } else {
                         apiCallFailed?.postValue(true)
                     }
@@ -89,6 +90,7 @@ class HomeViewModel : ViewModel() {
                 Log.d("EETracker *******", "API Response getAllExpenseReports: ${response.body()}")
                 response.body()?.let {
                     pendingExpenses.postValue(fetchPendingExpenses(it))
+                    apiCallFailed?.postValue(false)
                 }
             }
         })
@@ -120,6 +122,7 @@ class HomeViewModel : ViewModel() {
                         if (it.getStatus()) {
                             pendingExpenses.value?.removeAt(position)
                             pendingExpenses.postValue(pendingExpenses.value)
+                            apiCallFailed?.postValue(false)
                         } else {
                             apiCallFailed?.postValue(true)
                         }

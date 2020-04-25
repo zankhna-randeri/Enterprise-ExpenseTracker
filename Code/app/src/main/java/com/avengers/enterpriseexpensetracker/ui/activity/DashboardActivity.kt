@@ -55,6 +55,7 @@ class DashboardActivity : AppCompatActivity() {
                 R.id.nav_home,
                 R.id.nav_add_expense,
                 R.id.nav_report_history,
+                R.id.nav_change_pwd,
                 R.id.nav_logout), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

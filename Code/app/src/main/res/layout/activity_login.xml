@@ -58,10 +58,10 @@
                     android:id="@+id/txt_input_password"
                     style="@style/TextInputTheme"
                     android:layout_width="match_parent"
-                    app:endIconMode="password_toggle"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_5"
-                    android:hint="@string/txt_password">
+                    android:hint="@string/txt_password"
+                    app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
                         style="@style/EditTextDetailTheme"

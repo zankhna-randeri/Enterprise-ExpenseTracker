@@ -1,10 +1,15 @@
 package com.avengers.enterpriseexpensetracker.ui.fragment
 
+import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +20,7 @@ import com.avengers.enterpriseexpensetracker.adapter.ReportDetailAdapter
 import com.avengers.enterpriseexpensetracker.modal.Expense
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.util.Constants
+import com.bumptech.glide.Glide
 
 class ReportDetailFragment : Fragment() {
     private var expenseView: RecyclerView? = null
@@ -57,8 +63,23 @@ class ReportDetailFragment : Fragment() {
                         override fun btnViewReceiptClickListener(position: Int) {
                             val receiptUrl = report.getExpenses()?.get(position)?.getReceiptUrl()
                             Log.d(Constants.TAG, "Receipt URL: $receiptUrl")
+                            receiptUrl?.let { url -> showReceiptImage(context, url) }
                         }
                     })
+        }
+    }
+
+    private fun showReceiptImage(context: Context, receiptUrl: String) {
+        activity?.let {
+            val dialog = Dialog(it)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val dialogView = inflater.inflate(R.layout.dialog_view_receipt, null)
+            dialog.setContentView(dialogView)
+
+            val imageView = dialogView.findViewById<ImageView>(R.id.imgReceipt)
+            Glide.with(context).load(receiptUrl).into(imageView)
+            dialog.show()
         }
     }
 }

@@ -1,7 +1,8 @@
 package com.avengers.enterpriseexpensetracker.service
 
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
-import com.avengers.enterpriseexpensetracker.modal.LoginUser
+import com.avengers.enterpriseexpensetracker.modal.request.DeviceTokenRequest
+import com.avengers.enterpriseexpensetracker.modal.request.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
 import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
@@ -56,7 +57,6 @@ interface ExpenseTrackerWebService {
     @DELETE("/deleteReport")
     fun deleteReport(@Query("reportID") reportId: String): Call<ApiResponse>
 
-    @GET("/updateDeviceId")
-    fun updateDeviceToken(@Query("emailId") emailId: String,
-                          @Query("deviceToken") deviceToken: String): Call<ApiResponse>
+    @POST("/updateDeviceId")
+    fun updateDeviceToken(@Body updateDeviceIdRequest: DeviceTokenRequest): Call<ApiResponse>
 }

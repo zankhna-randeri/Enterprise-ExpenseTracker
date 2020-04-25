@@ -3,6 +3,7 @@ package com.avengers.enterpriseexpensetracker.ui.activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -68,6 +70,22 @@ class DashboardActivity : AppCompatActivity() {
         updateDeviceTokenIfRequired()
     }
 
+    override fun onPause() {
+        super.onPause()
+        updateTokenResponseReceiver?.let {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(it)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateTokenResponseReceiver?.let {
+            val intentFilter = IntentFilter(Constants.BROADCAST_UPDATE_DEVICE_TOKEN)
+            LocalBroadcastManager.getInstance(this)
+                    .registerReceiver(it, intentFilter)
+        }
+    }
+
     private fun initBroadcastReceiver() {
         updateTokenResponseReceiver = object : ApiResponseReceiver() {
             var appDataBundle: Bundle? = null
@@ -77,7 +95,7 @@ class DashboardActivity : AppCompatActivity() {
                     val deviceToken = bundle.getString(Constants.EXTRA_DEVICE_TOKEN)
                     deviceToken?.let { token ->
                         EETrackerPreferenceManager.saveDeviceToken(context, token)
-                        Log.e(Constants.TAG, "FCM token updated to prefs, Token : $token")
+                        Log.d(Constants.TAG, "FCM token updated to prefs, Token : $token")
                     }
                 }
             }

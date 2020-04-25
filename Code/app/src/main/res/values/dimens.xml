@@ -26,6 +26,7 @@
     <dimen name="padding_10">10dp</dimen>
     <dimen name="padding_12">12dp</dimen>
     <dimen name="padding_20">20dp</dimen>
+    <dimen name="padding_32">32dp</dimen>
 
     <dimen name="person_width">32dp</dimen>
     <dimen name="logo_160">160dp</dimen>

@@ -36,6 +36,7 @@
     <string name="txt_view_receipt">View Receipt</string>
     <string name="txt_yes">Yes</string>
     <string name="txt_no">No</string>
+    <string name="txt_submit">Submit</string>
 
     <!--    Dashboard-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -46,6 +47,11 @@
     <string name="txt_confirm_dialog_title">Confirm</string>
     <string name="txt_confirm_delete"> Do you really want to delete this expense report?</string>
     <string name="txt_delete_progress">Deleting Expense Report</string>
+
+    <!--    Change Password-->
+    <string name="txt_old_pwd">Old Password</string>
+    <string name="txt_new_pwd">New Password</string>
+    <string name="txt_confirm_new_pwd">Confirm New Password</string>
 
     <!--    Menu-->
     <string name="menu_home">Home</string>

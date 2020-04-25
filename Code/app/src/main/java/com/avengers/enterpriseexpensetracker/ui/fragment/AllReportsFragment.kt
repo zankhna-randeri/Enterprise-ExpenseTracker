@@ -73,7 +73,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun initView(view: View) {
         allExpenseView = view.findViewById(R.id.expenseReportView)
         allExpenseView?.layoutManager = LinearLayoutManager(activity)
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshHome)
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshReports)
         swipeRefreshLayout?.setOnRefreshListener(this)
         swipeRefreshLayout?.setColorSchemeResources(R.color.colorPrimary,
                 R.color.color_chart_1,

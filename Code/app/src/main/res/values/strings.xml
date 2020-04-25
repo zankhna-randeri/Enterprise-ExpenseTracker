@@ -52,6 +52,7 @@
     <string name="txt_old_pwd">Old Password</string>
     <string name="txt_new_pwd">New Password</string>
     <string name="txt_confirm_new_pwd">Confirm New Password</string>
+    <string name="txt_error_confirm_pwd">Password doesn\'t match</string>
 
     <!--    Menu-->
     <string name="menu_home">Home</string>

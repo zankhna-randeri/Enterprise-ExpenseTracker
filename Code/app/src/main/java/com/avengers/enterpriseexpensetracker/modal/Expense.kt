@@ -86,6 +86,10 @@ class Expense() : Parcelable {
         return businessAddress
     }
 
+    fun getReceiptUrl(): String? {
+        return receiptURL
+    }
+
     fun setEmailId(emailId: String) {
         this.emailId = emailId
     }

@@ -119,7 +119,7 @@ class DashboardActivity : AppCompatActivity() {
                     Log.d(Constants.TAG, "FCM Token : $deviceToken")
 
                     val savedToken = EETrackerPreferenceManager.getDeviceToken(this)
-                    if (!deviceToken.isNullOrBlank() && !savedToken.isNullOrBlank() && savedToken != deviceToken) {
+                    if (!deviceToken.isNullOrBlank() && (savedToken.isNullOrBlank() || savedToken != deviceToken)) {
                         updateTokenOnServer(deviceToken)
                     }
                 })

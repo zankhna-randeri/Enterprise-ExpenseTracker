@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.avengers.enterpriseexpensetracker.R
+import com.avengers.enterpriseexpensetracker.viewmodel.ChangePasswordViewModel
 import com.google.android.material.textfield.TextInputLayout
 
 class ChangePasswordFragment : Fragment(), View.OnClickListener {
 
+    private var viewModel: ChangePasswordViewModel? = null
     private lateinit var oldPassword: TextInputLayout
     private lateinit var newPassword: TextInputLayout
     private lateinit var confirmNewPassword: TextInputLayout
@@ -18,6 +21,7 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        viewModel = ViewModelProvider(this).get(ChangePasswordViewModel::class.java)
         return inflater.inflate(R.layout.fragment_change_password, container, false)
     }
 
@@ -40,7 +44,7 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
                 confirmNewPassword.error = null
                 if (isAllFieldsValid()) {
                     if ((newPassword.editText?.text.toString() == confirmNewPassword.editText?.text.toString())) {
-                        // change password
+
                     } else {
                         confirmNewPassword.error = getString(R.string.txt_error_confirm_pwd)
                     }

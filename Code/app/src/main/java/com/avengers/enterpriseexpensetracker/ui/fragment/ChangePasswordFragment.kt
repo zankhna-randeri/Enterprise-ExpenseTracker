@@ -1,11 +1,11 @@
 package com.avengers.enterpriseexpensetracker.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import com.avengers.enterpriseexpensetracker.R
 import com.google.android.material.textfield.TextInputLayout
 
@@ -34,4 +34,24 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
         btnSubmit.setOnClickListener(this)
     }
 
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            btnSubmit.id -> {
+                confirmNewPassword.error = null
+                if (isAllFieldsValid()) {
+                    if ((newPassword.editText?.text.toString() == confirmNewPassword.editText?.text.toString())) {
+                        // change password
+                    } else {
+                        confirmNewPassword.error = getString(R.string.txt_error_confirm_pwd)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun isAllFieldsValid(): Boolean {
+        return !(oldPassword.editText?.text.isNullOrBlank()) &&
+                !(newPassword.editText?.text.isNullOrBlank()) &&
+                !(confirmNewPassword.editText?.text.isNullOrBlank())
+    }
 }

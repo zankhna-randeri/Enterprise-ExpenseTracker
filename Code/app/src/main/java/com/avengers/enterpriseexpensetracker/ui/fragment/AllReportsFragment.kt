@@ -26,7 +26,7 @@ import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.Utility
 
-class ReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var allExpenseView: RecyclerView? = null
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private var fetchAllReportsResponseReceiver: BroadcastReceiver? = null

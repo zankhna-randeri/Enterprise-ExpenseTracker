@@ -16,14 +16,15 @@ import com.avengers.enterpriseexpensetracker.modal.Expense
 import com.avengers.enterpriseexpensetracker.util.Constants
 
 class ReportDetailAdapter(private var context: Context,
-                          private var expenses: List<Expense>) :
+                          private var expenses: List<Expense>,
+                          private var buttonClickListener: RecyclerClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         lateinit var viewHolder: RecyclerView.ViewHolder
         val inflater = LayoutInflater.from(parent.context)
         val reqViewHolder = inflater.inflate(R.layout.item_expense_detail, parent, false)
-        viewHolder = ExpenseDetailViewHolder(reqViewHolder)
+        viewHolder = ExpenseDetailViewHolder(reqViewHolder, buttonClickListener)
         return viewHolder
     }
 

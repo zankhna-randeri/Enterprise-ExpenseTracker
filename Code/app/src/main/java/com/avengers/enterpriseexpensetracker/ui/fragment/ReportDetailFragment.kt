@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -79,7 +79,13 @@ class ReportDetailFragment : Fragment() {
 
             val imageView = dialogView.findViewById<ImageView>(R.id.imgReceipt)
             Glide.with(context).load(receiptUrl).into(imageView)
+
+            val lp = WindowManager.LayoutParams()
+            lp.copyFrom(dialog.window?.attributes)
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT
+            lp.height = WindowManager.LayoutParams.MATCH_PARENT
             dialog.show()
+            dialog.window?.attributes = lp
         }
     }
 }

@@ -56,5 +56,8 @@ class Constants {
             "com.avengers.enterpriseexpensetracker.service.action.FETCH_ALL_REPORTS"
         const val BROADCAST_UPDATE_DEVICE_TOKEN =
             "com.avengers.enterpriseexpensetracker.service.action.UPDATE_DEVICE_TOKEN"
+
+        // Firebase
+        const val FCM_PAYLOAD_REPORT_ID = "reportId"
     }
 }

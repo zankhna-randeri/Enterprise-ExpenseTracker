@@ -22,7 +22,7 @@ import retrofit2.http.Part
 import retrofit2.http.Query
 import retrofit2.http.Url
 
-interface ExpenseTrackerWebService {
+interface EETrackerWebService {
     companion object {
         private const val BASE_URL = "http://expensetracker.us-east-1.elasticbeanstalk.com"
 

@@ -42,8 +42,8 @@ class EETrackerJobService : JobIntentService() {
             }
         }
 
-        val webservice: ExpenseTrackerWebService =
-            ExpenseTrackerWebService.retrofit.create(ExpenseTrackerWebService::class.java)
+        val webservice: EETrackerWebService =
+            EETrackerWebService.retrofit.create(EETrackerWebService::class.java)
     }
 
     override fun onHandleWork(intent: Intent) {

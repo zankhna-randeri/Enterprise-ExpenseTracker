@@ -8,7 +8,7 @@ import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
 import com.avengers.enterpriseexpensetracker.modal.response.HomeFragmentResponse
-import com.avengers.enterpriseexpensetracker.service.ExpenseTrackerWebService
+import com.avengers.enterpriseexpensetracker.service.EETrackerWebService
 import com.avengers.enterpriseexpensetracker.util.Constants
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,7 +16,7 @@ import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
 
-    private val webservice = ExpenseTrackerWebService.retrofit.create(ExpenseTrackerWebService::class.java)
+    private val webservice = EETrackerWebService.retrofit.create(EETrackerWebService::class.java)
     private var apiCallFailed = MutableLiveData<Boolean>()
 
     private var homeScreenResponse = HomeFragmentResponse()

@@ -67,4 +67,8 @@
     <string name="status_notification_channel_id">1111</string>
     <string name="status_notification_channel_name">Expense Report Status Update</string>
     <string name="txt_status_update">Expense Report Status Update</string>
+
+    <!--    All reports-->
+    <string name="txt_from_date">Select from Date</string>
+    <string name="txt_to_date">Select to Date</string>
 </resources>

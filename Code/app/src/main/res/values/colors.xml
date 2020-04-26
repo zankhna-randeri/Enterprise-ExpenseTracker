@@ -13,6 +13,7 @@
     <color name="color_voice_response">#506878</color>
     <color name="color_voice_request">#3F535F</color>
     <color name="color_expense_header">#1F92ED</color>
+    <color name="color_layout_bg1">#DEDDDD</color>
 
     <!--    Pie chart-->
     <color name="color_chart_1">#6AA786</color>

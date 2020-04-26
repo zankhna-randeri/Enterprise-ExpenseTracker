@@ -12,7 +12,6 @@ import androidx.core.app.NotificationCompat
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.ui.activity.NotificationActivity
 import com.avengers.enterpriseexpensetracker.util.Constants
-import com.avengers.enterpriseexpensetracker.util.Utility
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -24,15 +23,18 @@ class EETrackerFCMService : FirebaseMessagingService() {
         // Check if message contains a data payload.
         remoteMessage.data.isNotEmpty().let {
             Log.d("EETracker *******", "Message data payload: " + remoteMessage.data)
-
+            Log.d("EETracker *******",
+                    "Message data payload reportId: " + remoteMessage.data[Constants.FCM_PAYLOAD_REPORT_ID])
+            Log.d("EETracker *******",
+                    "Message data payload reportStatus: " + remoteMessage.data[Constants.FCM_PAYLOAD_REPORT_STATUS])
         }
 
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
+            Log.d("EETracker *******", "Message Notification Title: ${it.title}")
             Log.d("EETracker *******", "Message Notification Body: ${it.body}")
             it.body?.let { message -> sendNotification(message) }
         }
-
     }
 
     private fun sendNotification(messageBody: String) {

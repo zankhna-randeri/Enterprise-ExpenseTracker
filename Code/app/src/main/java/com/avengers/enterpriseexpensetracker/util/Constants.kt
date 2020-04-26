@@ -59,5 +59,6 @@ class Constants {
 
         // Firebase
         const val FCM_PAYLOAD_REPORT_ID = "reportId"
+        const val FCM_PAYLOAD_REPORT_STATUS = "reportStatus"
     }
 }

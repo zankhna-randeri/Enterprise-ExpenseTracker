@@ -24,7 +24,7 @@ class Utility {
 
     fun showMsg(context: Context, msg: String?) {
         Toast.makeText(context, msg,
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_SHORT).show()
     }
 
     fun startExpenseTrackerService(context: Context?, intent: Intent?) {

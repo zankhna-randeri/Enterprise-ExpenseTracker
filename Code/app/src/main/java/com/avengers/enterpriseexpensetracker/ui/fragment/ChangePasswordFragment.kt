@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
+import com.avengers.enterpriseexpensetracker.util.Utility
 import com.avengers.enterpriseexpensetracker.viewmodel.ChangePasswordViewModel
 import com.google.android.material.textfield.TextInputLayout
 
@@ -29,6 +32,7 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
+        initObserver()
     }
 
     private fun initView(view: View) {
@@ -37,6 +41,19 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
         confirmNewPassword = view.findViewById(R.id.txt_input_confirm_new_password)
         btnSubmit = view.findViewById(R.id.btn_change_pwd_submit)
         btnSubmit.setOnClickListener(this)
+    }
+
+    private fun initObserver() {
+        viewModel?.getApiCallStatus()?.observe(viewLifecycleOwner, Observer { response ->
+            if (response.getStatus()) {
+                view?.findNavController()?.navigateUp()
+            } else {
+                activity?.applicationContext?.let { context ->
+                    Utility.getInstance()
+                            .showMsg(context, response.getMessage() ?: getString(R.string.txt_api_failed))
+                }
+            }
+        })
     }
 
     override fun onClick(v: View?) {
@@ -49,8 +66,8 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
                 if (isAllFieldsValid(oldPassword, newPassword, confirmPassword)) {
                     if ((newPassword == confirmPassword)) {
                         activity?.applicationContext?.let {
-                            EETrackerPreferenceManager.getUserEmail(it)?.let {
-                                emailId -> viewModel?.changePassword(emailId,oldPassword, newPassword)
+                            EETrackerPreferenceManager.getUserEmail(it)?.let { emailId ->
+                                viewModel?.changePassword(emailId, oldPassword, newPassword)
                             }
                         }
                     } else {

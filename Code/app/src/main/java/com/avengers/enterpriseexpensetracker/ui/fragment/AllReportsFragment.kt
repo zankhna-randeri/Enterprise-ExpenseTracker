@@ -1,5 +1,7 @@
 package com.avengers.enterpriseexpensetracker.ui.fragment
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -25,11 +27,18 @@ import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
 import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.Utility
+import com.google.android.material.textfield.TextInputLayout
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var allExpenseView: RecyclerView? = null
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
+    private lateinit var fromDate: TextInputLayout
+    private lateinit var toDate: TextInputLayout
     private var fetchAllReportsResponseReceiver: BroadcastReceiver? = null
+    private var fromDateListener: DatePickerDialog.OnDateSetListener? = null
+    private var toDateListener: DatePickerDialog.OnDateSetListener? = null
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -73,13 +82,53 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun initView(view: View) {
         allExpenseView = view.findViewById(R.id.expenseReportView)
         allExpenseView?.layoutManager = LinearLayoutManager(activity)
+        fromDate = view.findViewById(R.id.txt_from_date)
+        toDate = view.findViewById(R.id.txt_to_date)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshReports)
         swipeRefreshLayout?.setOnRefreshListener(this)
         swipeRefreshLayout?.setColorSchemeResources(R.color.colorPrimary,
                 R.color.color_chart_1,
                 R.color.color_chart_3)
 
+        initDateListeners()
         fetchAllReports()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun initDateListeners() {
+        fromDateListener = DatePickerDialog.OnDateSetListener { datePickerView, year, month, day ->
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, day)
+        }
+
+        toDateListener = DatePickerDialog.OnDateSetListener { datePickerView, year, month, day ->
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, day)
+        }
+
+        fromDate.editText?.setOnClickListener {
+            context?.let {
+                DatePickerDialog(it, R.style.AlertDialogTheme,
+                        fromDateListener,
+                        Calendar.YEAR,
+                        Calendar.DAY_OF_MONTH,
+                        Calendar.DAY_OF_MONTH).show()
+            }
+        }
+
+        toDate.editText?.setOnClickListener {
+            context?.let {
+                DatePickerDialog(it, R.style.AlertDialogTheme,
+                        toDateListener,
+                        Calendar.YEAR,
+                        Calendar.DAY_OF_MONTH,
+                        Calendar.DAY_OF_MONTH).show()
+            }
+        }
     }
 
     private fun intiBroadcastReceiver() {

@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -84,6 +85,8 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         allExpenseView?.layoutManager = LinearLayoutManager(activity)
         fromDate = view.findViewById(R.id.txt_from_date)
         toDate = view.findViewById(R.id.txt_to_date)
+        fromDate.editText?.inputType = InputType.TYPE_NULL
+        toDate.editText?.inputType = InputType.TYPE_NULL
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshReports)
         swipeRefreshLayout?.setOnRefreshListener(this)
         swipeRefreshLayout?.setColorSchemeResources(R.color.colorPrimary,

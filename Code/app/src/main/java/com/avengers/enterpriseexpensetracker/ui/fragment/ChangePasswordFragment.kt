@@ -1,6 +1,7 @@
 package com.avengers.enterpriseexpensetracker.ui.fragment
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,9 +43,11 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
         when (v?.id) {
             btnSubmit.id -> {
                 confirmNewPassword.error = null
-                if (isAllFieldsValid()) {
-                    if ((newPassword.editText?.text.toString() == confirmNewPassword.editText?.text.toString())) {
-
+                val oldPassword = oldPassword.editText?.text
+                val newPassword = newPassword.editText?.text
+                val confirmPassword = confirmNewPassword.editText?.text
+                if (isAllFieldsValid(oldPassword, newPassword, confirmPassword)) {
+                    if ((newPassword.toString() == confirmPassword.toString())) {
                     } else {
                         confirmNewPassword.error = getString(R.string.txt_error_confirm_pwd)
                     }
@@ -53,9 +56,10 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun isAllFieldsValid(): Boolean {
-        return !(oldPassword.editText?.text.isNullOrBlank()) &&
-                !(newPassword.editText?.text.isNullOrBlank()) &&
-                !(confirmNewPassword.editText?.text.isNullOrBlank())
+    private fun isAllFieldsValid(oldPassword: Editable?,
+                                 newPassword: Editable?,
+                                 confirmPassword: Editable?): Boolean {
+        return !(oldPassword.isNullOrBlank()) && !(newPassword.isNullOrBlank()) &&
+                !(confirmPassword.isNullOrBlank())
     }
 }

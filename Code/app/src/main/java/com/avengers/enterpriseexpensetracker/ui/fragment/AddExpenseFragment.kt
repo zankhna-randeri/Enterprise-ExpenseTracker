@@ -34,6 +34,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
@@ -136,7 +137,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             override fun onSuccess(context: Context?, response: ApiResponse) {
                 // TODO: dismiss dialog, close fragment
                 context?.let { Utility.getInstance().showMsg(it, response.getMessage()) }
-                activity?.supportFragmentManager?.popBackStack()
+                view?.findNavController()?.navigateUp()
             }
 
             override fun onFailure(context: Context?, message: String?) {

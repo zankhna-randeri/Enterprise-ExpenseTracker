@@ -5,19 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
-import com.avengers.enterpriseexpensetracker.util.Utility
 import com.avengers.enterpriseexpensetracker.viewmodel.ChangePasswordViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 
 class ChangePasswordFragment : Fragment(), View.OnClickListener {
 
     private var viewModel: ChangePasswordViewModel? = null
+    private lateinit var activityLayout: CoordinatorLayout
     private lateinit var oldPassword: TextInputLayout
     private lateinit var newPassword: TextInputLayout
     private lateinit var confirmNewPassword: TextInputLayout
@@ -36,6 +39,7 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initView(view: View) {
+        activityLayout = view.findViewById(R.id.lyt_change_password)
         oldPassword = view.findViewById(R.id.txt_input_old_password)
         newPassword = view.findViewById(R.id.txt_input_new_password)
         confirmNewPassword = view.findViewById(R.id.txt_input_confirm_new_password)
@@ -49,8 +53,12 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
                 view?.findNavController()?.navigateUp()
             } else {
                 activity?.applicationContext?.let { context ->
-                    Utility.getInstance()
-                            .showMsg(context, response.getMessage() ?: getString(R.string.txt_api_failed))
+                    val snackbar = Snackbar.make(activityLayout,
+                            response.getMessage() ?: getString(R.string.txt_api_failed),
+                            Snackbar.LENGTH_LONG)
+                    snackbar.view.setBackgroundColor(ContextCompat.getColor(context,
+                            android.R.color.holo_red_light))
+                    snackbar.show()
                 }
             }
         })

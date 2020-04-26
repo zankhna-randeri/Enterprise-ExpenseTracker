@@ -1,6 +1,7 @@
 package com.avengers.enterpriseexpensetracker.service
 
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
+import com.avengers.enterpriseexpensetracker.modal.request.ChangePasswordRequest
 import com.avengers.enterpriseexpensetracker.modal.request.DeviceTokenRequest
 import com.avengers.enterpriseexpensetracker.modal.request.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
@@ -59,4 +60,7 @@ interface EETrackerWebService {
 
     @POST("/updateDeviceId")
     fun updateDeviceToken(@Body updateDeviceIdRequest: DeviceTokenRequest): Call<ApiResponse>
+
+    @POST("/userPasswordReset")
+    fun changePassword(@Body userPwdResetRequest: ChangePasswordRequest): Call<ApiResponse>
 }

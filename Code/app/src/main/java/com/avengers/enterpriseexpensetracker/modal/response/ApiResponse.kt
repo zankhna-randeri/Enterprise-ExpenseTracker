@@ -35,4 +35,9 @@ open class ApiResponse(private var statusToUI: Boolean = false,
     fun getMessage(): String? {
         return message
     }
+
+    override fun toString(): String {
+        return "ApiResponse(statusToUI=$statusToUI, message=$message)"
+    }
+
 }

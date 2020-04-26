@@ -1,7 +1,6 @@
 package com.avengers.enterpriseexpensetracker.ui.fragment
 
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.avengers.enterpriseexpensetracker.R
+import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.viewmodel.ChangePasswordViewModel
 import com.google.android.material.textfield.TextInputLayout
 
@@ -43,11 +43,16 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
         when (v?.id) {
             btnSubmit.id -> {
                 confirmNewPassword.error = null
-                val oldPassword = oldPassword.editText?.text
-                val newPassword = newPassword.editText?.text
-                val confirmPassword = confirmNewPassword.editText?.text
+                val oldPassword = oldPassword.editText?.text.toString()
+                val newPassword = newPassword.editText?.text.toString()
+                val confirmPassword = confirmNewPassword.editText?.text.toString()
                 if (isAllFieldsValid(oldPassword, newPassword, confirmPassword)) {
-                    if ((newPassword.toString() == confirmPassword.toString())) {
+                    if ((newPassword == confirmPassword)) {
+                        activity?.applicationContext?.let {
+                            EETrackerPreferenceManager.getUserEmail(it)?.let {
+                                emailId -> viewModel?.changePassword(emailId,oldPassword, newPassword)
+                            }
+                        }
                     } else {
                         confirmNewPassword.error = getString(R.string.txt_error_confirm_pwd)
                     }
@@ -56,9 +61,9 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun isAllFieldsValid(oldPassword: Editable?,
-                                 newPassword: Editable?,
-                                 confirmPassword: Editable?): Boolean {
+    private fun isAllFieldsValid(oldPassword: String?,
+                                 newPassword: String?,
+                                 confirmPassword: String?): Boolean {
         return !(oldPassword.isNullOrBlank()) && !(newPassword.isNullOrBlank()) &&
                 !(confirmPassword.isNullOrBlank())
     }

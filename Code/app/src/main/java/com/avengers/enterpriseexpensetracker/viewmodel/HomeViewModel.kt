@@ -70,8 +70,10 @@ class HomeViewModel : ViewModel() {
                 response.body()?.let {
                     if (it.getStatus()) {
                         categoryWiseTotal.postValue(it)
+                        apiCallFailed?.postValue(false)
+                    } else {
+                        apiCallFailed?.postValue(true)
                     }
-                    apiCallFailed?.postValue(it.getStatus())
                 }
             }
         })
@@ -120,8 +122,10 @@ class HomeViewModel : ViewModel() {
                         if (it.getStatus()) {
                             pendingExpenses.value?.removeAt(position)
                             pendingExpenses.postValue(pendingExpenses.value)
+                            apiCallFailed?.postValue(false)
+                        } else {
+                            apiCallFailed?.postValue(true)
                         }
-                        apiCallFailed?.postValue(it.getStatus())
                     }
                 }
             })

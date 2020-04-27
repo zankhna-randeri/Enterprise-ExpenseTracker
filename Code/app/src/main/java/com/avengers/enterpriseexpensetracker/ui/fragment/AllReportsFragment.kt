@@ -168,6 +168,13 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             fromDateInput.error = getString(R.string.txt_error_small_from_date)
             return
         }
+
+        val intent = Intent(activity?.applicationContext, EETrackerJobService::class.java).apply {
+            action = Constants.ACTION_FILTER_REPORTS_BY_DATE
+            putExtra(Constants.EXTRA_FROM_DATE, fromDate)
+            putExtra(Constants.EXTRA_TO_DATE, toDate)
+        }
+        Utility.getInstance().startExpenseTrackerService(context, intent)
     }
 
     private fun updateDate(dateInputView: TextInputLayout, date: String) {

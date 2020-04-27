@@ -30,6 +30,7 @@ import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerDateFormatManager
 import com.avengers.enterpriseexpensetracker.util.Utility
 import com.google.android.material.textfield.TextInputLayout
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -162,6 +163,11 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             toDateInput.error = getString(R.string.txt_error_empty_date)
             return
         }
+
+        if (isInvalidDateRange(fromDate, toDate)) {
+            fromDateInput.error = getString(R.string.txt_error_small_from_date)
+            return
+        }
     }
 
     private fun updateDate(dateInputView: TextInputLayout, date: String) {
@@ -251,5 +257,12 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             action = Constants.ACTION_FETCH_ALL_REPORTS
         }
         Utility.getInstance().startExpenseTrackerService(context, intent)
+    }
+
+    private fun isInvalidDateRange(fromDate: String, toDate: String): Boolean {
+        val formatter = SimpleDateFormat("yyyy-mm-dd", Locale.US)
+        val date1 = formatter.parse(fromDate)
+        val date2 = formatter.parse(toDate)
+        return fromDate > toDate
     }
 }

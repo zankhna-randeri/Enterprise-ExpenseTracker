@@ -123,9 +123,9 @@ class ReportDetailAdapter(private var context: Context,
         when (expense.getCategory()) {
             Constants.Companion.ExpenseType.Food.name -> {
                 expense.getSubCategory()?.let {
-                    category = expense.getSubCategory().toString()
+                    category = expense.getSubCategory().toString() + ", "
                 }
-                category += ", " + Constants.Companion.ExpenseType.Food.name
+                category += Constants.Companion.ExpenseType.Food.name
             }
             Constants.Companion.ExpenseType.Travel.name -> {
                 category += Constants.Companion.ExpenseType.Travel.name

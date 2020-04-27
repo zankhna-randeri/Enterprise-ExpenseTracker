@@ -80,4 +80,23 @@ class EETrackerDateFormatManager() {
         val groups = pat.matcher(day)
         return groups.matches()
     }
+
+    fun mapActualMonth(month: Int): String {
+        when (month) {
+            0 -> return "01"
+            1 -> return "02"
+            2 -> return "03"
+            3 -> return "04"
+            4 -> return "05"
+            5 -> return "06"
+            6 -> return "07"
+            7 -> return "08"
+            8 -> return "09"
+            9 -> return "10"
+            10 -> return "11"
+            11 -> return "12"
+        }
+
+        return "00"
+    }
 }

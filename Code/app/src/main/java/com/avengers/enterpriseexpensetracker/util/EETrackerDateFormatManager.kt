@@ -99,4 +99,13 @@ class EETrackerDateFormatManager() {
 
         return "00"
     }
+
+    fun dayFormat(day: Int): String {
+        var strDay = day.toString()
+        if (strDay.length < 2) {
+            strDay = "0$strDay"
+        }
+
+        return strDay
+    }
 }

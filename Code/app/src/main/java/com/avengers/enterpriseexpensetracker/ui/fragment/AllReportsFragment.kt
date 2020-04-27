@@ -105,13 +105,15 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun initDateListeners() {
         fromDateListener = DatePickerDialog.OnDateSetListener { datePickerView, year, month, day ->
             val strMonth = EETrackerDateFormatManager().mapActualMonth(month)
-            fromDate = "$year-$strMonth-$day"
+            val strDay = EETrackerDateFormatManager().dayFormat(day)
+            fromDate = "$year-$strMonth-$strDay"
             updateDate(fromDateInput, fromDate)
         }
 
         toDateListener = DatePickerDialog.OnDateSetListener { datePickerView, year, month, day ->
             val strMonth = EETrackerDateFormatManager().mapActualMonth(month)
-            toDate = "$year-$strMonth-$day"
+            val strDay = EETrackerDateFormatManager().dayFormat(day)
+            toDate = "$year-$strMonth-$strDay"
             updateDate(toDateInput, toDate)
         }
 

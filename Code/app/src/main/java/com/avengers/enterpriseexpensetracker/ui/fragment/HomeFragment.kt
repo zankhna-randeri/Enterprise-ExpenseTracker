@@ -47,7 +47,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                               savedInstanceState: Bundle?): View? {
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        return inflater.inflate(R.layout.fragment_dashboard, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

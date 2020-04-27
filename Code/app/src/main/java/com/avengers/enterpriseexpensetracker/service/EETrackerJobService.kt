@@ -70,6 +70,15 @@ class EETrackerJobService : JobIntentService() {
                     val deviceToken = intent.getStringExtra(Constants.EXTRA_DEVICE_TOKEN)
                     deviceToken?.let { handleActionDeviceTokenUpdate(it, action) }
                 }
+                Constants.ACTION_FILTER_REPORTS_BY_DATE -> {
+                    val fromDate = intent.getStringExtra(Constants.EXTRA_FROM_DATE)
+                    val toDate = intent.getStringExtra(Constants.EXTRA_TO_DATE)
+                    if (!fromDate.isNullOrBlank() && !toDate.isNullOrBlank()) {
+                        handleActionReportFilterByDate(fromDate, toDate, action)
+                    } else {
+                        return
+                    }
+                }
                 else -> {
                     Log.e(Constants.TAG, "******* No action received from intent *******")
                     return
@@ -180,6 +189,20 @@ class EETrackerJobService : JobIntentService() {
         }
     }
 
+    private fun handleActionReportFilterByDate(fromDate: String, toDate: String, action: String) {
+        if (NetworkHelper.hasNetworkAccess(applicationContext)) {
+            EETrackerPreferenceManager.getUserEmail(applicationContext)
+                    ?.let {
+                        val call = webservice.filterReportsByDate(it, fromDate, toDate)
+                        val response = call.execute()
+                        val filterReportResponse = GetAllReportsResponse(response.body())
+                        Log.d("EETracker *******",
+                                "API Response handleActionReportFilterByDate: $filterReportResponse")
+                        handleApiResponse(filterReportResponse, action)
+                    }
+        }
+    }
+
     private fun handleApiResponse(response: ApiResponse?, action: String, appDataBundle: Bundle?) {
         var responseIntent: Intent? = null
         when (action) {
@@ -197,6 +220,9 @@ class EETrackerJobService : JobIntentService() {
             }
             Constants.ACTION_UPDATE_DEVICE_TOKEN -> {
                 responseIntent = Intent(Constants.BROADCAST_UPDATE_DEVICE_TOKEN)
+            }
+            Constants.ACTION_FILTER_REPORTS_BY_DATE -> {
+                responseIntent = Intent(Constants.BROADCAST_FILTER_REPORTS_BY_DATE)
             }
         }
 

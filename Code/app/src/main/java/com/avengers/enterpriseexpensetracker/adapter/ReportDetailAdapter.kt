@@ -11,35 +11,66 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
+import com.avengers.enterpriseexpensetracker.adapter.viewholder.CommentViewHolder
 import com.avengers.enterpriseexpensetracker.adapter.viewholder.ExpenseDetailViewHolder
 import com.avengers.enterpriseexpensetracker.modal.Expense
 import com.avengers.enterpriseexpensetracker.util.Constants
 
 class ReportDetailAdapter(private var context: Context,
                           private var expenses: List<Expense>,
+                          private var comment: String?,
                           private var buttonClickListener: RecyclerClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        private const val VIEW_HEADER = 0
+        private const val VIEW_LIST = 1
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         lateinit var viewHolder: RecyclerView.ViewHolder
         val inflater = LayoutInflater.from(parent.context)
-        val reqViewHolder = inflater.inflate(R.layout.item_expense_detail, parent, false)
-        viewHolder = ExpenseDetailViewHolder(reqViewHolder, buttonClickListener)
+        when (viewType) {
+            VIEW_HEADER -> {
+                val reqViewHolder = inflater.inflate(R.layout.item_report_comment, parent, false)
+                viewHolder = CommentViewHolder(reqViewHolder)
+            }
+            VIEW_LIST -> {
+                val reqViewHolder = inflater.inflate(R.layout.item_expense_detail, parent, false)
+                viewHolder = ExpenseDetailViewHolder(reqViewHolder, buttonClickListener)
+            }
+        }
+
         return viewHolder
     }
 
     override fun getItemCount(): Int {
-        return expenses.size
+        return expenses.size + 1
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ExpenseDetailViewHolder) {
-            holder.getDateView().text = expenses[position].getDate()
-            holder.getNameView().text = generateSpannableString(expenses[position])
+            val actualPosition = position - 1
+            holder.getDateView().text = expenses[actualPosition].getDate()
+            holder.getNameView().text = generateSpannableString(expenses[actualPosition])
             holder.getAmountView().text = context.resources.getString(R.string.txt_currency_dollar_amount,
-                    expenses[position].getAmount())
-            holder.getCategoryView().setImageResource(getCategoryResource(expenses[position]))
+                    expenses[actualPosition].getAmount())
+            holder.getCategoryView().setImageResource(getCategoryResource(expenses[actualPosition]))
+        } else if (holder is CommentViewHolder) {
+            if (comment.isNullOrBlank()) {
+                holder.getCommentView().text = context.getString(R.string.txt_no_comment)
+            } else {
+                holder.getCommentView().text = context.getString(R.string.txt_comment, comment)
+            }
         }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (position == 0) {
+            return VIEW_HEADER
+        }
+
+        return VIEW_LIST
     }
 
     private fun getCategoryResource(expense: Expense): Int {

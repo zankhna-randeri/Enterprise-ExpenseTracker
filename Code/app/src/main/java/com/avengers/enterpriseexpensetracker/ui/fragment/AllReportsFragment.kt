@@ -255,7 +255,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onReceive(context: Context?, intent: Intent?) {
                 val filteredReports =
-                    intent?.getParcelableExtra<GetAllReportsResponse>(Constants.BROADCAST_FILTER_REPORTS_BY_DATE)
+                    intent?.getParcelableExtra<GetAllReportsResponse>(Constants.EXTRA_API_RESPONSE)
                 filteredReports?.let { response ->
                     response.reports?.let {
                         onSuccess(context, response)

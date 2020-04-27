@@ -52,7 +52,7 @@ class ReportDetailFragment : Fragment() {
     private fun loadReportDetails(report: ExpenseReport) {
         activity?.applicationContext?.let { context ->
             expenseView?.adapter = ReportDetailAdapter(context,
-                    report.getExpenses() as List<Expense>,
+                    report.getExpenses() as List<Expense>, report.getReportComment(),
                     object : RecyclerClickListener {
                         override fun onDeleteClickListener(position: Int) {
                         }

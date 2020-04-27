@@ -41,6 +41,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var toDateInput: TextInputLayout
     private lateinit var btnFilterDate: Button
     private var fetchAllReportsResponseReceiver: BroadcastReceiver? = null
+    private var filterReportsByDateReceiver: BroadcastReceiver? = null
     private var fromDateListener: DatePickerDialog.OnDateSetListener? = null
     private var toDateListener: DatePickerDialog.OnDateSetListener? = null
     private val calendar = Calendar.getInstance(Locale.US)
@@ -71,11 +72,24 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 LocalBroadcastManager.getInstance(context).registerReceiver(receiver, intentFilter)
             }
         }
+
+        filterReportsByDateReceiver?.let { receiver ->
+            val intentFilter = IntentFilter(Constants.BROADCAST_FILTER_REPORTS_BY_DATE)
+            activity?.applicationContext?.let { context ->
+                LocalBroadcastManager.getInstance(context).registerReceiver(receiver, intentFilter)
+            }
+        }
     }
 
     override fun onPause() {
         super.onPause()
         fetchAllReportsResponseReceiver?.let { receiver ->
+            activity?.applicationContext?.let { context ->
+                LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver)
+            }
+        }
+
+        filterReportsByDateReceiver?.let { receiver ->
             activity?.applicationContext?.let { context ->
                 LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver)
             }
@@ -217,8 +231,40 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     } ?: run {
                         // TODO: Show empty view
                         // showEmptyView()
-
                     }
+                } ?: run {
+                    onFailure(context, getString(R.string.txt_api_failed))
+                }
+            }
+        }
+
+        filterReportsByDateReceiver = object : ApiResponseReceiver() {
+            override fun onSuccess(context: Context?, response: ApiResponse) {
+                val filteredReportsResponse = response as GetAllReportsResponse
+                val approvedExpenses = fetchApprovedExpenses(filteredReportsResponse.reports)
+                if (approvedExpenses.isNullOrEmpty()) {
+                    //TODO: showEmptyView()
+                } else {
+                    bindExpenseView(approvedExpenses)
+                }
+            }
+
+            override fun onFailure(context: Context?, message: String?) {
+                context?.let { Utility.getInstance().showMsg(it, message) }
+            }
+
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val filteredReports =
+                    intent?.getParcelableExtra<GetAllReportsResponse>(Constants.BROADCAST_FILTER_REPORTS_BY_DATE)
+                filteredReports?.let { response ->
+                    response.reports?.let {
+                        onSuccess(context, response)
+                    } ?: run {
+                        // TODO: Show empty view
+                        // showEmptyView()
+                    }
+                } ?: run {
+                    onFailure(context, getString(R.string.txt_api_failed))
                 }
             }
         }

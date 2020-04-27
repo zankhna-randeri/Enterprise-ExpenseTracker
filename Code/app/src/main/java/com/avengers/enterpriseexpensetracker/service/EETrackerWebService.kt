@@ -63,4 +63,9 @@ interface EETrackerWebService {
 
     @POST("/userPasswordReset")
     fun changePassword(@Body userPwdResetRequest: ChangePasswordRequest): Call<ApiResponse>
+
+    @POST("/filterReportsByDate")
+    fun filterReportsByDate(@Query("emailId") emailId: String,
+                            @Query("fromDate") fromDate: String,
+                            @Query("toDate") toDate: String): Call<MutableList<ExpenseReport>>
 }

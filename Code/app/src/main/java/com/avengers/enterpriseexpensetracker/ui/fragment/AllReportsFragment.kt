@@ -97,6 +97,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
+        resetDateFilter()
         fetchAllReports()
     }
 
@@ -317,5 +318,14 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val date1 = formatter.parse(fromDate)
         val date2 = formatter.parse(toDate)
         return date1 > date2
+    }
+
+    private fun resetDateFilter() {
+        fromDateInput.editText?.text?.clear()
+        toDateInput.editText?.text?.clear()
+        fromDateInput.editText?.clearFocus()
+        toDateInput.editText?.clearFocus()
+        fromDate = ""
+        toDate = ""
     }
 }

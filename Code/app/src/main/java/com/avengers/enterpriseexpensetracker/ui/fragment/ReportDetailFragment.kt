@@ -61,7 +61,12 @@ class ReportDetailFragment : Fragment() {
                         }
 
                         override fun btnViewReceiptClickListener(position: Int) {
-                            val receiptUrl = report.getExpenses()?.get(position)?.getReceiptUrl()
+                            // As there is a comment view added as a header in report detail adapter,
+                            // there are total expenses.size() + 1 item in list.
+                            // So expense list will start from 1 rather than 0. To avoid IndexOutOfBound exception,
+                            // actual position will be position - 1
+                            val actualPosition = position - 1
+                            val receiptUrl = report.getExpenses()?.get(actualPosition)?.getReceiptUrl()
                             Log.d(Constants.TAG, "Receipt URL: $receiptUrl")
                             receiptUrl?.let { url -> showReceiptImage(context, url) }
                         }

@@ -267,9 +267,9 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun isInvalidDateRange(fromDate: String, toDate: String): Boolean {
-        val formatter = SimpleDateFormat("yyyy-mm-dd", Locale.US)
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         val date1 = formatter.parse(fromDate)
         val date2 = formatter.parse(toDate)
-        return fromDate > toDate
+        return date1 > date2
     }
 }

@@ -51,17 +51,17 @@ class Constants {
 
         // Broadcast
         const val BROADCAST_LOGIN_RESPONSE =
-            "com.avengers.enterpriseexpensetracker.service.action.LOGIN_RESPONSE"
+            "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_LOGIN_RESPONSE"
         const val BROADCAST_RECEIPT_SCAN_RESPONSE =
-            "com.avengers.enterpriseexpensetracker.service.action.RECEIPT_SCAN_RESPONSE"
+            "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_RECEIPT_SCAN_RESPONSE"
         const val BROADCAST_SUBMIT_EXPENSE_REPORT_RESPONSE =
-            "com.avengers.enterpriseexpensetracker.service.action.SUBMIT_EXPENSE_REPORT_RESPONSE"
+            "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_SUBMIT_EXPENSE_REPORT_RESPONSE"
         const val BROADCAST_FETCH_ALL_REPORTS =
-            "com.avengers.enterpriseexpensetracker.service.action.FETCH_ALL_REPORTS"
+            "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_FETCH_ALL_REPORTS"
         const val BROADCAST_UPDATE_DEVICE_TOKEN =
-            "com.avengers.enterpriseexpensetracker.service.action.UPDATE_DEVICE_TOKEN"
+            "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_UPDATE_DEVICE_TOKEN"
         const val BROADCAST_FILTER_REPORTS_BY_DATE =
-            "com.avengers.enterpriseexpensetracker.service.action.FILTER_REPORTS_BY_DATE"
+            "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_FILTER_REPORTS_BY_DATE"
 
         // Firebase
         const val FCM_PAYLOAD_REPORT_ID = "reportId"

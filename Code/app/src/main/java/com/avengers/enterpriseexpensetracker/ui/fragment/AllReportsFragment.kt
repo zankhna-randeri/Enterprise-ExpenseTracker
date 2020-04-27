@@ -14,11 +14,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.AllExpenseAdapter
+import com.avengers.enterpriseexpensetracker.adapter.RecyclerClickListener
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.GetAllReportsResponse
@@ -299,7 +301,23 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         expenses: List<ExpenseReport>) {
         val adapter =
             activity?.applicationContext?.let {
-                AllExpenseAdapter(it, expenses)
+                AllExpenseAdapter(it, expenses, object : RecyclerClickListener {
+                    override fun onDeleteClickListener(position: Int) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onItemClickListener(position: Int) {
+                        val report = expenses[position]
+                        val action =
+                            AllReportsFragmentDirections.actionNavReportHistoryToNavReportDetail(report)
+                        view?.findNavController()?.navigate(action)
+                    }
+
+                    override fun btnViewReceiptClickListener(position: Int) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
             }
         allExpenseView?.adapter = adapter
     }

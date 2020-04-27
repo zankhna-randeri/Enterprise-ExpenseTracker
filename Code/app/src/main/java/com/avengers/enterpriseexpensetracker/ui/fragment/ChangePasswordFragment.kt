@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
+import com.avengers.enterpriseexpensetracker.util.NetworkHelper
 import com.avengers.enterpriseexpensetracker.viewmodel.ChangePasswordViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -83,9 +84,11 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
                 val confirmPassword = confirmNewPassword.editText?.text.toString()
                 if (isAllFieldsValid(oldPassword, newPassword, confirmPassword)) {
                     if ((newPassword == confirmPassword)) {
-                        activity?.applicationContext?.let {
-                            EETrackerPreferenceManager.getUserEmail(it)?.let { emailId ->
-                                viewModel?.changePassword(emailId, oldPassword, newPassword)
+                        activity?.applicationContext?.let { context ->
+                            if (NetworkHelper.hasNetworkAccess(context)) {
+                                EETrackerPreferenceManager.getUserEmail(context)?.let { emailId ->
+                                    viewModel?.changePassword(emailId, oldPassword, newPassword)
+                                }
                             }
                         }
                     } else {

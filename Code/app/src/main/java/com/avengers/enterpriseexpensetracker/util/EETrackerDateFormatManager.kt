@@ -49,25 +49,27 @@ class EETrackerDateFormatManager() {
             // Merge all formats
             val parseFormat = formatter[0] + " " + formatter[1] + " " + formatter[2]
 
+            val parsedCommand = tokens[0] + " " + tokens[1] + " " + tokens[2]
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 var dateTimeFormatter = DateTimeFormatter.ofPattern(parseFormat, Locale.ENGLISH)
                 dateTimeFormatter =
                     DateTimeFormatterBuilder().parseCaseInsensitive().append(dateTimeFormatter).toFormatter()
-                val dateTime = LocalDate.parse(command, dateTimeFormatter)
+                val dateTime = LocalDate.parse(parsedCommand, dateTimeFormatter)
                 val converted = DateTimeFormatter.ofPattern("MM/dd/yyyy").format(dateTime)
-                Log.d("EETracker ***", "converted date: $converted")
+                Log.d("EETracker *******", "converted date: $converted")
                 return converted
             } else {
                 // convert to mm/dd/yyyy
                 val dateFormatter = SimpleDateFormat(parseFormat, Locale.US)
-                val date = dateFormatter.parse(command)
-                Log.d("EETracker ***", "parsed date: $date")
+                val date = dateFormatter.parse(parsedCommand)
+                Log.d("EETracker *******", "parsed date: $date")
                 val converted = SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date!!)
-                Log.d("EETracker ***", "converted date: $converted")
+                Log.d("EETracker *******", "converted date: $converted")
                 return converted
             }
         } catch (e: ParseException) {
-            Log.e("EETracker ***", "Exception: ${e.message}")
+            Log.e("EETracker *******", "Exception: ${e.message}")
             e.printStackTrace()
             return null
         }

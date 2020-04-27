@@ -27,6 +27,7 @@ import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
 import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
 import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
 import com.avengers.enterpriseexpensetracker.util.Constants
+import com.avengers.enterpriseexpensetracker.util.EETrackerDateFormatManager
 import com.avengers.enterpriseexpensetracker.util.Utility
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
@@ -103,12 +104,14 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     @SuppressLint("ClickableViewAccessibility")
     private fun initDateListeners() {
         fromDateListener = DatePickerDialog.OnDateSetListener { datePickerView, year, month, day ->
-            fromDate = "$year-$month-$day"
+            val strMonth = EETrackerDateFormatManager().mapActualMonth(month)
+            fromDate = "$year-$strMonth-$day"
             updateDate(fromDateInput, fromDate)
         }
 
         toDateListener = DatePickerDialog.OnDateSetListener { datePickerView, year, month, day ->
-            toDate = "$year-$month-$day"
+            val strMonth = EETrackerDateFormatManager().mapActualMonth(month)
+            toDate = "$year-$strMonth-$day"
             updateDate(toDateInput, toDate)
         }
 

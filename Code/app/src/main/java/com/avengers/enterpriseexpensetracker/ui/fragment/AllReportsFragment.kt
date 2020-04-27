@@ -1,6 +1,5 @@
 package com.avengers.enterpriseexpensetracker.ui.fragment
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -12,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +38,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private lateinit var fromDateInput: TextInputLayout
     private lateinit var toDateInput: TextInputLayout
+    private lateinit var btnFilterDate: Button
     private var fetchAllReportsResponseReceiver: BroadcastReceiver? = null
     private var fromDateListener: DatePickerDialog.OnDateSetListener? = null
     private var toDateListener: DatePickerDialog.OnDateSetListener? = null
@@ -85,6 +86,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun initView(view: View) {
+        btnFilterDate = view.findViewById(R.id.btn_date_filter_submit)
         allExpenseView = view.findViewById(R.id.expenseReportView)
         allExpenseView?.layoutManager = LinearLayoutManager(activity)
         fromDateInput = view.findViewById(R.id.txt_from_date)
@@ -97,12 +99,18 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 R.color.color_chart_1,
                 R.color.color_chart_3)
 
-        initDateListeners()
+        initListeners()
         fetchAllReports()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun initDateListeners() {
+    //    @SuppressLint("ClickableViewAccessibility")
+    private fun initListeners() {
+        btnFilterDate.setOnClickListener {
+            fromDateInput.error = null
+            toDateInput.error = null
+            filterReportsByDate()
+        }
+
         fromDateListener = DatePickerDialog.OnDateSetListener { datePickerView, year, month, day ->
             val strMonth = EETrackerDateFormatManager().mapActualMonth(month)
             val strDay = EETrackerDateFormatManager().dayFormat(day)
@@ -141,6 +149,18 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         month,
                         day).show()
             }
+        }
+    }
+
+    private fun filterReportsByDate() {
+        if (fromDate.isBlank()) {
+            fromDateInput.error = getString(R.string.txt_error_empty_date)
+            return
+        }
+
+        if (toDate.isBlank()) {
+            toDateInput.error = getString(R.string.txt_error_empty_date)
+            return
         }
     }
 

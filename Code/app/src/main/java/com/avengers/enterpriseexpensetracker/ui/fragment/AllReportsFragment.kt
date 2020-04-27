@@ -41,7 +41,8 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var fetchAllReportsResponseReceiver: BroadcastReceiver? = null
     private var fromDateListener: DatePickerDialog.OnDateSetListener? = null
     private var toDateListener: DatePickerDialog.OnDateSetListener? = null
-    val calendar = Calendar.getInstance()
+    private val fromCalendar = Calendar.getInstance()
+    private val toCalendar = Calendar.getInstance()
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -119,21 +120,27 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         fromDate.editText?.setOnClickListener {
             context?.let {
+                val day = fromCalendar[Calendar.DAY_OF_MONTH]
+                val month = fromCalendar[Calendar.MONTH]
+                val year = fromCalendar[Calendar.YEAR]
                 DatePickerDialog(it, R.style.AlertDialogTheme,
                         fromDateListener,
-                        Calendar.YEAR,
-                        Calendar.MONTH,
-                        Calendar.DAY_OF_MONTH).show()
+                        year,
+                        month,
+                        day).show()
             }
         }
 
         toDate.editText?.setOnClickListener {
             context?.let {
+                val day = toCalendar[Calendar.DAY_OF_MONTH]
+                val month = toCalendar[Calendar.MONTH]
+                val year = toCalendar[Calendar.YEAR]
                 DatePickerDialog(it, R.style.AlertDialogTheme,
                         toDateListener,
-                        Calendar.YEAR,
-                        Calendar.MONTH,
-                        Calendar.DAY_OF_MONTH).show()
+                        year,
+                        month,
+                        day).show()
             }
         }
     }

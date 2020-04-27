@@ -19,12 +19,14 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.app.ActivityCompat
@@ -83,6 +85,11 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private val ACTION_CAMERA = 3
     private val ACTION_PHOTOS = 4
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -105,6 +112,10 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         initSpeechRecognizer()
         setUpConversations()
         setUpObservers()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.clear()
     }
 
     private fun initBroadcast() {

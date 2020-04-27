@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -49,6 +50,11 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private val calendar = Calendar.getInstance(Locale.US)
     private var fromDate: String = ""
     private var toDate: String = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -103,6 +109,10 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         fetchAllReports()
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.clear()
+    }
+
     private fun initView(view: View) {
         btnFilterDate = view.findViewById(R.id.btn_date_filter_submit)
         allExpenseView = view.findViewById(R.id.expenseReportView)
@@ -121,7 +131,6 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         fetchAllReports()
     }
 
-    //    @SuppressLint("ClickableViewAccessibility")
     private fun initListeners() {
         btnFilterDate.setOnClickListener {
             fromDateInput.error = null

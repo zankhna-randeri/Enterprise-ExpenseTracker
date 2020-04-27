@@ -2,6 +2,7 @@ package com.avengers.enterpriseexpensetracker.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -26,6 +27,11 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
     private lateinit var confirmNewPassword: TextInputLayout
     private lateinit var btnSubmit: Button
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         viewModel = ViewModelProvider(this).get(ChangePasswordViewModel::class.java)
@@ -36,6 +42,10 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
         initObserver()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.clear()
     }
 
     private fun initView(view: View) {

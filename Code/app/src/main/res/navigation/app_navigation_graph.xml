@@ -9,7 +9,7 @@
         android:id="@+id/nav_home"
         android:name="com.avengers.enterpriseexpensetracker.ui.fragment.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_dashboard">
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_to_nav_report_detail"
             app:destination="@id/nav_report_detail"

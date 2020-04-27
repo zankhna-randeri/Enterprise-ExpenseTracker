@@ -71,4 +71,6 @@
     <!--    All reports-->
     <string name="txt_from_date">Select from Date</string>
     <string name="txt_to_date">Select to Date</string>
+    <string name="txt_error_empty_date">Please select date</string>
+    <string name="txt_error_small_from_date">From date should be smaller than to date</string>
 </resources>

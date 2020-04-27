@@ -3,6 +3,7 @@ package com.avengers.enterpriseexpensetracker.ui.fragment
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -36,6 +37,11 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var txtProgressMsg: TextView? = null
     private var adapter: HomeViewExpenseAdapter? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -52,6 +58,16 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         initView(view)
         fetchHomeScreenData()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_notification -> {
+                view?.findNavController()?.navigate(HomeFragmentDirections.actionNavHomeToNotificationFragment())
+            }
+        }
+
+        return false
     }
 
     override fun onResume() {

@@ -29,6 +29,7 @@ import com.avengers.enterpriseexpensetracker.util.AnalyticsHelper
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.Utility
 import com.google.android.material.textfield.TextInputLayout
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -40,6 +41,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var fetchAllReportsResponseReceiver: BroadcastReceiver? = null
     private var fromDateListener: DatePickerDialog.OnDateSetListener? = null
     private var toDateListener: DatePickerDialog.OnDateSetListener? = null
+    val calendar = Calendar.getInstance()
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -104,6 +106,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, day)
+            updateDate(fromDate, calendar)
         }
 
         toDateListener = DatePickerDialog.OnDateSetListener { datePickerView, year, month, day ->
@@ -111,6 +114,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, day)
+            updateDate(toDate, calendar)
         }
 
         fromDate.editText?.setOnClickListener {
@@ -118,7 +122,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 DatePickerDialog(it, R.style.AlertDialogTheme,
                         fromDateListener,
                         Calendar.YEAR,
-                        Calendar.DAY_OF_MONTH,
+                        Calendar.MONTH,
                         Calendar.DAY_OF_MONTH).show()
             }
         }
@@ -128,10 +132,16 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 DatePickerDialog(it, R.style.AlertDialogTheme,
                         toDateListener,
                         Calendar.YEAR,
-                        Calendar.DAY_OF_MONTH,
+                        Calendar.MONTH,
                         Calendar.DAY_OF_MONTH).show()
             }
         }
+    }
+
+    private fun updateDate(dateInputView: TextInputLayout, calendar: Calendar) {
+        val baseFormat = "yyyy-mm-dd"
+        val sdf = SimpleDateFormat(baseFormat, Locale.US)
+        dateInputView.editText?.setText(sdf.format(calendar.time))
     }
 
     private fun intiBroadcastReceiver() {

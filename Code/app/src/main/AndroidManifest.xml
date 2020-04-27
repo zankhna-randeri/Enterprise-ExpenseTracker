@@ -20,7 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activity.NotificationActivity" />
         <activity
             android:name=".ui.activity.DashboardActivity"
             android:screenOrientation="portrait"

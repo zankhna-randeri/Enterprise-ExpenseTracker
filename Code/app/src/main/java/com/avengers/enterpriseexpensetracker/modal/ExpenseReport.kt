@@ -17,6 +17,7 @@ class ExpenseReport : Parcelable {
     private var reportLastModified: String? = null
     private var reportStatus: String = Constants.Companion.Status.Pending.name
     private var reportTotalAmount: Double = 0.0
+    private var reportComment: String? = null
 
     constructor(parcel: Parcel) : this() {
         reportId = parcel.readString()
@@ -27,6 +28,7 @@ class ExpenseReport : Parcelable {
         reportLastModified = parcel.readString()
         reportStatus = parcel.readString() as String
         reportTotalAmount = parcel.readDouble()
+        reportComment = parcel.readString()
         expenseDetailsRequest = ArrayList()
         parcel.readTypedList(expenseDetailsRequest!!, Expense.CREATOR)
     }
@@ -58,7 +60,8 @@ class ExpenseReport : Parcelable {
                 " submissionDate=$reportCreateDate," +
                 " reportLastModified=$reportLastModified," +
                 " status=$reportStatus," +
-                " total=$reportTotalAmount)"
+                " total=$reportTotalAmount," +
+                " reportComment = $reportComment)"
     }
 
     fun setReportStatus(status: String) {
@@ -79,6 +82,7 @@ class ExpenseReport : Parcelable {
         parcel.writeString(reportStatus)
         parcel.writeDouble(reportTotalAmount)
         parcel.writeTypedList(expenseDetailsRequest)
+        parcel.writeString(reportComment)
     }
 
     override fun describeContents(): Int {
@@ -124,5 +128,9 @@ class ExpenseReport : Parcelable {
 
     fun getReportId(): String? {
         return reportId
+    }
+
+    fun getReportComment(): String? {
+        return reportComment
     }
 }

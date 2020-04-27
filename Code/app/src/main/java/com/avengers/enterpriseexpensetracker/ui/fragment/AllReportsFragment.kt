@@ -297,8 +297,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         return rejectedExpenses
     }
 
-    private fun bindExpenseView(
-        expenses: List<ExpenseReport>) {
+    private fun bindExpenseView(expenses: List<ExpenseReport>) {
         val adapter =
             activity?.applicationContext?.let {
                 AllExpenseAdapter(it, expenses, object : RecyclerClickListener {

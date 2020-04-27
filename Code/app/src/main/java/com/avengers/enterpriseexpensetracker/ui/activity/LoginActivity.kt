@@ -68,7 +68,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(intent)
             this.finish()
         } else {
-            initView();
+            initView()
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
                 // Permission is not granted

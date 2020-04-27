@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.avengers.enterpriseexpensetracker.ui.fragment.HomeFragment"
-        android:label="@string/menu_home"
         tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_nav_home_to_nav_report_detail"
@@ -21,12 +20,10 @@
     <fragment
         android:id="@+id/nav_add_expense"
         android:name="com.avengers.enterpriseexpensetracker.ui.fragment.AddExpenseFragment"
-        android:label="@string/menu_add_expense"
         tools:layout="@layout/fragment_add_expense" />
     <fragment
         android:id="@+id/nav_report_history"
         android:name="com.avengers.enterpriseexpensetracker.ui.fragment.AllReportsFragment"
-        android:label="@string/menu_report_history"
         tools:layout="@layout/fragment_all_reports">
         <action
             android:id="@+id/action_nav_report_history_to_nav_report_detail"
@@ -36,12 +33,10 @@
     <fragment
         android:id="@+id/nav_logout"
         android:name="com.avengers.enterpriseexpensetracker.ui.fragment.LogoutFragment"
-        android:label="@string/menu_logout"
         tools:layout="@layout/fragment_logout" />
     <fragment
         android:id="@+id/nav_report_detail"
         android:name="com.avengers.enterpriseexpensetracker.ui.fragment.ReportDetailFragment"
-        android:label="fragment_report_detail"
         tools:layout="@layout/fragment_report_detail">
         <argument
             android:name="report"
@@ -50,11 +45,9 @@
     <fragment
         android:id="@+id/nav_change_pwd"
         android:name="com.avengers.enterpriseexpensetracker.ui.fragment.ChangePasswordFragment"
-        android:label="fragment_change_password"
         tools:layout="@layout/fragment_change_password" />
     <fragment
         android:id="@+id/nav_notification"
-        android:name="com.avengers.enterpriseexpensetracker.NotificationFragment"
-        android:label="@string/action_notification"
+        android:name="com.avengers.enterpriseexpensetracker.ui.fragment.NotificationFragment"
         tools:layout="@layout/fragment_notification" />
 </navigation>

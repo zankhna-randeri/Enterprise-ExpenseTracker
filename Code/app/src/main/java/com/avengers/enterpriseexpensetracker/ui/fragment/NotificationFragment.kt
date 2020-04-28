@@ -59,11 +59,8 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
                     val position = viewHolder.adapterPosition
-                    val notification = adapter?.getNotifications()?.get(position)
-                    notification?.let {
-                        if (NetworkHelper.hasNetworkAccess(context)) {
-                            viewModel?.deleteNotification(it.getId())
-                        }
+                    if (NetworkHelper.hasNetworkAccess(context)) {
+                        viewModel?.deleteNotification(position)
                     }
                 }
             }
@@ -81,7 +78,11 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             if (notifications.isNullOrEmpty()) {
                 //TODO: Show empty view
             } else {
-                bindNotifications(notifications)
+                if (adapter != null) {
+                    adapter?.notifyDataSetChanged()
+                } else {
+                    bindNotifications(notifications)
+                }
             }
         })
 

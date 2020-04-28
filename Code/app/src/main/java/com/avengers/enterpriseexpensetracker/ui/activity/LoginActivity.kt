@@ -41,7 +41,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var activityLayout: CoordinatorLayout
-    private lateinit var forgotPwd: TextView
+    private lateinit var forgotPwd: Button
     private var toolbar: Toolbar? = null
     private var title: TextView? = null
     private var inputEmail: TextInputLayout? = null
@@ -97,7 +97,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         txtProgressMsg = progress?.findViewById(R.id.txt_progress_msg)
 
         // Setup forgot password link
-        forgotPwd = findViewById(R.id.txt_forgot_pwd)
+        forgotPwd = findViewById(R.id.btn_forgot_pwd)
         forgotPwd.paintFlags = forgotPwd.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         setUpToolbar()
 

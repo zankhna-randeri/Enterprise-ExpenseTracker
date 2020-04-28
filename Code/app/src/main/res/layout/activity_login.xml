@@ -82,7 +82,7 @@
                     android:theme="@style/ButtonTheme" />
 
                 <Button
-                    android:id="@+id/txt_forgot_pwd"
+                    android:id="@+id/btn_forgot_pwd"
                     style="@style/FlatButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

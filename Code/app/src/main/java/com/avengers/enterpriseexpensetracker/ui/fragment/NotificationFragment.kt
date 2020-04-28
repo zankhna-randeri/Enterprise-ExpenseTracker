@@ -28,7 +28,6 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var swipeToDeleteCallback: SwipeToDeleteCallback? = null
     private var adapter: NotificationAdapter? = null
-    private var notifications: List<Notification>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +95,6 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun bindNotifications(notifications: List<Notification>) {
-        this.notifications = notifications
         adapter = NotificationAdapter(notifications)
         notificationView.adapter = adapter
     }

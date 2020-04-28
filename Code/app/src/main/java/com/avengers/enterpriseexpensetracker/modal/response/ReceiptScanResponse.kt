@@ -52,7 +52,7 @@ data class ReceiptScanResponse(private var expenseBusinessName: String? = null,
         }
     }
 
-    fun getApiResponseStatus(): Boolean? {
+    fun isApiResponseSuccess(): Boolean? {
         return super.isSuccess()
     }
 

@@ -45,7 +45,7 @@ data class LoginResponse(private var firstname: String? = null,
         return this.lastname
     }
 
-    fun getApiResponseStatus(): Boolean {
+    fun isApiResponseSuccess(): Boolean {
         return super.isSuccess()
     }
 

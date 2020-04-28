@@ -133,7 +133,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                 val response = intent?.getParcelableExtra<ReceiptScanResponse>(Constants.EXTRA_API_RESPONSE)
                 response?.let {
                     Log.d("EETracker *******", "response $response")
-                    val statusSuccess = response.getApiResponseStatus() ?: false
+                    val statusSuccess = response.isApiResponseSuccess() ?: false
                     if (statusSuccess) {
                         onSuccess(context, response)
                     } else {

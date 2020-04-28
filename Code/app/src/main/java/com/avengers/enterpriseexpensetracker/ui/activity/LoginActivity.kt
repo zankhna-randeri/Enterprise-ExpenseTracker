@@ -132,7 +132,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             override fun onReceive(context: Context?, intent: Intent?) {
                 val response = intent?.getParcelableExtra<LoginResponse>(Constants.EXTRA_API_RESPONSE)
                 response?.let { res ->
-                    val statusSuccess = res.getApiResponseStatus() ?: false
+                    val statusSuccess = res.isApiResponseSuccess() ?: false
                     if (statusSuccess) {
                         onSuccess(context, res)
                     } else {

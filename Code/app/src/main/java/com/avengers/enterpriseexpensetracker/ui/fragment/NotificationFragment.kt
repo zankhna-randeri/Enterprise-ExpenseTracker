@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +27,7 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var viewModel: NotificationViewModel? = null
     private lateinit var notificationView: RecyclerView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var emptyView: TextView
     private var swipeToDeleteCallback: SwipeToDeleteCallback? = null
     private var adapter: NotificationAdapter? = null
 
@@ -76,8 +78,9 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         viewModel?.getNotifications()?.observe(viewLifecycleOwner, Observer { notifications ->
             swipeRefreshLayout.isRefreshing = false
             if (notifications.isNullOrEmpty()) {
-                //TODO: Show empty view
+                showEmptyView()
             } else {
+                hideEmptyView()
                 if (adapter != null) {
                     adapter?.notifyDataSetChanged()
                 } else {
@@ -106,6 +109,7 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun initView(view: View) {
+        emptyView = view.findViewById(R.id.emptyView)
         notificationView = view.findViewById(R.id.notificationView)
         notificationView.layoutManager = LinearLayoutManager(activity)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshNotification)
@@ -117,5 +121,16 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onRefresh() {
         getNotifications()
+    }
+
+    private fun showEmptyView() {
+        emptyView.text = getString(R.string.txt_empty_notification)
+        emptyView.visibility = View.VISIBLE
+        notificationView.visibility = View.GONE
+    }
+
+    private fun hideEmptyView() {
+        emptyView.visibility = View.GONE
+        notificationView.visibility = View.VISIBLE
     }
 }

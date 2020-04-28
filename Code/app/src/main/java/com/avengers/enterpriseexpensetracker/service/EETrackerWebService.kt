@@ -1,6 +1,7 @@
 package com.avengers.enterpriseexpensetracker.service
 
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
+import com.avengers.enterpriseexpensetracker.modal.Notification
 import com.avengers.enterpriseexpensetracker.modal.request.ChangePasswordRequest
 import com.avengers.enterpriseexpensetracker.modal.request.DeviceTokenRequest
 import com.avengers.enterpriseexpensetracker.modal.request.LoginUser
@@ -68,4 +69,7 @@ interface EETrackerWebService {
     fun filterReportsByDate(@Query("emailId") emailId: String,
                             @Query("fromDate") fromDate: String,
                             @Query("toDate") toDate: String): Call<MutableList<ExpenseReport>>
+
+    @GET("/getUserNotifications")
+    fun getNotifications(@Query("emailId") emailId: String): Call<MutableList<Notification>>
 }

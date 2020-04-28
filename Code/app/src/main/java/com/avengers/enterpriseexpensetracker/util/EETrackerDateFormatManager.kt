@@ -108,4 +108,15 @@ class EETrackerDateFormatManager() {
 
         return strDay
     }
+
+    fun formattedDate(dateString: String?): String {
+        // convert to MMMM dd, yyyy format -> June 10, 2020
+        dateString?.let {
+            val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+            val date = dateFormatter.parse(dateString)
+            return SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(date!!)
+        }
+
+        return ""
+    }
 }

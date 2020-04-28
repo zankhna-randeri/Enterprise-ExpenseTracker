@@ -3,6 +3,7 @@ package com.avengers.enterpriseexpensetracker.modal
 import android.os.Parcel
 import android.os.Parcelable
 import com.avengers.enterpriseexpensetracker.util.Constants
+import com.avengers.enterpriseexpensetracker.util.EETrackerDateFormatManager
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -104,22 +105,11 @@ class ExpenseReport : Parcelable {
     }
 
     fun getApprovedDate(): String {
-        return formattedDate(approvedDate)
+        return EETrackerDateFormatManager().formattedDate(approvedDate)
     }
 
     fun getCreationDate(): String {
-        return formattedDate(reportCreateDate)
-    }
-
-    private fun formattedDate(dateString: String?): String {
-        // convert to MMMM dd, yyyy format -> June 10, 2020
-        dateString?.let {
-            val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-            val date = dateFormatter.parse(dateString)
-            return SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(date!!)
-        }
-
-        return ""
+        return EETrackerDateFormatManager().formattedDate(reportCreateDate)
     }
 
     fun getTotal(): Float {

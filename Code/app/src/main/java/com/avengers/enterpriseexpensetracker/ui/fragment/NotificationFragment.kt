@@ -17,6 +17,7 @@ import com.avengers.enterpriseexpensetracker.adapter.NotificationAdapter
 import com.avengers.enterpriseexpensetracker.modal.Notification
 import com.avengers.enterpriseexpensetracker.ui.widget.SwipeToDeleteCallback
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
+import com.avengers.enterpriseexpensetracker.util.NetworkHelper
 import com.avengers.enterpriseexpensetracker.viewmodel.NotificationViewModel
 
 class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -51,11 +52,18 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun enableSwipeToDelete() {
-        activity?.applicationContext?.let {
-            swipeToDeleteCallback = object : SwipeToDeleteCallback(it) {
+        activity?.applicationContext?.let { context ->
+
+            swipeToDeleteCallback = object : SwipeToDeleteCallback(context) {
+
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
                     val position = viewHolder.adapterPosition
                     val notification = adapter?.getNotifications()?.get(position)
+                    notification?.let {
+                        if (NetworkHelper.hasNetworkAccess(context)) {
+                            viewModel?.deleteNotification(it.getId())
+                        }
+                    }
                 }
             }
 

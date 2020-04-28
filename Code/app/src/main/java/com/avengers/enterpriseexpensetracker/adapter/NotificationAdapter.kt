@@ -28,4 +28,8 @@ class NotificationAdapter(private var notifications: List<Notification>) :
             holder.getMessageView().text = notifications[position].getNotificationMessage()
         }
     }
+
+    fun getNotifications(): List<Notification> {
+        return notifications
+    }
 }

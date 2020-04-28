@@ -81,9 +81,9 @@
                     android:text="@string/txt_login"
                     android:theme="@style/ButtonTheme" />
 
-                <TextView
+                <Button
                     android:id="@+id/txt_forgot_pwd"
-                    style="@style/TextDetailTheme"
+                    style="@style/FlatButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_8"

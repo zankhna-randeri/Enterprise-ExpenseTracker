@@ -47,4 +47,8 @@ data class Notification(private var notificationId: Int = -1,
     fun getNotificationMessage(): String {
         return notificatonMessage
     }
+
+    fun getId(): Int {
+        return notificationId
+    }
 }

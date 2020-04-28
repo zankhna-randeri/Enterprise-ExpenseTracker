@@ -77,7 +77,7 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun initObservers() {
-        viewModel?.getApiCallStatus()?.observe(viewLifecycleOwner, Observer { notifications ->
+        viewModel?.getNotifications()?.observe(viewLifecycleOwner, Observer { notifications ->
             swipeRefreshLayout.isRefreshing = false
             if (notifications.isNullOrEmpty()) {
                 //TODO: Show empty view

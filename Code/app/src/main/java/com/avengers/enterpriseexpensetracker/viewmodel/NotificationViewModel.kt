@@ -14,7 +14,7 @@ import retrofit2.Response
 class NotificationViewModel : ViewModel() {
 
     private val webservice = EETrackerWebService.retrofit.create(EETrackerWebService::class.java)
-    private var apiResponse = MutableLiveData<MutableList<Notification>>()
+    private var notifications = MutableLiveData<MutableList<Notification>>()
     private var deleteApiResponse = MutableLiveData<ApiResponse>()
 
     fun getAllNotifications(emailId: String) {
@@ -23,21 +23,21 @@ class NotificationViewModel : ViewModel() {
 
             override fun onFailure(call: Call<MutableList<Notification>>, t: Throwable) {
                 Log.d(Constants.TAG, "API Failed getNotifications")
-                apiResponse.postValue(null)
+                notifications.postValue(null)
             }
 
             override fun onResponse(call: Call<MutableList<Notification>>,
                                     response: Response<MutableList<Notification>>) {
                 response.body()?.let {
                     Log.d(Constants.TAG, "API Response getNotifications: ${response.body().toString()}")
-                    apiResponse.postValue(it)
+                    notifications.postValue(it)
                 }
             }
         })
     }
 
-    fun getApiCallStatus(): MutableLiveData<MutableList<Notification>> {
-        return apiResponse
+    fun getNotifications(): MutableLiveData<MutableList<Notification>> {
+        return notifications
     }
 
     fun deleteNotification(id: Int) {

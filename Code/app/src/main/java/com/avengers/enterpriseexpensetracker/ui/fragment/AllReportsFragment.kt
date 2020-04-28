@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.avengers.enterpriseexpensetracker.R
-import com.avengers.enterpriseexpensetracker.adapter.AllExpenseAdapter
+import com.avengers.enterpriseexpensetracker.adapter.AllExpenseReportAdapter
 import com.avengers.enterpriseexpensetracker.adapter.RecyclerClickListener
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
@@ -309,7 +309,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun bindExpenseView(expenses: List<ExpenseReport>) {
         val adapter =
             activity?.applicationContext?.let {
-                AllExpenseAdapter(it, expenses, object : RecyclerClickListener {
+                AllExpenseReportAdapter(it, expenses, object : RecyclerClickListener {
                     override fun onDeleteClickListener(position: Int) {
                         TODO("Not yet implemented")
                     }

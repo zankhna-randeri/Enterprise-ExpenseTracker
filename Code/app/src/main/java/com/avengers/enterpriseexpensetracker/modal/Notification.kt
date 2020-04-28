@@ -2,6 +2,7 @@ package com.avengers.enterpriseexpensetracker.modal
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.avengers.enterpriseexpensetracker.util.EETrackerDateFormatManager
 
 data class Notification(private var notificationId: Int = 0,
                         private var emailId: String = "",
@@ -37,5 +38,13 @@ data class Notification(private var notificationId: Int = 0,
         override fun newArray(size: Int): Array<Notification?> {
             return arrayOfNulls(size)
         }
+    }
+
+    fun getDate(): String {
+        return EETrackerDateFormatManager().formattedDate(createDate)
+    }
+
+    fun getNotificationMessage(): String {
+        return notificatonMessage
     }
 }

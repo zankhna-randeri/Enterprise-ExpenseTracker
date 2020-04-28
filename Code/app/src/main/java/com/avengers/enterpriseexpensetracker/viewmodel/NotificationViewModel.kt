@@ -33,4 +33,8 @@ class NotificationViewModel : ViewModel() {
             }
         })
     }
+
+    fun getApiCallStatus(): MutableLiveData<MutableList<Notification>> {
+        return apiResponse
+    }
 }

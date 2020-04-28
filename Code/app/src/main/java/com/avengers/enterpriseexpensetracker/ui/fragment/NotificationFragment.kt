@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.avengers.enterpriseexpensetracker.R
+import com.avengers.enterpriseexpensetracker.adapter.NotificationAdapter
 import com.avengers.enterpriseexpensetracker.modal.Notification
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.viewmodel.NotificationViewModel
@@ -46,6 +47,7 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun initObservers() {
         viewModel?.getApiCallStatus()?.observe(viewLifecycleOwner, Observer { notifications ->
+            swipeRefreshLayout.isRefreshing = false
             if (notifications.isNullOrEmpty()) {
                 //TODO: Show empty view
             } else {
@@ -55,9 +57,12 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun bindNotifications(notifications: MutableList<Notification>) {
+        val adapter = NotificationAdapter(notifications)
+        notificationView.adapter = adapter
     }
 
     private fun getNotifications() {
+        swipeRefreshLayout.isRefreshing = true
         EETrackerPreferenceManager.getUserEmail(context)?.let { viewModel?.getAllNotifications(it) }
     }
 
@@ -72,6 +77,6 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
-        TODO("Not yet implemented")
+        getNotifications()
     }
 }

@@ -72,4 +72,7 @@ interface EETrackerWebService {
 
     @GET("/getUserNotifications")
     fun getNotifications(@Query("emailId") emailId: String): Call<MutableList<Notification>>
+
+    @DELETE("/deleteNotification")
+    fun deleteNotification(@Query("notificationId") notificationId: Int): Call<ApiResponse>
 }

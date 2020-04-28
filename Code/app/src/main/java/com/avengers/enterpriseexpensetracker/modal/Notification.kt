@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.avengers.enterpriseexpensetracker.util.EETrackerDateFormatManager
 
-data class Notification(private var notificationId: Int = 0,
+data class Notification(private var notificationId: Int = -1,
                         private var emailId: String = "",
                         private var reportID: String = "",
                         private var notificatonMessage: String = "",

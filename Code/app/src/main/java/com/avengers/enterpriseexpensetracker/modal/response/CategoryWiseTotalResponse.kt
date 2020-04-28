@@ -41,10 +41,6 @@ data class CategoryWiseTotalResponse(
         }
     }
 
-    fun getApiResponseStatus(): Boolean? {
-        return super.isSuccess()
-    }
-
     fun getFoodExpense(): Float {
         return foodTotalExpense.toFloat()
     }

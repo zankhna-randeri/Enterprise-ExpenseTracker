@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.NotificationAdapter
 import com.avengers.enterpriseexpensetracker.modal.Notification
+import com.avengers.enterpriseexpensetracker.ui.widget.SwipeToDeleteCallback
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.viewmodel.NotificationViewModel
 
@@ -22,6 +24,8 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var viewModel: NotificationViewModel? = null
     private lateinit var notificationView: RecyclerView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private var swipeToDeleteCallback: SwipeToDeleteCallback? = null
+    private var adapter: NotificationAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +47,23 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         initView(view)
         initObservers()
         getNotifications()
+        enableSwipeToDelete()
+    }
+
+    private fun enableSwipeToDelete() {
+        activity?.applicationContext?.let {
+            swipeToDeleteCallback = object : SwipeToDeleteCallback(it) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
+                    val position = viewHolder.adapterPosition
+                    val notification = adapter?.getNotifications()?.get(position)
+                }
+            }
+
+            swipeToDeleteCallback?.let { swipeCallback ->
+                val itemTouchHelper = ItemTouchHelper(swipeCallback)
+                itemTouchHelper.attachToRecyclerView(notificationView)
+            }
+        }
     }
 
     private fun initObservers() {
@@ -57,7 +78,7 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun bindNotifications(notifications: MutableList<Notification>) {
-        val adapter = NotificationAdapter(notifications)
+        adapter = NotificationAdapter(notifications)
         notificationView.adapter = adapter
     }
 

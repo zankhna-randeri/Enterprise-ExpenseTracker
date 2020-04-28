@@ -15,6 +15,7 @@
     <color name="color_expense_header">#1F92ED</color>
     <color name="color_layout_bg1">#DEDDDD</color>
     <color name="color_delete">#b80f0a</color>
+    <color name="color_gray">#828282</color>
 
     <!--    Pie chart-->
     <color name="color_chart_1">#6AA786</color>

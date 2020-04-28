@@ -122,6 +122,12 @@
         <item name="android:textSize">@dimen/font_medium</item>
     </style>
 
+    <style name="EmptyTextDetailTheme" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/app_font</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/color_gray</item>
+        <item name="android:textSize">@dimen/font_20</item>
+    </style>
     <style name="AlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:fontFamily">@font/app_font</item>

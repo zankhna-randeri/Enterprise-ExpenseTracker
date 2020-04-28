@@ -28,6 +28,7 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var swipeToDeleteCallback: SwipeToDeleteCallback? = null
     private var adapter: NotificationAdapter? = null
     private var notifications: List<Notification>? = null
+    private var deletePosition
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +83,11 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 //TODO: Show empty view
             } else {
                 bindNotifications(notifications)
+            }
+        })
+
+        viewModel?.getDeleteResponse()?.observe(viewLifecycleOwner, Observer { response ->
+            if (response.getStatus()) {
             }
         })
     }

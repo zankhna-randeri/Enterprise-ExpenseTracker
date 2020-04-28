@@ -41,14 +41,14 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var activityLayout: CoordinatorLayout
-    private lateinit var forgotPwd: Button
+    private lateinit var btnForgotPwd: Button
     private var toolbar: Toolbar? = null
     private var title: TextView? = null
     private var inputEmail: TextInputLayout? = null
     private var inputPassword: TextInputLayout? = null
     private var progress: LinearLayout? = null
     private var txtProgressMsg: TextView? = null
-    private var btnSubmit: Button? = null
+    private lateinit var btnSubmit: Button
     private var loginResponseReceiver: BroadcastReceiver? = null
 
     companion object {
@@ -57,11 +57,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login)
 
         FirebaseApp.initializeApp(applicationContext)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-        FirebaseCrashlytics.getInstance().sendUnsentReports();
+        FirebaseCrashlytics.getInstance().sendUnsentReports()
 
         if (isAlreadyLoggedIn()) {
             val intent = Intent(this, DashboardActivity::class.java)
@@ -97,8 +97,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         txtProgressMsg = progress?.findViewById(R.id.txt_progress_msg)
 
         // Setup forgot password link
-        forgotPwd = findViewById(R.id.btn_forgot_pwd)
-        forgotPwd.paintFlags = forgotPwd.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        btnForgotPwd = findViewById(R.id.btn_forgot_pwd)
+        btnForgotPwd.paintFlags = btnForgotPwd.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        btnForgotPwd.setOnClickListener(this)
+
         setUpToolbar()
 
         initBroadcast()
@@ -166,11 +168,15 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            btnSubmit?.id -> {
+            btnSubmit.id -> {
                 AnalyticsHelper.getInstance().trackLogin(this, TrackLoginData("email"))
                 val email = inputEmail?.editText?.text.toString()
                 val password = inputPassword?.editText?.text.toString()
                 handleLogin(email, password)
+            }
+            btnForgotPwd.id -> {
+                AnalyticsHelper.getInstance().trackForgotPassword(this, TrackLoginData("forgot-Password"))
+                startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java))
             }
         }
     }

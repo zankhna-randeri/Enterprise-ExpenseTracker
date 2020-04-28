@@ -60,7 +60,7 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
 
     private fun initObserver() {
         viewModel?.getApiCallStatus()?.observe(viewLifecycleOwner, Observer { response ->
-            if (response.getStatus()) {
+            if (response.isSuccess()) {
                 view?.findNavController()?.navigateUp()
             } else {
                 activity?.applicationContext?.let { context ->

@@ -112,8 +112,7 @@ class DashboardActivity : AppCompatActivity() {
 
                 response?.let {
                     Log.d(Constants.TAG, "response $response")
-                    val statusSuccess = response.getStatus()
-                    if (statusSuccess) {
+                    if (response.isSuccess()) {
                         onSuccess(context, response)
                     } else {
                         onFailure(context, context?.getString(R.string.txt_api_failed))

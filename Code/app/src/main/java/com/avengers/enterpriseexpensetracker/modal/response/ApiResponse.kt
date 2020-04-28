@@ -28,7 +28,7 @@ open class ApiResponse(private var statusToUI: Boolean = false,
         }
     }
 
-    fun getStatus(): Boolean {
+    fun isSuccess(): Boolean {
         return statusToUI
     }
 

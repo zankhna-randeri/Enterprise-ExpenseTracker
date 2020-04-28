@@ -87,7 +87,7 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         })
 
         viewModel?.getDeleteResponse()?.observe(viewLifecycleOwner, Observer { response ->
-            if (!response.getStatus()) {
+            if (!response.isSuccess()) {
                 activity?.applicationContext?.let {
                     Utility.getInstance().showMsg(it, it.getString(R.string.txt_api_failed))
                 }

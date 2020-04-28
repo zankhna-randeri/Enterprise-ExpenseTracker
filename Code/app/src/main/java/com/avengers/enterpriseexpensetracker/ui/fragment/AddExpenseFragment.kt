@@ -26,7 +26,6 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.app.ActivityCompat
@@ -161,8 +160,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
                 val response = intent?.getParcelableExtra<ApiResponse>(Constants.EXTRA_API_RESPONSE)
                 response?.let {
                     Log.d("EETracker *******", "response $response")
-                    val statusSuccess = response.getStatus() ?: false
-                    if (statusSuccess) {
+                    if (response.isSuccess()) {
                         onSuccess(context, response)
                     } else {
                         onFailure(context, context?.getString(R.string.txt_api_failed))

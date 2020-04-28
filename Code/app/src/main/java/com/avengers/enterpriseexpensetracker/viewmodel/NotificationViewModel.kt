@@ -52,7 +52,7 @@ class NotificationViewModel : ViewModel() {
                 override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                     response.body()?.let {
                         Log.d(Constants.TAG, "API Response deleteNotification: ${response.body().toString()}")
-                        if (it.getStatus()) {
+                        if (it.isSuccess()) {
                             notifications.value?.removeAt(position)
                             notifications.postValue(notifications.value)
                         }

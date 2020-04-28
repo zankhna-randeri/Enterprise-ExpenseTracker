@@ -68,7 +68,7 @@ class HomeViewModel : ViewModel() {
                                     response: Response<CategoryWiseTotalResponse>) {
                 Log.d("EETracker *******", "API Response getCategoryWiseExpenseApproved: ${response.body()}")
                 response.body()?.let {
-                    if (it.getStatus()) {
+                    if (it.isSuccess()) {
                         categoryWiseTotal.postValue(it)
                         apiCallFailed?.postValue(false)
                     } else {
@@ -119,7 +119,7 @@ class HomeViewModel : ViewModel() {
 
                 override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                     response.body()?.let {
-                        if (it.getStatus()) {
+                        if (it.isSuccess()) {
                             pendingExpenses.value?.removeAt(position)
                             pendingExpenses.postValue(pendingExpenses.value)
                             apiCallFailed?.postValue(false)

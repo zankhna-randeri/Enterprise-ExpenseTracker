@@ -40,20 +40,27 @@ class NotificationViewModel : ViewModel() {
         return notifications
     }
 
-    fun deleteNotification(id: Int) {
-        val call = webservice.deleteNotification(id)
-        call.enqueue(object : Callback<ApiResponse> {
-            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                deleteApiResponse.postValue(ApiResponse(false))
-            }
-
-            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                response.body()?.let {
-                    Log.d(Constants.TAG, "API Response deleteNotification: ${response.body().toString()}")
-                    deleteApiResponse.postValue(it)
+    fun deleteNotification(position: Int) {
+        val notificationId = notifications.value?.get(position)?.getId()
+        notificationId?.let { id ->
+            val call = webservice.deleteNotification(id)
+            call.enqueue(object : Callback<ApiResponse> {
+                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                    deleteApiResponse.postValue(ApiResponse(false))
                 }
-            }
-        })
+
+                override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                    response.body()?.let {
+                        Log.d(Constants.TAG, "API Response deleteNotification: ${response.body().toString()}")
+                        if (it.getStatus()) {
+                            notifications.value?.removeAt(position)
+                            notifications.postValue(notifications.value)
+                        }
+                        deleteApiResponse.postValue(it)
+                    }
+                }
+            })
+        }
     }
 
     fun getDeleteResponse(): MutableLiveData<ApiResponse> {

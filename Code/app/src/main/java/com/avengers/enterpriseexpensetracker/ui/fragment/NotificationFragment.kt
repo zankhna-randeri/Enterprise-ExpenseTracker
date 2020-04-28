@@ -18,6 +18,7 @@ import com.avengers.enterpriseexpensetracker.modal.Notification
 import com.avengers.enterpriseexpensetracker.ui.widget.SwipeToDeleteCallback
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.NetworkHelper
+import com.avengers.enterpriseexpensetracker.util.Utility
 import com.avengers.enterpriseexpensetracker.viewmodel.NotificationViewModel
 
 class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -28,7 +29,6 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var swipeToDeleteCallback: SwipeToDeleteCallback? = null
     private var adapter: NotificationAdapter? = null
     private var notifications: List<Notification>? = null
-    private var deletePosition
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +87,10 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         })
 
         viewModel?.getDeleteResponse()?.observe(viewLifecycleOwner, Observer { response ->
-            if (response.getStatus()) {
+            if (!response.getStatus()) {
+                activity?.applicationContext?.let {
+                    Utility.getInstance().showMsg(it, it.getString(R.string.txt_api_failed))
+                }
             }
         })
     }

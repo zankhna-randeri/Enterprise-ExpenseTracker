@@ -35,6 +35,7 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var toolbar: Toolbar
     private lateinit var title: TextView
     private var requestOTPResponseReceiver: BroadcastReceiver? = null
+    private var submitOTPResponseReceiver: BroadcastReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +58,17 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
             val intentFilter = IntentFilter(Constants.BROADCAST_REQUEST_OTP)
             LocalBroadcastManager.getInstance(this).registerReceiver(it, intentFilter)
         }
+
+        submitOTPResponseReceiver?.let {
+            val intentFilter = IntentFilter(Constants.BROADCAST_SUBMIT_OTP)
+            LocalBroadcastManager.getInstance(this).registerReceiver(it, intentFilter)
+        }
     }
 
     override fun onPause() {
         super.onPause()
         requestOTPResponseReceiver?.let { LocalBroadcastManager.getInstance(this).unregisterReceiver(it) }
+        submitOTPResponseReceiver?.let { LocalBroadcastManager.getInstance(this).unregisterReceiver(it) }
     }
 
     private fun initView() {
@@ -158,6 +165,30 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
                         onSuccess(context, response)
                     } else {
                         onFailure(context, context?.getString(R.string.txt_api_failed))
+                    }
+                }
+            }
+        }
+
+        submitOTPResponseReceiver = object : ApiResponseReceiver() {
+            override fun onSuccess(context: Context?, response: ApiResponse) {
+                finish()
+                Utility.getInstance().showMsg(this@ForgotPasswordActivity, response.getMessage())
+            }
+
+            override fun onFailure(context: Context?, message: String?) {
+                context?.let { Utility.getInstance().showMsg(it, message) }
+            }
+
+            override fun onReceive(context: Context?, intent: Intent?) {
+                // TODO: hideLoadingView
+                val response = intent?.getParcelableExtra<ApiResponse>(Constants.EXTRA_API_RESPONSE)
+                response?.let {
+                    Log.d(Constants.TAG, "response $response")
+                    if (response.isSuccess()) {
+                        onSuccess(context, response)
+                    } else {
+                        onFailure(context, response.getMessage())
                     }
                 }
             }

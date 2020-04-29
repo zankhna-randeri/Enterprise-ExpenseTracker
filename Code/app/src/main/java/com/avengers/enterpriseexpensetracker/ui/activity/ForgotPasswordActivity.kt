@@ -167,10 +167,10 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
     private fun submitOTP(emailId: String, otp: String, password: String) {
         //TODO: Show Loading view
         val intent = Intent(this, EETrackerJobService::class.java).apply {
-            putExtra(Constants.EXTRA_EMAIL, otp)
+            putExtra(Constants.EXTRA_EMAIL, emailId)
             putExtra(Constants.EXTRA_SUBMIT_OTP, otp)
             putExtra(Constants.EXTRA_PASSWORD, password)
-            action = Constants.ACTION_REQUEST_OTP
+            action = Constants.ACTION_SUBMIT_OTP
         }
         Utility.getInstance().startExpenseTrackerService(this, intent)
     }

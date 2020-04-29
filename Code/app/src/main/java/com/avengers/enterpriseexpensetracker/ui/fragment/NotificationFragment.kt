@@ -1,6 +1,7 @@
 package com.avengers.enterpriseexpensetracker.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -9,14 +10,17 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.NotificationAdapter
+import com.avengers.enterpriseexpensetracker.adapter.RecyclerClickListener
 import com.avengers.enterpriseexpensetracker.modal.Notification
 import com.avengers.enterpriseexpensetracker.ui.widget.SwipeToDeleteCallback
+import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.NetworkHelper
 import com.avengers.enterpriseexpensetracker.util.Utility
@@ -49,9 +53,19 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
-        initObservers()
         getNotifications()
         enableSwipeToDelete()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initObservers()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel?.clearExpenseReport()
+        Log.d(Constants.TAG, "onDestroyView -------- NotificationFragment")
     }
 
     private fun enableSwipeToDelete() {
@@ -83,6 +97,7 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 hideEmptyView()
                 if (adapter != null) {
                     adapter?.notifyDataSetChanged()
+                    notificationView.adapter = adapter
                 } else {
                     bindNotifications(notifications)
                 }
@@ -96,10 +111,32 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
             }
         })
+
+        viewModel?.getExpenseReport()?.observe(viewLifecycleOwner, Observer { expenseReport ->
+            if (expenseReport != null) {
+                val action =
+                    NotificationFragmentDirections.actionNavNotificationToNavReportDetail(expenseReport)
+                view?.findNavController()?.navigate(action)
+            }
+        })
     }
 
     private fun bindNotifications(notifications: List<Notification>) {
-        adapter = NotificationAdapter(notifications)
+        adapter = NotificationAdapter(notifications, object : RecyclerClickListener {
+            override fun onDeleteClickListener(position: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onItemClickListener(position: Int) {
+                // TODO: show loadingview
+                viewModel?.getExpenseReport(position)
+            }
+
+            override fun btnViewReceiptClickListener(position: Int) {
+                TODO("Not yet implemented")
+            }
+
+        })
         notificationView.adapter = adapter
     }
 

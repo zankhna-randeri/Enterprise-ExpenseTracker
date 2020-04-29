@@ -26,7 +26,7 @@ import retrofit2.http.Url
 
 interface EETrackerWebService {
     companion object {
-        private const val BASE_URL = "http://expensetracker.us-east-1.elasticbeanstalk.com"
+        private const val BASE_URL = "https://www.enterprise-expense-tracker.com"
 
         val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -75,4 +75,7 @@ interface EETrackerWebService {
 
     @DELETE("/deleteNotification")
     fun deleteNotification(@Query("notificationId") notificationId: Int): Call<ApiResponse>
+
+    @POST("/generateForgotPasswordLink")
+    fun requestOTP(@Query("emailId") emailId: String, @Query("tempPassword") otp: String): Call<ApiResponse>
 }

@@ -7,14 +7,15 @@ import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.viewholder.NotificationViewHolder
 import com.avengers.enterpriseexpensetracker.modal.Notification
 
-class NotificationAdapter(private var notifications: List<Notification>) :
+class NotificationAdapter(private var notifications: List<Notification>,
+                          private var clickListener: RecyclerClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         lateinit var viewHolder: RecyclerView.ViewHolder
         val inflater = LayoutInflater.from(parent.context)
         val reqViewHolder = inflater.inflate(R.layout.item_notification, parent, false)
-        viewHolder = NotificationViewHolder(reqViewHolder)
+        viewHolder = NotificationViewHolder(reqViewHolder, clickListener)
         return viewHolder
     }
 

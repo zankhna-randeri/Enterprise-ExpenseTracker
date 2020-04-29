@@ -92,7 +92,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         inputEmail = findViewById(R.id.txt_input_email)
         inputPassword = findViewById(R.id.txt_input_password)
         btnSubmit = findViewById(R.id.btn_login_submit)
-        btnSubmit?.setOnClickListener(this)
+        btnSubmit.setOnClickListener(this)
         progress = findViewById(R.id.lyt_progress)
         txtProgressMsg = progress?.findViewById(R.id.txt_progress_msg)
 

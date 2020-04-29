@@ -15,6 +15,7 @@ import androidx.navigation.findNavController
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.NetworkHelper
+import com.avengers.enterpriseexpensetracker.util.Utility
 import com.avengers.enterpriseexpensetracker.viewmodel.ChangePasswordViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -82,7 +83,7 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
                 val oldPassword = oldPassword.editText?.text.toString()
                 val newPassword = newPassword.editText?.text.toString()
                 val confirmPassword = confirmNewPassword.editText?.text.toString()
-                if (isAllFieldsValid(oldPassword, newPassword, confirmPassword)) {
+                if (Utility.getInstance().isAllFieldsValid(oldPassword, newPassword, confirmPassword)) {
                     if ((newPassword == confirmPassword)) {
                         activity?.applicationContext?.let { context ->
                             if (NetworkHelper.hasNetworkAccess(context)) {
@@ -97,12 +98,5 @@ class ChangePasswordFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
-    }
-
-    private fun isAllFieldsValid(oldPassword: String?,
-                                 newPassword: String?,
-                                 confirmPassword: String?): Boolean {
-        return !(oldPassword.isNullOrBlank()) && !(newPassword.isNullOrBlank()) &&
-                !(confirmPassword.isNullOrBlank())
     }
 }

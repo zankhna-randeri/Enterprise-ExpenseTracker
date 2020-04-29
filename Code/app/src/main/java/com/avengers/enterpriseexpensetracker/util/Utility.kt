@@ -46,4 +46,14 @@ class Utility {
     fun isValidEmail(email: String?): Boolean {
         return (!email.isNullOrBlank()) && Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
+
+    fun isAllFieldsValid(vararg fields: String?): Boolean {
+        for (field in fields) {
+            if (field.isNullOrBlank()) {
+                return false
+            }
+        }
+
+        return true
+    }
 }

@@ -3,6 +3,7 @@ package com.avengers.enterpriseexpensetracker.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -40,5 +41,9 @@ class Utility {
             view = View(activity)
         }
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    fun isValidEmail(email: String?): Boolean {
+        return (!email.isNullOrBlank()) && Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 }

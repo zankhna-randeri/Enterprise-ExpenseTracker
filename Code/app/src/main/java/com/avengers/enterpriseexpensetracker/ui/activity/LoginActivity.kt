@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
-import android.util.Patterns
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -205,7 +204,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         try {
             Utility.getInstance().hideKeyboard(this)
 
-            if (password.isNullOrBlank() || !isValidEmail(email)) {
+            if (password.isNullOrBlank() || !Utility.getInstance().isValidEmail(email)) {
                 Utility.getInstance().showMsg(applicationContext,
                         getString(R.string.enter_login_info))
             } else {
@@ -224,10 +223,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             e.printStackTrace()
             hideLoadingView()
         }
-    }
-
-    fun isValidEmail(email: String?): Boolean {
-        return (!email.isNullOrBlank()) && Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     private fun showLoadingView() {

@@ -51,4 +51,8 @@ data class Notification(private var notificationId: Int = -1,
     fun getId(): Int {
         return notificationId
     }
+
+    fun getReportId(): String {
+        return reportID
+    }
 }

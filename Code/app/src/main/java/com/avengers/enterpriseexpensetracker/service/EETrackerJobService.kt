@@ -19,8 +19,6 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
 
 /**
@@ -85,7 +83,7 @@ class EETrackerJobService : JobIntentService() {
                     val emailId = intent.getStringExtra(Constants.EXTRA_EMAIL)
                     val otp = intent.getStringExtra(Constants.EXTRA_REQUEST_OTP)
                     if (!emailId.isNullOrBlank() && !otp.isNullOrBlank()) {
-                        handleActionRequestOPT(emailId, otp, action)
+                        handleActionRequestOTP(emailId, otp, action)
                     } else {
                         return
                     }
@@ -214,7 +212,7 @@ class EETrackerJobService : JobIntentService() {
         }
     }
 
-    private fun handleActionRequestOPT(emailId: String, otp: String, action: String) {
+    private fun handleActionRequestOTP(emailId: String, otp: String, action: String) {
         if (NetworkHelper.hasNetworkAccess(applicationContext)) {
             val call = webservice.requestOTP(emailId, otp)
             val response = call.execute()

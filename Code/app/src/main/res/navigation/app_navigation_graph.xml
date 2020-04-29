@@ -56,5 +56,9 @@
         android:id="@+id/nav_notification"
         android:name="com.avengers.enterpriseexpensetracker.ui.fragment.NotificationFragment"
         android:label="@string/action_notification"
-        tools:layout="@layout/fragment_notification" />
+        tools:layout="@layout/fragment_notification">
+        <action
+            android:id="@+id/action_nav_notification_to_nav_report_detail"
+            app:destination="@id/nav_report_detail" />
+    </fragment>
 </navigation>

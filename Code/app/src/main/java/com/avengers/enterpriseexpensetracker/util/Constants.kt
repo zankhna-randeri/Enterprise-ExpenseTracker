@@ -56,6 +56,7 @@ class Constants {
         const val EXTRA_REQUEST_OTP = "request_otp"
         const val EXTRA_SUBMIT_OTP = "submit_otp"
         const val EXTRA_PASSWORD = "password"
+        const val EXTRA_SHOULD_START_NOTIFICATION = "start_notification"
 
         // Broadcast
         const val BROADCAST_LOGIN_RESPONSE =

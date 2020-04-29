@@ -10,7 +10,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.avengers.enterpriseexpensetracker.R
-import com.avengers.enterpriseexpensetracker.ui.activity.NotificationActivity
+import com.avengers.enterpriseexpensetracker.ui.activity.DashboardActivity
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -39,7 +39,9 @@ class EETrackerFCMService : FirebaseMessagingService() {
 
     private fun sendNotification(messageBody: String) {
 
-        val intent = Intent(this, NotificationActivity::class.java)
+        val intent = Intent(this, DashboardActivity::class.java).apply {
+            putExtra(Constants.EXTRA_SHOULD_START_NOTIFICATION, true)
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT)

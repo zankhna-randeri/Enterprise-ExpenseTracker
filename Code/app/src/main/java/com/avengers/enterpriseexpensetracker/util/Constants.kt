@@ -37,6 +37,8 @@ class Constants {
             "com.avengers.enterpriseexpensetracker.action.UPDATE_DEVICE_TOKEN"
         const val ACTION_FILTER_REPORTS_BY_DATE =
             "com.avengers.enterpriseexpensetracker.action.FILTER_REPORTS_BY_DATE"
+        const val ACTION_REQUEST_OTP =
+            "com.avengers.enterpriseexpensetracker.action.REQUEST_OTP"
 
         // Extras
         const val EXTRA_LOGIN_USER = "login_user"
@@ -48,6 +50,8 @@ class Constants {
         const val EXTRA_APP_DATA_BUNDLE = "app_data_bundle"
         const val EXTRA_FROM_DATE = "from_date"
         const val EXTRA_TO_DATE = "to_date"
+        const val EXTRA_EMAIL = "email"
+        const val EXTRA_REQUEST_OTP = "request_otp"
 
         // Broadcast
         const val BROADCAST_LOGIN_RESPONSE =
@@ -62,6 +66,8 @@ class Constants {
             "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_UPDATE_DEVICE_TOKEN"
         const val BROADCAST_FILTER_REPORTS_BY_DATE =
             "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_FILTER_REPORTS_BY_DATE"
+        const val BROADCAST_REQUEST_OTP =
+            "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_REQUEST_OTP"
 
         // Firebase
         const val FCM_PAYLOAD_REPORT_ID = "reportId"

@@ -19,6 +19,8 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 
 /**
@@ -75,6 +77,15 @@ class EETrackerJobService : JobIntentService() {
                     val toDate = intent.getStringExtra(Constants.EXTRA_TO_DATE)
                     if (!fromDate.isNullOrBlank() && !toDate.isNullOrBlank()) {
                         handleActionReportFilterByDate(fromDate, toDate, action)
+                    } else {
+                        return
+                    }
+                }
+                Constants.ACTION_REQUEST_OTP -> {
+                    val emailId = intent.getStringExtra(Constants.EXTRA_EMAIL)
+                    val otp = intent.getStringExtra(Constants.EXTRA_REQUEST_OTP)
+                    if (!emailId.isNullOrBlank() && !otp.isNullOrBlank()) {
+                        handleActionRequestOPT(emailId, otp, action)
                     } else {
                         return
                     }
@@ -203,6 +214,16 @@ class EETrackerJobService : JobIntentService() {
         }
     }
 
+    private fun handleActionRequestOPT(emailId: String, otp: String, action: String) {
+        if (NetworkHelper.hasNetworkAccess(applicationContext)) {
+            val call = webservice.requestOTP(emailId, otp)
+            val response = call.execute()
+            Log.d(Constants.TAG,
+                    "API Response handleActionRequestOPT: $response")
+            handleApiResponse(response.body(), action)
+        }
+    }
+
     private fun handleApiResponse(response: ApiResponse?, action: String, appDataBundle: Bundle?) {
         var responseIntent: Intent? = null
         when (action) {
@@ -223,6 +244,9 @@ class EETrackerJobService : JobIntentService() {
             }
             Constants.ACTION_FILTER_REPORTS_BY_DATE -> {
                 responseIntent = Intent(Constants.BROADCAST_FILTER_REPORTS_BY_DATE)
+            }
+            Constants.ACTION_REQUEST_OTP -> {
+                responseIntent = Intent(Constants.BROADCAST_REQUEST_OTP)
             }
         }
 

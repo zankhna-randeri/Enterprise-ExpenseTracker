@@ -155,7 +155,7 @@ class EETrackerJobService : JobIntentService() {
                 Log.d(Constants.TAG, "Submit Report Lambda query : $queryParams")
 
                 val emailLambda = webservice.submitReportLambda(lambdaUrl, queryParams)
-                Log.d("EETracker *******", "API Request expenseReport: $emailLambda")
+                Log.d("EETracker *******", "API Request expenseReportLambda: $emailLambda")
                 val lambdaRes = emailLambda.execute()
 
                 // handle submit report api response

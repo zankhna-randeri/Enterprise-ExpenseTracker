@@ -82,8 +82,8 @@ class ExpenseReport : Parcelable {
         parcel.writeString(reportLastModified)
         parcel.writeString(reportStatus)
         parcel.writeDouble(reportTotalAmount)
-        parcel.writeTypedList(expenseDetailsRequest)
         parcel.writeString(reportComment)
+        parcel.writeTypedList(expenseDetailsRequest)
     }
 
     override fun describeContents(): Int {

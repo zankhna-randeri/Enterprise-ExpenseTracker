@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -48,7 +49,15 @@ class DashboardActivity : AppCompatActivity() {
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
+
+        val navHostFragment: NavHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        val navInflater = navController.navInflater
+        val navGraph = navInflater.inflate(R.navigation.app_navigation_graph)
+        navGraph.startDestination = getStartDestination(intent)
+        navController.graph = navGraph
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(setOf(
@@ -69,6 +78,14 @@ class DashboardActivity : AppCompatActivity() {
 
         initBroadcastReceiver()
         updateDeviceTokenIfRequired()
+    }
+
+    private fun getStartDestination(intent: Intent): Int {
+        return if (intent.getBooleanExtra(Constants.EXTRA_SHOULD_START_NOTIFICATION, false)) {
+            R.id.nav_notification
+        } else {
+            R.id.nav_home
+        }
     }
 
     override fun onPause() {

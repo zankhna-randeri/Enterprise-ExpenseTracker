@@ -3,6 +3,7 @@ package com.avengers.enterpriseexpensetracker.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.Notification
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.service.EETrackerWebService
@@ -16,13 +17,14 @@ class NotificationViewModel : ViewModel() {
     private val webservice = EETrackerWebService.retrofit.create(EETrackerWebService::class.java)
     private var notifications = MutableLiveData<MutableList<Notification>>()
     private var deleteApiResponse = MutableLiveData<ApiResponse>()
+    private var expenseReport = MutableLiveData<ExpenseReport>()
 
     fun getAllNotifications(emailId: String) {
         val call = webservice.getNotifications(emailId)
         call.enqueue(object : Callback<MutableList<Notification>> {
 
             override fun onFailure(call: Call<MutableList<Notification>>, t: Throwable) {
-                Log.d(Constants.TAG, "API Failed getNotifications")
+                Log.e(Constants.TAG, "API Failed getNotifications")
                 notifications.postValue(null)
             }
 
@@ -65,5 +67,34 @@ class NotificationViewModel : ViewModel() {
 
     fun getDeleteResponse(): MutableLiveData<ApiResponse> {
         return deleteApiResponse
+    }
+
+    fun getExpenseReport(position: Int) {
+        val reportId = notifications.value?.get(position)?.getReportId()
+        reportId?.let { id ->
+            val call = webservice.getReportDetailById(id)
+            call.enqueue(object : Callback<ExpenseReport?> {
+                override fun onFailure(call: Call<ExpenseReport?>, t: Throwable) {
+                    Log.e(Constants.TAG, "API Failed getReportDetailById")
+                    expenseReport.postValue(null)
+                }
+
+                override fun onResponse(call: Call<ExpenseReport?>, response: Response<ExpenseReport?>) {
+                    response.body()?.let {
+                        Log.d(Constants.TAG,
+                                "API Response getReportDetailById: ${response.body().toString()}")
+                        expenseReport.postValue(it)
+                    }
+                }
+            })
+        }
+    }
+
+    fun getExpenseReport(): MutableLiveData<ExpenseReport> {
+        return expenseReport
+    }
+
+    fun clearExpenseReport() {
+        expenseReport.postValue(null)
     }
 }

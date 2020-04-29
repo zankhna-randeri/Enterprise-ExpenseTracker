@@ -174,7 +174,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 handleLogin(email, password)
             }
             btnForgotPwd.id -> {
-                AnalyticsHelper.getInstance().trackForgotPassword(this, TrackLoginData("forgot-Password"))
+                AnalyticsHelper.getInstance().trackForgotPassword(this, TrackLoginData("forgot_Password"))
                 startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java))
             }
         }

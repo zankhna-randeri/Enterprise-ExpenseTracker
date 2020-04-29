@@ -33,4 +33,11 @@ class AnalyticsHelper {
             putString(FirebaseAnalytics.Param.METHOD, trackingData.getMethod())
         })
     }
+
+    fun trackForgotPassword(context: Context, trackingData: TrackLoginData) {
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context)
+        firebaseAnalytics.logEvent("click_event", Bundle().apply {
+            putString("button_click", trackingData.getMethod())
+        })
+    }
 }

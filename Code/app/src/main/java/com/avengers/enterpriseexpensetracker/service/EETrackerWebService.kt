@@ -82,4 +82,7 @@ interface EETrackerWebService {
 
     @POST("/resetForgotPassword")
     fun submitOTPForgotPassword(@Body userPwdResetRequest: ForgotPasswordSubmitOTPRequest): Call<ApiResponse>
+
+    @GET("/getReport")
+    fun getReportDetailById(@Query("reportID") reportId: String): Call<ExpenseReport?>
 }

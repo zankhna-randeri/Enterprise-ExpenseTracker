@@ -8,6 +8,7 @@ import androidx.core.app.JobIntentService
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.request.DeviceTokenRequest
+import com.avengers.enterpriseexpensetracker.modal.request.ForgotPasswordSubmitOTPRequest
 import com.avengers.enterpriseexpensetracker.modal.request.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.GetAllReportsResponse
@@ -15,6 +16,7 @@ import com.avengers.enterpriseexpensetracker.modal.response.LoginResponse
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.EETrackerPreferenceManager
 import com.avengers.enterpriseexpensetracker.util.NetworkHelper
+import com.avengers.enterpriseexpensetracker.util.Utility
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -84,6 +86,16 @@ class EETrackerJobService : JobIntentService() {
                     val otp = intent.getStringExtra(Constants.EXTRA_REQUEST_OTP)
                     if (!emailId.isNullOrBlank() && !otp.isNullOrBlank()) {
                         handleActionRequestOTP(emailId, otp, action)
+                    } else {
+                        return
+                    }
+                }
+                Constants.ACTION_SUBMIT_OTP -> {
+                    val emailId = intent.getStringExtra(Constants.EXTRA_EMAIL)
+                    val otp = intent.getStringExtra(Constants.EXTRA_SUBMIT_OTP)
+                    val password = intent.getStringExtra(Constants.EXTRA_PASSWORD)
+                    if (Utility.getInstance().isAllFieldsValid(emailId, otp, password)) {
+                        handleActionSubmitOTP(emailId, otp, password, action)
                     } else {
                         return
                     }
@@ -222,6 +234,20 @@ class EETrackerJobService : JobIntentService() {
         }
     }
 
+    private fun handleActionSubmitOTP(emailId: String,
+                                      otp: String,
+                                      password: String,
+                                      action: String) {
+        if (NetworkHelper.hasNetworkAccess(applicationContext)) {
+            val request = ForgotPasswordSubmitOTPRequest(emailId, otp, password)
+            val call = webservice.submitOTPForgotPassword(request)
+            val response = call.execute()
+            Log.d(Constants.TAG,
+                    "API Response handleActionRequestOPT: $response")
+            handleApiResponse(response.body(), action)
+        }
+    }
+
     private fun handleApiResponse(response: ApiResponse?, action: String, appDataBundle: Bundle?) {
         var responseIntent: Intent? = null
         when (action) {
@@ -245,6 +271,9 @@ class EETrackerJobService : JobIntentService() {
             }
             Constants.ACTION_REQUEST_OTP -> {
                 responseIntent = Intent(Constants.BROADCAST_REQUEST_OTP)
+            }
+            Constants.ACTION_SUBMIT_OTP -> {
+                responseIntent = Intent(Constants.BROADCAST_SUBMIT_OTP)
             }
         }
 

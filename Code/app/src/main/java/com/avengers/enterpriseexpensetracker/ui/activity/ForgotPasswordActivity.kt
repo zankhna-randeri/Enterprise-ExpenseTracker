@@ -94,14 +94,8 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
                 inputEmail.error = null
                 val emailId = inputEmail.editText?.text.toString()
                 if (Utility.getInstance().isValidEmail(emailId)) {
-                    //TODO: Show Loading view
                     val otp = generateOTP(7)
-                    val intent = Intent(this, EETrackerJobService::class.java).apply {
-                        putExtra(Constants.EXTRA_EMAIL, emailId)
-                        putExtra(Constants.EXTRA_REQUEST_OTP, otp)
-                        action = Constants.ACTION_REQUEST_OTP
-                    }
-                    Utility.getInstance().startExpenseTrackerService(this, intent)
+                    requestOTP(emailId, otp)
                 } else {
                     inputEmail.error = getString(R.string.txt_error_invalid_email)
                 }
@@ -109,6 +103,16 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
             btnSubmitOTP.id -> {
             }
         }
+    }
+
+    private fun requestOTP(emailId: String, otp: String) {
+        //TODO: Show Loading view
+        val intent = Intent(this, EETrackerJobService::class.java).apply {
+            putExtra(Constants.EXTRA_EMAIL, emailId)
+            putExtra(Constants.EXTRA_REQUEST_OTP, otp)
+            action = Constants.ACTION_REQUEST_OTP
+        }
+        Utility.getInstance().startExpenseTrackerService(this, intent)
     }
 
     private fun generateOTP(length: Int): String {

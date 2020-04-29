@@ -4,6 +4,7 @@ import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
 import com.avengers.enterpriseexpensetracker.modal.Notification
 import com.avengers.enterpriseexpensetracker.modal.request.ChangePasswordRequest
 import com.avengers.enterpriseexpensetracker.modal.request.DeviceTokenRequest
+import com.avengers.enterpriseexpensetracker.modal.request.ForgotPasswordSubmitOTPRequest
 import com.avengers.enterpriseexpensetracker.modal.request.LoginUser
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
 import com.avengers.enterpriseexpensetracker.modal.response.CategoryWiseTotalResponse
@@ -78,4 +79,7 @@ interface EETrackerWebService {
 
     @POST("/generateForgotPasswordLink")
     fun requestOTP(@Query("emailId") emailId: String, @Query("tempPassword") otp: String): Call<ApiResponse>
+
+    @POST("/resetForgotPassword")
+    fun submitOTPForgotPassword(@Body userPwdResetRequest: ForgotPasswordSubmitOTPRequest): Call<ApiResponse>
 }

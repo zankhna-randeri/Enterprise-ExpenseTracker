@@ -14,6 +14,7 @@ import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.Utility
 import com.google.android.material.textfield.TextInputLayout
+import java.security.SecureRandom
 
 class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -71,8 +72,10 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
                 inputEmail.error = null
                 val emailId = inputEmail.editText?.text.toString()
                 if (Utility.getInstance().isValidEmail(emailId)) {
+                    val otp = generateOTP(7)
                     val intent = Intent(this, EETrackerJobService::class.java).apply {
                         putExtra(Constants.EXTRA_EMAIL, emailId)
+                        putExtra(Constants.EXTRA_REQUEST_OTP, otp)
                         action = Constants.ACTION_REQUEST_OTP
                     }
                     Utility.getInstance().startExpenseTrackerService(this, intent)
@@ -81,8 +84,19 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             btnSubmitOTP.id -> {
-
             }
         }
+    }
+
+    private fun generateOTP(length: Int): String {
+        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        val random = SecureRandom()
+        var otp = ""
+        for (i in 0 until length) {
+            val randomIndex = random.nextInt(chars.length)
+            otp += chars[randomIndex]
+        }
+
+        return otp
     }
 }

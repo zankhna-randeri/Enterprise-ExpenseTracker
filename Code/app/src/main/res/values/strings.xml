@@ -10,6 +10,9 @@
     <string name="failed_login">Login failed! Please try again.</string>
     <string name="txt_login_progress">Login In Progress</string>
     <string name="txt_logout_done">You are logged out</string>
+    <string name="txt_forgot_pwd_otp_msg">Please submit your email and we will send you unique code to reset your password.</string>
+    <string name="txt_otp_received_msg">Please enter unique OTP you received in your email to reset your password.</string>
+    <string name="txt_hint_otp">Enter OTP</string>
 
     <!--    TTS-->
     <string name="tts_init_failed">TTS initialization failed!</string>

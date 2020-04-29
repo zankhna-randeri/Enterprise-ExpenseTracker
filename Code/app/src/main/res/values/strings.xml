@@ -40,6 +40,7 @@
     <string name="txt_yes">Yes</string>
     <string name="txt_no">No</string>
     <string name="txt_submit">Submit</string>
+    <string name="txt_error_invalid_email">Invalid emailId</string>
 
     <!--    Dashboard-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

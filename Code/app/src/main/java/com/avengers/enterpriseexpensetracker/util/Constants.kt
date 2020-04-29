@@ -39,6 +39,8 @@ class Constants {
             "com.avengers.enterpriseexpensetracker.action.FILTER_REPORTS_BY_DATE"
         const val ACTION_REQUEST_OTP =
             "com.avengers.enterpriseexpensetracker.action.REQUEST_OTP"
+        const val ACTION_SUBMIT_OTP =
+            "com.avengers.enterpriseexpensetracker.action.SUBMIT_OTP"
 
         // Extras
         const val EXTRA_LOGIN_USER = "login_user"
@@ -52,6 +54,8 @@ class Constants {
         const val EXTRA_TO_DATE = "to_date"
         const val EXTRA_EMAIL = "email"
         const val EXTRA_REQUEST_OTP = "request_otp"
+        const val EXTRA_SUBMIT_OTP = "submit_otp"
+        const val EXTRA_PASSWORD = "password"
 
         // Broadcast
         const val BROADCAST_LOGIN_RESPONSE =
@@ -68,6 +72,8 @@ class Constants {
             "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_FILTER_REPORTS_BY_DATE"
         const val BROADCAST_REQUEST_OTP =
             "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_REQUEST_OTP"
+        const val BROADCAST_SUBMIT_OTP =
+            "com.avengers.enterpriseexpensetracker.service.action.BROADCAST_SUBMIT_OTP"
 
         // Firebase
         const val FCM_PAYLOAD_REPORT_ID = "reportId"

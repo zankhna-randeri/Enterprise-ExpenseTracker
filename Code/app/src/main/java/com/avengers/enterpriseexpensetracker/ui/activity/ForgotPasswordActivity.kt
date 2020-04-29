@@ -101,6 +101,18 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             btnSubmitOTP.id -> {
+                inputConfirmNewPassword.error = null
+                val emailId = inputEmail.editText?.text.toString()
+                val otp = inputOTP.editText?.text.toString()
+                val newPassword = inputNewPassword.editText?.text.toString()
+                val confirmPassword = inputConfirmNewPassword.editText?.text.toString()
+                if (Utility.getInstance().isAllFieldsValid(emailId, otp, newPassword, confirmPassword)) {
+                    if (newPassword == confirmPassword) {
+                        submitOTP(emailId, otp, newPassword)
+                    } else {
+                        inputConfirmNewPassword.error = getString(R.string.txt_error_confirm_pwd)
+                    }
+                }
             }
         }
     }
@@ -150,5 +162,16 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    private fun submitOTP(emailId: String, otp: String, password: String) {
+        //TODO: Show Loading view
+        val intent = Intent(this, EETrackerJobService::class.java).apply {
+            putExtra(Constants.EXTRA_EMAIL, otp)
+            putExtra(Constants.EXTRA_SUBMIT_OTP, otp)
+            putExtra(Constants.EXTRA_PASSWORD, password)
+            action = Constants.ACTION_REQUEST_OTP
+        }
+        Utility.getInstance().startExpenseTrackerService(this, intent)
     }
 }

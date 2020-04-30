@@ -18,4 +18,6 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <include layout="@layout/app_empty_view" />
+
+    <include layout="@layout/app_progress" />
 </FrameLayout>

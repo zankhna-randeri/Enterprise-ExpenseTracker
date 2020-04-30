@@ -13,6 +13,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.findNavController
@@ -43,6 +44,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var fromDateInput: TextInputLayout
     private lateinit var toDateInput: TextInputLayout
     private lateinit var btnFilterDate: Button
+    private lateinit var emptyView: TextView
     private var fetchAllReportsResponseReceiver: BroadcastReceiver? = null
     private var filterReportsByDateReceiver: BroadcastReceiver? = null
     private var fromDateListener: DatePickerDialog.OnDateSetListener? = null
@@ -117,6 +119,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         btnFilterDate = view.findViewById(R.id.btn_date_filter_submit)
         allExpenseView = view.findViewById(R.id.expenseReportView)
         allExpenseView?.layoutManager = LinearLayoutManager(activity)
+        emptyView = view.findViewById(R.id.emptyView)
         fromDateInput = view.findViewById(R.id.txt_from_date)
         toDateInput = view.findViewById(R.id.txt_to_date)
         fromDateInput.editText?.inputType = InputType.TYPE_NULL
@@ -219,9 +222,9 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 expenses.addAll(rejectedExpenses)
 
                 if (expenses.isNullOrEmpty()) {
-                    // TODO: Show empty view
-                    // showEmptyView()
+                    showEmptyView(getString(R.string.txt_empty_reports))
                 } else {
+                    hideEmptyView()
                     bindExpenseView(expenses)
                 }
             }
@@ -241,8 +244,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     response.reports?.let { allReports ->
                         onSuccess(context, response)
                     } ?: run {
-                        // TODO: Show empty view
-                        // showEmptyView()
+                        showEmptyView(getString(R.string.txt_empty_reports))
                     }
                 } ?: run {
                     onFailure(context, getString(R.string.txt_api_failed))
@@ -255,8 +257,9 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 val filteredReportsResponse = response as GetAllReportsResponse
                 val approvedExpenses = fetchApprovedExpenses(filteredReportsResponse.reports)
                 if (approvedExpenses.isNullOrEmpty()) {
-                    //TODO: showEmptyView()
+                    showEmptyView(getString(R.string.txt_empty_reports_date_filter))
                 } else {
+                    hideEmptyView()
                     bindExpenseView(approvedExpenses)
                 }
             }
@@ -272,8 +275,7 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     response.reports?.let {
                         onSuccess(context, response)
                     } ?: run {
-                        // TODO: Show empty view
-                        // showEmptyView()
+                        showEmptyView(getString(R.string.txt_empty_reports_date_filter))
                     }
                 } ?: run {
                     onFailure(context, getString(R.string.txt_api_failed))
@@ -353,5 +355,16 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         toDateInput.editText?.clearFocus()
         fromDate = ""
         toDate = ""
+    }
+
+    private fun showEmptyView(message: String) {
+        emptyView.text = message
+        emptyView.visibility = View.VISIBLE
+        allExpenseView?.visibility = View.GONE
+    }
+
+    private fun hideEmptyView() {
+        emptyView.visibility = View.GONE
+        allExpenseView?.visibility = View.VISIBLE
     }
 }

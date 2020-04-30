@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -32,6 +33,8 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var notificationView: RecyclerView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var emptyView: TextView
+    private lateinit var progress: LinearLayout
+    private lateinit var txtProgressMsg: TextView
     private var swipeToDeleteCallback: SwipeToDeleteCallback? = null
     private var adapter: NotificationAdapter? = null
 
@@ -113,6 +116,7 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         })
 
         viewModel?.getExpenseReport()?.observe(viewLifecycleOwner, Observer { expenseReport ->
+            hideLoadingView()
             if (expenseReport != null) {
                 val action =
                     NotificationFragmentDirections.actionNavNotificationToNavReportDetail(expenseReport)
@@ -128,7 +132,7 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
             override fun onItemClickListener(position: Int) {
-                // TODO: show loadingview
+                showLoadingView(getString(R.string.txt_fetching_report))
                 viewModel?.getExpenseReport(position)
             }
 
@@ -147,6 +151,8 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun initView(view: View) {
         emptyView = view.findViewById(R.id.emptyView)
+        progress = view.findViewById(R.id.lyt_progress)
+        txtProgressMsg = progress.findViewById(R.id.txt_progress_msg)
         notificationView = view.findViewById(R.id.notificationView)
         notificationView.layoutManager = LinearLayoutManager(activity)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshNotification)
@@ -169,5 +175,14 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun hideEmptyView() {
         emptyView.visibility = View.GONE
         notificationView.visibility = View.VISIBLE
+    }
+
+    private fun showLoadingView(message: String) {
+        progress.visibility = View.VISIBLE
+        txtProgressMsg.text = message
+    }
+
+    private fun hideLoadingView() {
+        progress.visibility = View.GONE
     }
 }

@@ -145,7 +145,6 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
         submitExpenseResponseReceiver = object : ApiResponseReceiver() {
             override fun onSuccess(context: Context?, response: ApiResponse) {
-                // TODO: dismiss dialog, close fragment
                 context?.let { Utility.getInstance().showMsg(it, response.getMessage()) }
                 view?.findNavController()?.navigateUp()
             }

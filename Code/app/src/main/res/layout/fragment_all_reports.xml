@@ -73,7 +73,7 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <include
-        layout="@layout/app_progress"
-        android:visibility="gone" />
+    <include layout="@layout/app_progress" />
+
+    <include layout="@layout/app_empty_view" />
 </FrameLayout>

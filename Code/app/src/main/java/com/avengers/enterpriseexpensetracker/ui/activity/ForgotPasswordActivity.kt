@@ -9,10 +9,13 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.ViewSwitcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.modal.response.ApiResponse
@@ -20,6 +23,7 @@ import com.avengers.enterpriseexpensetracker.receiver.ApiResponseReceiver
 import com.avengers.enterpriseexpensetracker.service.EETrackerJobService
 import com.avengers.enterpriseexpensetracker.util.Constants
 import com.avengers.enterpriseexpensetracker.util.Utility
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import java.security.SecureRandom
 
@@ -34,6 +38,9 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var inputConfirmNewPassword: TextInputLayout
     private lateinit var toolbar: Toolbar
     private lateinit var title: TextView
+    private lateinit var activityLayout: CoordinatorLayout
+    private lateinit var progress: LinearLayout
+    private lateinit var txtProgressMsg: TextView
     private var requestOTPResponseReceiver: BroadcastReceiver? = null
     private var submitOTPResponseReceiver: BroadcastReceiver? = null
 
@@ -77,6 +84,9 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
         inputOTP = findViewById(R.id.txt_input_otp)
         inputNewPassword = findViewById(R.id.txt_input_new_password)
         inputConfirmNewPassword = findViewById(R.id.txt_input_confirm_new_password)
+        activityLayout = findViewById(R.id.lyt_forgot_pwd)
+        progress = findViewById(R.id.lyt_progress)
+        txtProgressMsg = progress.findViewById(R.id.txt_progress_msg)
         btnRequestOTP = findViewById(R.id.btn_send_otp)
         btnRequestOTP.setOnClickListener(this)
         btnSubmitOTP = findViewById(R.id.btn_submit_otp)
@@ -125,7 +135,7 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun requestOTP(emailId: String, otp: String) {
-        //TODO: Show Loading view
+        showLoadingView(getString(R.string.txt_generate_otp_msg))
         val intent = Intent(this, EETrackerJobService::class.java).apply {
             putExtra(Constants.EXTRA_EMAIL, emailId)
             putExtra(Constants.EXTRA_REQUEST_OTP, otp)
@@ -153,18 +163,24 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onFailure(context: Context?, message: String?) {
-                context?.let { Utility.getInstance().showMsg(it, message) }
+                val snackbar = Snackbar.make(activityLayout, message.toString(),
+                        Snackbar.LENGTH_LONG)
+                context?.let {
+                    snackbar.view.setBackgroundColor(ContextCompat.getColor(it,
+                            android.R.color.holo_red_light))
+                }
+                snackbar.show()
             }
 
             override fun onReceive(context: Context?, intent: Intent?) {
-                // TODO: hideLoadingView
+                hideLoadingView()
                 val response = intent?.getParcelableExtra<ApiResponse>(Constants.EXTRA_API_RESPONSE)
                 response?.let {
                     Log.d(Constants.TAG, "response $response")
-                    if (response.isSuccess()) {
-                        onSuccess(context, response)
+                    if (it.isSuccess()) {
+                        onSuccess(context, it)
                     } else {
-                        onFailure(context, context?.getString(R.string.txt_api_failed))
+                        onFailure(context, it.getMessage())
                     }
                 }
             }
@@ -177,11 +193,17 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onFailure(context: Context?, message: String?) {
-                context?.let { Utility.getInstance().showMsg(it, message) }
+                val snackbar = Snackbar.make(activityLayout, message.toString(),
+                        Snackbar.LENGTH_LONG)
+                context?.let {
+                    snackbar.view.setBackgroundColor(ContextCompat.getColor(it,
+                            android.R.color.holo_red_light))
+                }
+                snackbar.show()
             }
 
             override fun onReceive(context: Context?, intent: Intent?) {
-                // TODO: hideLoadingView
+                hideLoadingView()
                 val response = intent?.getParcelableExtra<ApiResponse>(Constants.EXTRA_API_RESPONSE)
                 response?.let {
                     Log.d(Constants.TAG, "response $response")
@@ -196,7 +218,7 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun submitOTP(emailId: String, otp: String, password: String) {
-        //TODO: Show Loading view
+        showLoadingView(getString(R.string.txt_submit_otp_msg))
         val intent = Intent(this, EETrackerJobService::class.java).apply {
             putExtra(Constants.EXTRA_EMAIL, emailId)
             putExtra(Constants.EXTRA_SUBMIT_OTP, otp)
@@ -204,5 +226,14 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
             action = Constants.ACTION_SUBMIT_OTP
         }
         Utility.getInstance().startExpenseTrackerService(this, intent)
+    }
+
+    private fun showLoadingView(string: String) {
+        progress.visibility = View.VISIBLE
+        txtProgressMsg.text = string
+    }
+
+    private fun hideLoadingView() {
+        progress.visibility = View.GONE
     }
 }

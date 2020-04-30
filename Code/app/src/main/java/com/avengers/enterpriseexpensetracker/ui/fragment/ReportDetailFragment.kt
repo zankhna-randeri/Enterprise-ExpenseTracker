@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.RecyclerClickListener
+import com.avengers.enterpriseexpensetracker.adapter.RecyclerViewReceiptClickListener
 import com.avengers.enterpriseexpensetracker.adapter.ReportDetailAdapter
 import com.avengers.enterpriseexpensetracker.modal.Expense
 import com.avengers.enterpriseexpensetracker.modal.ExpenseReport
@@ -59,7 +60,7 @@ class ReportDetailFragment : Fragment() {
         activity?.applicationContext?.let { context ->
             expenseView?.adapter = ReportDetailAdapter(context,
                     report.getExpenses() as List<Expense>, report.getReportComment(),
-                    object : RecyclerClickListener {
+                    object : RecyclerViewReceiptClickListener {
                         override fun onDeleteClickListener(position: Int) {
                         }
 

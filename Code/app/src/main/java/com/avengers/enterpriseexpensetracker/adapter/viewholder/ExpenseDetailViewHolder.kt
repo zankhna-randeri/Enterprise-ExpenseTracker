@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.avengers.enterpriseexpensetracker.R
 import com.avengers.enterpriseexpensetracker.adapter.RecyclerClickListener
+import com.avengers.enterpriseexpensetracker.adapter.RecyclerViewReceiptClickListener
 import java.lang.ref.WeakReference
 
 class ExpenseDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
@@ -17,9 +18,9 @@ class ExpenseDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
     private var imgCategory = itemView.findViewById<ImageView>(R.id.imgCategory)
     private var btnViewReceipt = itemView.findViewById<ImageButton>(R.id.btnViewReceipt)
 
-    private var buttonClickListener: WeakReference<RecyclerClickListener>? = null
+    private var buttonClickListener: WeakReference<RecyclerViewReceiptClickListener>? = null
 
-    constructor(itemView: View, buttonClickListener: RecyclerClickListener) : this(itemView) {
+    constructor(itemView: View, buttonClickListener: RecyclerViewReceiptClickListener) : this(itemView) {
         this.buttonClickListener = WeakReference(buttonClickListener)
         btnViewReceipt.setOnClickListener(this)
     }

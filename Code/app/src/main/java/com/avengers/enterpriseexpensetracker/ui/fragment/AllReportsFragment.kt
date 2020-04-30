@@ -312,10 +312,6 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val adapter =
             activity?.applicationContext?.let {
                 AllExpenseReportAdapter(it, expenses, object : RecyclerClickListener {
-                    override fun onDeleteClickListener(position: Int) {
-                        TODO("Not yet implemented")
-                    }
-
                     override fun onItemClickListener(position: Int) {
                         val report = expenses[position]
                         val action =
@@ -323,10 +319,8 @@ class AllReportsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         view?.findNavController()?.navigate(action)
                     }
 
-                    override fun btnViewReceiptClickListener(position: Int) {
-                        TODO("Not yet implemented")
+                    override fun onDeleteClickListener(position: Int) {
                     }
-
                 })
             }
         allExpenseView?.adapter = adapter

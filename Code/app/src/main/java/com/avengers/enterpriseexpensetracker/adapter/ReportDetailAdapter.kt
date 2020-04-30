@@ -19,7 +19,7 @@ import com.avengers.enterpriseexpensetracker.util.Constants
 class ReportDetailAdapter(private var context: Context,
                           private var expenses: List<Expense>,
                           private var comment: String?,
-                          private var buttonClickListener: RecyclerClickListener) :
+                          private var clickListener: RecyclerViewReceiptClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -37,7 +37,7 @@ class ReportDetailAdapter(private var context: Context,
             }
             VIEW_LIST -> {
                 val reqViewHolder = inflater.inflate(R.layout.item_expense_detail, parent, false)
-                viewHolder = ExpenseDetailViewHolder(reqViewHolder, buttonClickListener)
+                viewHolder = ExpenseDetailViewHolder(reqViewHolder, clickListener)
             }
         }
 

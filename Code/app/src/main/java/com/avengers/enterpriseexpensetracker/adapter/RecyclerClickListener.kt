@@ -1,10 +1,6 @@
 package com.avengers.enterpriseexpensetracker.adapter
 
 interface RecyclerClickListener {
-
-    fun onDeleteClickListener(position: Int)
-
     fun onItemClickListener(position: Int)
-
-    fun btnViewReceiptClickListener(position: Int)
+    fun onDeleteClickListener(position: Int)
 }

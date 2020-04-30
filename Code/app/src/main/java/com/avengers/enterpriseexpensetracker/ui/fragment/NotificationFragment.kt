@@ -135,11 +135,6 @@ class NotificationFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 showLoadingView(getString(R.string.txt_fetching_report))
                 viewModel?.getExpenseReport(position)
             }
-
-            override fun btnViewReceiptClickListener(position: Int) {
-                TODO("Not yet implemented")
-            }
-
         })
         notificationView.adapter = adapter
     }

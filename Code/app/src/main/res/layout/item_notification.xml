@@ -5,7 +5,7 @@
     android:id="@+id/notificationItemView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_8"
+    android:layout_margin="@dimen/margin_3"
     app:cardBackgroundColor="@color/colorAccent"
     app:cardCornerRadius="@dimen/corner_radius_4"
     app:cardElevation="@dimen/elevation_4">
@@ -31,10 +31,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:paddingStart="@dimen/padding_5"
-            android:paddingTop="@dimen/padding_8"
-            android:paddingEnd="@dimen/padding_5"
-            android:paddingBottom="@dimen/padding_8"
+            android:padding="@dimen/padding_5"
             android:scrollHorizontally="true"
             android:theme="@style/ListTextDetailTheme"
             tools:text="Expense approved" />

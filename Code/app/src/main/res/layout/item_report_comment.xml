@@ -2,17 +2,17 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/commentItemView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_8"
-    android:id="@+id/commentItemView"
+    android:layout_margin="@dimen/margin_3"
     app:cardBackgroundColor="@color/colorAccent"
     app:cardCornerRadius="@dimen/corner_radius_4"
     app:cardElevation="@dimen/elevation_4">
 
     <TextView
-        style="@style/TextDetailTheme"
         android:id="@+id/rptComment"
+        style="@style/TextDetailTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_5"

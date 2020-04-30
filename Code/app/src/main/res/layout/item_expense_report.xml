@@ -5,7 +5,7 @@
     android:id="@+id/reportCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_8"
+    android:layout_margin="@dimen/margin_3"
     app:cardBackgroundColor="@color/colorAccent"
     app:cardCornerRadius="@dimen/corner_radius_4"
     app:cardElevation="@dimen/elevation_4">
@@ -19,6 +19,7 @@
             android:id="@+id/item_report_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:background="@drawable/report_pending"
             android:padding="@dimen/padding_5">
 
@@ -26,7 +27,6 @@
                 android:id="@+id/txt_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_weight="0.90"
                 android:theme="@style/ListDateTextTheme"
                 tools:text="April 21 2020" />
@@ -35,7 +35,6 @@
                 android:id="@+id/btnDelete"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_weight="0.10"
                 android:background="@drawable/ripple_background"
                 android:contentDescription="@string/txt_delete_tooltip"
@@ -52,10 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:paddingStart="@dimen/padding_5"
-            android:paddingTop="@dimen/padding_8"
-            android:paddingEnd="@dimen/padding_5"
-            android:paddingBottom="@dimen/padding_8">
+            android:padding="@dimen/padding_5">
 
             <TextView
                 android:id="@+id/txt_name"

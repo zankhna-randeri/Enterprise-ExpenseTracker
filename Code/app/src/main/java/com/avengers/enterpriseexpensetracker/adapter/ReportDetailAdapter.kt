@@ -96,7 +96,7 @@ class ReportDetailAdapter(private var context: Context,
 
         var category = getCategoryText(expense)
         var business = if (!expense.getBusinessName().isNullOrBlank()) {
-            "\n\n" + expense.getBusinessName()
+            "\n" + expense.getBusinessName()
         } else {
             ""
         }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_8"
+    android:layout_margin="@dimen/margin_3"
     app:cardBackgroundColor="@color/colorAccent"
     app:cardCornerRadius="@dimen/corner_radius_4"
     app:cardElevation="@dimen/elevation_4">
@@ -29,10 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:paddingStart="@dimen/padding_5"
-            android:paddingTop="@dimen/padding_8"
-            android:paddingEnd="@dimen/padding_5"
-            android:paddingBottom="@dimen/padding_8">
+            android:paddingStart="@dimen/padding_2"
+            android:paddingTop="@dimen/padding_5"
+            android:paddingEnd="@dimen/padding_2">
 
             <TextView
                 android:id="@+id/txt_expense_name"
@@ -63,10 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:paddingStart="@dimen/padding_5"
-            android:paddingTop="@dimen/padding_8"
-            android:paddingEnd="@dimen/padding_5"
-            android:paddingBottom="@dimen/padding_8">
+            android:padding="@dimen/padding_2">
 
             <ImageView
                 android:id="@+id/imgCategory"

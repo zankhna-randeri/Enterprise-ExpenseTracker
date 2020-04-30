@@ -25,9 +25,9 @@
                     style="@style/TextInputTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_8"
+                    android:layout_marginStart="@dimen/margin_5"
                     android:layout_marginTop="@dimen/margin_5"
-                    android:layout_marginEnd="@dimen/margin_8"
+                    android:layout_marginEnd="@dimen/margin_5"
                     android:hint="@string/txt_from_date"
                     app:errorEnabled="true">
 
@@ -43,10 +43,9 @@
                     style="@style/TextInputTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_8"
-                    android:layout_marginEnd="@dimen/margin_8"
-                    android:hint="@string/txt_to_date"
-                    app:errorEnabled="true">
+                    android:layout_marginStart="@dimen/margin_5"
+                    android:layout_marginEnd="@dimen/margin_5"
+                    android:hint="@string/txt_to_date">
 
                     <com.google.android.material.textfield.TextInputEditText
                         style="@style/SmallEditTextDetailTheme"
@@ -59,8 +58,8 @@
                     android:id="@+id/btn_date_filter_submit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_8"
-                    android:layout_marginEnd="@dimen/margin_8"
+                    android:layout_marginStart="@dimen/margin_5"
+                    android:layout_marginEnd="@dimen/margin_5"
                     android:text="@string/txt_submit"
                     android:theme="@style/SmallButtonTheme" />
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -69,7 +68,7 @@
                 android:id="@+id/expenseReportView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/margin_8"
+                android:layout_marginTop="@dimen/margin_5"
                 android:scrollbars="vertical" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

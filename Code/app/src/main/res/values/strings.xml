@@ -10,9 +10,13 @@
     <string name="failed_login">Login failed! Please try again.</string>
     <string name="txt_login_progress">Login In Progress</string>
     <string name="txt_logout_done">You are logged out</string>
+
+    <!--    Forgot Password-->
     <string name="txt_forgot_pwd_otp_msg">Please submit your email and we will send you unique code to reset your password.</string>
     <string name="txt_otp_received_msg">Please enter unique OTP you received in your email to reset your password.</string>
     <string name="txt_hint_otp">Enter OTP</string>
+    <string name="txt_generate_otp_msg">Sending email with OTP</string>
+    <string name="txt_submit_otp_msg">Verifying OTP</string>
 
     <!--    TTS-->
     <string name="tts_init_failed">TTS initialization failed!</string>
@@ -72,12 +76,15 @@
     <string name="status_notification_channel_name">Expense Report Status Update</string>
     <string name="txt_status_update">Expense Report Status Update</string>
     <string name="txt_empty_notification">No notifications yet.</string>
+    <string name="txt_fetching_report">Getting expense report details</string>
 
     <!--    All reports-->
     <string name="txt_from_date">Select from Date</string>
     <string name="txt_to_date">Select to Date</string>
     <string name="txt_error_empty_date">Please select date</string>
     <string name="txt_error_small_from_date">From date should be smaller than to date</string>
+    <string name="txt_empty_reports">No expense reports yet.</string>
+    <string name="txt_empty_reports_date_filter">No expense exports available between given dates.</string>
 
     <!--    Report detail-->
     <string name="txt_report_detail">Expense Report Detail</string>

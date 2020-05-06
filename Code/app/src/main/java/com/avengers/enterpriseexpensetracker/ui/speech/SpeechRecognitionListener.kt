@@ -76,28 +76,35 @@ class SpeechRecognitionListener(private var context: Context?,
     }
 
     override fun onReadyForSpeech(params: Bundle?) {
+        Log.d(Constants.TAG, "onReadyForSpeech")
     }
 
     override fun onRmsChanged(rmsdB: Float) {
+        Log.d(Constants.TAG, "onRmsChanged")
     }
 
     override fun onBufferReceived(buffer: ByteArray?) {
+        Log.d(Constants.TAG, "onBufferReceived")
     }
 
     override fun onPartialResults(partialResults: Bundle?) {
+        Log.d(Constants.TAG, "onPartialResults")
     }
 
     override fun onEvent(eventType: Int, params: Bundle?) {
+        Log.d(Constants.TAG, "onEvent")
     }
 
     override fun onBeginningOfSpeech() {
+        Log.d(Constants.TAG, "onBeginningOfSpeech")
     }
 
     override fun onEndOfSpeech() {
+        Log.d(Constants.TAG, "onEndOfSpeech")
     }
 
     override fun onError(error: Int) {
-        Log.e("EETracker *******", error.toString())
+        Log.e(Constants.TAG, "onError ${error}")
     }
 
     override fun onResults(results: Bundle?) {

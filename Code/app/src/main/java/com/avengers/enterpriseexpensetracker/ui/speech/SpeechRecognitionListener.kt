@@ -288,7 +288,7 @@ class SpeechRecognitionListener(private var context: Context?,
 
         // append remaining answer
         answer += "amount as $${expense.getAmount()} and date as ${expense.getDate()}. \n" +
-                "Do you want to submit the report, or add more expenses?"
+                "Submit report, or add more expenses?"
         return answer
     }
 
@@ -410,7 +410,9 @@ class SpeechRecognitionListener(private var context: Context?,
                 command.contains("september", true) ||
                 command.contains("october", true) ||
                 command.contains("november", true) ||
-                command.contains("december", true)
+                command.contains("december", true) ||
+                command.contains("Jan", true) ||
+                command.contains("Feb", true)
     }
 
     private fun reset() {
@@ -444,7 +446,7 @@ class SpeechRecognitionListener(private var context: Context?,
 
         answer = answer + "Amount as $${currentExpense?.getAmount()} and " +
                 "Date as ${currentExpense?.getDate()} \n" +
-                "Do you want to submit the report, or add more expenses?"
+                "Submit report, or add more expenses?"
 
         currentMode =
             VoiceBotMode.Confirmation

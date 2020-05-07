@@ -63,6 +63,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
     private var conversationView: RecyclerView? = null
     private var progress: LinearLayout? = null
     private var txtProgressMsg: TextView? = null
+    private lateinit var emptyView: TextView
 
     private var addExpenseViewModel: AddExpenseViewModel? = null
     private var conversationAdapter: ConversationAdapter? = null
@@ -106,6 +107,7 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
         btnVoice?.setOnClickListener(this)
         progress = view.findViewById(R.id.lyt_progress)
         txtProgressMsg = progress?.findViewById(R.id.txt_progress_msg)
+        emptyView = view.findViewById(R.id.emptyView)
 
         initBroadcast()
         initSpeechRecognizer()
@@ -174,7 +176,10 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
             Log.d("EETracker *******", "Inside observer")
             conversations.clear()
             if (!it.isNullOrEmpty()) {
+                hideEmptyView()
                 conversations.addAll(it)
+            } else {
+                showEmptyView()
             }
             if (conversationAdapter == null) {
                 conversationAdapter = ConversationAdapter(conversations)
@@ -585,5 +590,14 @@ class AddExpenseFragment : Fragment(), View.OnClickListener {
 
     private fun hideLoadingView() {
         progress?.visibility = View.GONE
+    }
+
+    private fun showEmptyView() {
+        emptyView.text = getString(R.string.txt_empty_chatbot)
+        emptyView.visibility = View.VISIBLE
+    }
+
+    private fun hideEmptyView() {
+        emptyView.visibility = View.GONE
     }
 }

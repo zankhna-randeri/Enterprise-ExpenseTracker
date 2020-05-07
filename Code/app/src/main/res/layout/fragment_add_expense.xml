@@ -49,4 +49,7 @@
     <include
         layout="@layout/app_progress"
         android:visibility="gone" />
+
+    <include layout="@layout/app_empty_view" />
+
 </FrameLayout>

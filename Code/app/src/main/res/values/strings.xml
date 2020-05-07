@@ -33,6 +33,7 @@
     <string name="txt_upload_progress">Uploading Receipt Image</string>
     <string name="txt_submit_report_progress">Submitting Expense Report</string>
     <string name="txt_select_img_dialog_title">Choose Photo</string>
+    <string name="txt_empty_chatbot">Hi, how may I help you?</string>
 
     <!-- common-->
     <string name="txt_loading">Loading</string>

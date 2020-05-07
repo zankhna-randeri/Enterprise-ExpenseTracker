@@ -143,9 +143,6 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                             report)
                                 view?.findNavController()?.navigate(action)
                             }
-
-                            override fun btnViewReceiptClickListener(position: Int) {
-                            }
                         })
             }
         pendingExpenseView?.adapter = adapter

@@ -39,7 +39,7 @@
                 android:layout_marginStart="@dimen/margin_5"
                 android:layout_marginTop="@dimen/margin_5"
                 android:layout_marginBottom="@dimen/margin_5"
-                android:background="@drawable/round"
+                android:background="@drawable/mic_background"
                 android:padding="@dimen/padding_8"
                 android:src="@drawable/ic_mic" />
         </LinearLayout>

@@ -14,7 +14,7 @@ class EETrackerDateFormatManager() {
 
     fun parseDate(command: String): String? {
         try {
-            val tokens = command.split(" ")
+            val tokens = command.split(" ").toMutableList()
             var dayIndex = -1
             var monthIndex = -1
             val yearIndex = 2
@@ -36,7 +36,8 @@ class EETrackerDateFormatManager() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     formatter[dayIndex] = "d['st']['nd']['rd']['th']"
                 } else {
-                    return null
+                    tokens[dayIndex] = tokens[dayIndex].replace("(st|nd|rd|th)".toRegex(), "")
+                    formatter[dayIndex] = "d"
                 }
             } else {
                 // normal format

@@ -288,7 +288,7 @@ class SpeechRecognitionListener(private var context: Context?,
 
         // append remaining answer
         answer += "amount as $${expense.getAmount()} and date as ${expense.getDate()}. \n" +
-                "Submit report, or add more expenses?"
+                "Edit Details, Submit Report, or Add More Expenses?"
         return answer
     }
 
@@ -318,20 +318,13 @@ class SpeechRecognitionListener(private var context: Context?,
                 command.contains("expense report", true) ||
                 command.contains("submit expense report", true) ||
                 command.contains("create expense report", true)
-//                isUserAgreed(command)
-
     }
 
     private fun isSubmitExpenseRequest(command: String): Boolean {
         return command.contains("add expense", true) ||
                 command.contains("add more expense", true) ||
-                command.contains("add more expenses", true)
-
-//        command.contains("submit expense", true) ||
-//                command.contains("expenses", true) ||
-//                command.contains("expense", true) ||
-//                isUserAgreed(command)
-
+                command.contains("add more expenses", true) ||
+                command.contains("add expenses", true)
     }
 
     private fun isExpenseType(command: String): Boolean {
@@ -379,15 +372,6 @@ class SpeechRecognitionListener(private var context: Context?,
         return command.contains("business name", true) ||
                 command.contains("businessname", true) ||
                 command.contains("name", true)
-    }
-
-    private fun isUserAgreed(command: String): Boolean {
-        return command.contains("yes", true) ||
-                command.contains("go ahead", true) ||
-                command.contains("yaa", true) ||
-                command.contains("confirmed", true) ||
-                command.contains("yup", true) ||
-                command.contains("confirm", true)
     }
 
     private fun isAmount(command: String): Boolean {

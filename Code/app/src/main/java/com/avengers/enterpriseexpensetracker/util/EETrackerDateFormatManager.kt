@@ -14,6 +14,7 @@ class EETrackerDateFormatManager() {
 
     fun parseDate(command: String): String? {
         try {
+            var converted = ""
             val tokens = command.split(" ").toMutableList()
             var dayIndex = -1
             var monthIndex = -1
@@ -57,18 +58,18 @@ class EETrackerDateFormatManager() {
                 dateTimeFormatter =
                     DateTimeFormatterBuilder().parseCaseInsensitive().append(dateTimeFormatter).toFormatter()
                 val dateTime = LocalDate.parse(parsedCommand, dateTimeFormatter)
-                val converted = DateTimeFormatter.ofPattern("MM/dd/yyyy").format(dateTime)
+                converted = DateTimeFormatter.ofPattern("MM/dd/yyyy").format(dateTime)
                 Log.d("EETracker *******", "converted date: $converted")
-                return converted
             } else {
                 // convert to mm/dd/yyyy
                 val dateFormatter = SimpleDateFormat(parseFormat, Locale.US)
                 val date = dateFormatter.parse(parsedCommand)
                 Log.d("EETracker *******", "parsed date: $date")
-                val converted = SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date!!)
+                converted = SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date!!)
                 Log.d("EETracker *******", "converted date: $converted")
-                return converted
             }
+            return converted
+
         } catch (e: ParseException) {
             Log.e("EETracker *******", "Exception: ${e.message}")
             e.printStackTrace()

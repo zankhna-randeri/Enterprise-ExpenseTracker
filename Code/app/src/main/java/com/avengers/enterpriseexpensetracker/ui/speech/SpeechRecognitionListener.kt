@@ -288,7 +288,7 @@ class SpeechRecognitionListener(private var context: Context?,
 
         // append remaining answer
         answer += "amount as $${expense.getAmount()} and date as ${expense.getDate()}. \n" +
-                "Edit Details, Submit Report, or Add More Expenses?"
+                "Change Details, Submit Report, or Add More Expenses?"
         return answer
     }
 
@@ -430,7 +430,7 @@ class SpeechRecognitionListener(private var context: Context?,
 
         answer = answer + "Amount as $${currentExpense?.getAmount()} and " +
                 "Date as ${currentExpense?.getDate()} \n" +
-                "Submit report, or add more expenses?"
+                "Change Details, Submit Report, or Add More Expenses?"
 
         currentMode =
             VoiceBotMode.Confirmation

@@ -28,8 +28,8 @@ class DateFormatterTest {
 
     @Test
     fun parseDateWithOrdinalMonthTest() {
-        val answer = dateFormatMgr.parseDate("1st January 2020")
-        Assert.assertEquals("01/01/2020", answer)
+        val answer = dateFormatMgr.parseDate("14th January 2020")
+        Assert.assertEquals("01/14/2020", answer)
     }
 
     @Test
